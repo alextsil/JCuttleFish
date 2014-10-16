@@ -10,33 +10,38 @@ import java.util.List;
 public class PathsExtractor {
 	
 	private String[] targetFilesPaths; //The list that contains all the file paths
-	private List<File> targetFilesInstances; //The list that contains all the File instances from the extracted paths
+	private ArrayList<File> targetFilesInstances; //The list that contains all the File instances from the extracted paths
 	private String pathName; //User given path name
 	
 	
 	public PathsExtractor(String pathName) {
 		this.pathName = pathName;
-		
+		targetFilesInstances = new ArrayList<File>();
+		extractPaths(this.pathName);
 	}
 	
 	//pernei to path kai bgazei se list ola ta paths twn arxeiwn pou vrike
-	public void extractPaths() {
-		File initialInstance = new File(this.pathName);
-		targetFilesPaths = initialInstance.list();
+	public void extractPaths(String pathName) {
+		File initialFilePath = new File(pathName);
+		File[] fileInstances = initialFilePath.listFiles();
 		
-		for (String singlePath : targetFilesPaths) {
-			File singleInstance = new File(singlePath);
+		for (File fileInstance : fileInstances) {
 			
-			if(initialInstance.isDirectory()) {
-				extractPaths();
+			if(fileInstance.isDirectory()) {
+				//call me to new path
+				extractPaths(fileInstance.getAbsolutePath());
 			}
-			else if (initialInstance.isFile()) {
-				this.targetFilesInstances.add(initialInstance);
+			else if (fileInstance.isFile()) {
+				targetFilesInstances.add(fileInstance);
 			}
-				
 			
 		}
 		
+	}
+	
+	
+	public ArrayList<File> getTargetFilesInstances() {
+		return this.targetFilesInstances;
 	}
 	
 	//pernei ta paths kai ta metatrepei se File instances

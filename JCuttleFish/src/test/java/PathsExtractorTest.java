@@ -1,6 +1,8 @@
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,7 +20,7 @@ public class PathsExtractorTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		userGivenPath = "C:\\tet\\";
+		userGivenPath = "C:\\intel\\";
 		instance = new PathsExtractor(userGivenPath);
 	}
 
@@ -28,12 +30,15 @@ public class PathsExtractorTest {
 	}
 
 	@Test
-	public void test() {	
-		fileIn = instance.getTargetFile();
-		System.out.println(instance.getPathName());
+	public void test() {
+		ArrayList<File> fash = new ArrayList<File>();
+		fash = instance.getTargetFilesInstances();
+		assertNotNull(fash);
 		
-		assertTrue(fileIn.isDirectory());
-		assertNotNull(fileIn);
+		for (File file : fash) {
+			System.out.println(file.toString());
+		}
+		
 	}
 
 }
