@@ -1,57 +1,74 @@
 package scanner;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 
-//This class resolves the path that was given as an argument, verifies it's a non-empty path
-//and saves the File instances of all FILES in a collection.
+//This class resolves the path that was given to the constructor, verifies it exists and it's not empty,
+//and saves the File instances of all FILES in a List.
 
+//TODO: implement a validate function.
 public class PathsExtractor {
 	
-	private String[] targetFilesPaths; //The list that contains all the file paths
-	private ArrayList<File> targetFilesInstances; //The list that contains all the File instances from the extracted paths
-	private String pathName; //User given path name
+	//The list that contains all the File instances from the extracted paths
+	private List<File> targetFilesInstances; 
+	//User given path name - Defensive copy
+	private String pathName; 
 	
 	
 	public PathsExtractor(String pathName) {
 		this.pathName = pathName;
 		targetFilesInstances = new ArrayList<File>();
-		extractPaths(this.pathName);
+		//validate
 	}
 	
-	//pernei to path kai bgazei se list ola ta paths twn arxeiwn pou vrike
-	public void extractPaths(String pathName) {
+	
+	//temp copy - workaround
+	private void extractPathsRaw(String pathName) {
 		File initialFilePath = new File(pathName);
+		assert initialFilePath.isDirectory();
+		
 		File[] fileInstances = initialFilePath.listFiles();
 		
 		for (File fileInstance : fileInstances) {
-			
 			if(fileInstance.isDirectory()) {
-				//call me to new path
-				extractPaths(fileInstance.getAbsolutePath());
+				//recursive call - contained folder path
+				extractPathsRaw(fileInstance.getAbsolutePath());
 			}
-			else if (fileInstance.isFile()) {
+			else {
 				targetFilesInstances.add(fileInstance);
 			}
-			
 		}
+	}
+	
+	//temp copy - workaround
+	private void extractPathsFiltered(String pathName,FileFilter filter) {
+		File initialFilePath = new File(pathName);
+		assert initialFilePath.isDirectory();
 		
+		File[] fileInstances = initialFilePath.listFiles(filter);
+		
+		for (File fileInstance : fileInstances) {
+			if(fileInstance.isDirectory()) {
+				//recursive call - contained folder path
+				extractPathsFiltered(fileInstance.getAbsolutePath(),filter);
+			}
+			else {
+				targetFilesInstances.add(fileInstance);
+			}
+		}
 	}
 	
 	
-	public ArrayList<File> getTargetFilesInstances() {
+	public List<File> getFilesInstances() {
+		extractPathsRaw(pathName);
 		return this.targetFilesInstances;
 	}
 	
-	//pernei ta paths kai ta metatrepei se File instances
-	public void createFileInstancesFromPaths() {
-		
-	}
-
-
-	public String getPathName() {
-		return pathName;
+	public List<File> getFilesInstances(FileFilter filter) {
+		extractPathsFiltered(pathName, filter);
+		return this.targetFilesInstances;
 	}
 	
 }

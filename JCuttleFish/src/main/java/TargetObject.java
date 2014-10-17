@@ -9,7 +9,7 @@ public class TargetObject {
 	private String childOf; // extends
 	private List<String> implementerOf; // implements
 	private List<String> parentOf;
-	private TargetType type;
+	private SupportedTypes type;
 
 	public TargetObject() {
 	
@@ -31,7 +31,7 @@ public class TargetObject {
 		return parentOf;
 	}
 
-	public TargetType getType() {
+	public SupportedTypes getType() {
 		return type;
 	}
 
@@ -51,7 +51,7 @@ public class TargetObject {
 		this.parentOf = parentOf;
 	}
 
-	public void setType(TargetType type) {
+	public void setType(SupportedTypes type) {
 		this.type = type;
 	}
 
