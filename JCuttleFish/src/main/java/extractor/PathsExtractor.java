@@ -1,9 +1,12 @@
-package scanner;
+package extractor;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
+
+import extractor.filefilters.SuffixFilter;
+import extractor.filefilters.SupportedSuffixFilters;
 
 //This class resolves the path that was given to the constructor, verifies it exists and it's not empty,
 //and saves the File instances of all FILES in a List.
@@ -18,12 +21,26 @@ public class PathsExtractor {
 	
 	
 	public PathsExtractor(String pathName) {
-		this.pathName = pathName;
-		targetFilesInstances = new ArrayList<File>();
+		this.pathName = pathName;		
 		//validate
 	}
 	
 	
+	public List<File> getFilesInstances() {
+		initializeListImpl();
+		extractPathsRaw(pathName);
+		return this.targetFilesInstances;
+	}
+
+
+	public List<File> getFilesInstances(SupportedSuffixFilters filter) {
+		initializeListImpl();
+		FileFilter concreteFilter = prepareFilter(filter);
+		extractPathsFiltered(pathName, concreteFilter);
+		return this.targetFilesInstances;
+	}
+
+
 	//temp copy - workaround
 	private void extractPathsRaw(String pathName) {
 		File initialFilePath = new File(pathName);
@@ -61,14 +78,14 @@ public class PathsExtractor {
 	}
 	
 	
-	public List<File> getFilesInstances() {
-		extractPathsRaw(pathName);
-		return this.targetFilesInstances;
+	private FileFilter prepareFilter(SupportedSuffixFilters filter) {
+		FileFilter concreteFilter = new SuffixFilter(filter);
+		return concreteFilter;
 	}
 	
-	public List<File> getFilesInstances(FileFilter filter) {
-		extractPathsFiltered(pathName, filter);
-		return this.targetFilesInstances;
+	private void initializeListImpl() {
+		targetFilesInstances = null; //ensure the list is empty
+		targetFilesInstances = new ArrayList<File>();
 	}
 	
 }

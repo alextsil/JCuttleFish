@@ -1,4 +1,4 @@
-package scanner.filefilters;
+package extractor.filefilters;
 
 import java.io.File;
 import java.io.FileFilter;

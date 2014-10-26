@@ -1,17 +1,17 @@
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.FileFilter;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import scanner.PathsExtractor;
-import scanner.filefilters.SuffixFilter;
-import scanner.filefilters.SupportedSuffixFilters;
+import extractor.PathsExtractor;
+import extractor.filefilters.SupportedSuffixFilters;
 
 
 public class PathsExtractorTest {
@@ -38,28 +38,35 @@ public class PathsExtractorTest {
 		resultsList = null;
 	}
 
-	@Test
-	public void unfilteredTest() {
-		resultsList = instance.getFilesInstances();
-		assertNotNull(resultsList);
-		
-		for (File file : resultsList) {
-			System.out.println(file.toString());
-		}
-		System.out.println(resultsList.size());	
-	}
+//	@Test
+//	public void unfilteredTest() {
+//		resultsList = instance.getFilesInstances();
+//		assertNotNull(resultsList);
+//		
+//		for (File file : resultsList) {
+//			System.out.println(file.toString());
+//		}
+//		System.out.println(resultsList.size());	
+//	}
 	
 	@Test
 	public void filteredTest() {
-		//TODO: kripse to filefilter stin pathsextractor
-		FileFilter filter = new SuffixFilter(SupportedSuffixFilters.JAVA);
-		resultsList = instance.getFilesInstances(filter);
+		resultsList = instance.getFilesInstances(SupportedSuffixFilters.JAVA);
+		assertNotNull(resultsList);
+	
+		for (File file : resultsList) {
+			System.out.println(file.toString());
+		}
+		System.out.println(resultsList.size());	
+		
+		
+		resultsList = instance.getFilesInstances(SupportedSuffixFilters.FORM);
 		assertNotNull(resultsList);
 		
 		for (File file : resultsList) {
 			System.out.println(file.toString());
 		}
-		System.out.println(resultsList.size());	
+		System.out.println(resultsList.size());		
 	}
 
 }
