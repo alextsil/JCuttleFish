@@ -2,36 +2,35 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
-import obfuscations.AccessModificator;
+import obfuscations.accessmodification.AccessModificator;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
-
 
 public class AccessModificatorTest {
-	private File singleTargetFile;
-	private AccessModificator allPublicizer;
+	
+	private File targetFile;
+	private AccessModificator modificator;
 
 	@Before
 	public void setUp() throws Exception {
-		singleTargetFile = new File("C:\\Contact.java\\");
-		allPublicizer = new AccessModificator();
-		allPublicizer.targetFile(singleTargetFile);
+		targetFile = new File("C:\\test\\test.java\\");
+		this.modificator = new AccessModificator(targetFile);
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		singleTargetFile = null;
-		allPublicizer = null;
+		this.modificator = null;
 	}
 
+	
 	@Test
-	public void test() {
-		allPublicizer.modifyToPublic();
-		assertNotNull(allPublicizer);
+	public void testFash() {
+		modificator.modifyFileToPublic();	
+		assertNotNull(this.modificator);
+		fail("not implemented");
 	}
 
 }
