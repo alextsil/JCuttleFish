@@ -13,4 +13,13 @@
   		<scope>test</scope>
   	</dependency>
   </dependencies>
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>maven-compiler-plugin</groupId>
+  			<artifactId>maven-compiler-plugin</artifactId>
+  			<version>1.7</version>
+  		</plugin>
+  	</plugins>
+  </build>
 </project>

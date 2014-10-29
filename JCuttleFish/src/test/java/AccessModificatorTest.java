@@ -28,8 +28,8 @@ public class AccessModificatorTest {
 	
 	@Test
 	public void testFash() {
-		modificator.modifyFileToPublic();	
-		assertNotNull(this.modificator);
+//		modificator.modifyFileToPublic();	
+//		assertNotNull(this.modificator);
 		fail("not implemented");
 	}
 
