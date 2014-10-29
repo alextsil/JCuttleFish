@@ -1,32 +1,21 @@
 package extractor.filefilters;
 
 public enum SupportedSuffixFilters {
-	JAVA,
-	XML,
-	INI,
-	FORM,
-	JSON,
-	TXT;
+	JAVA(".java"),
+	XML(".xml"),
+	INI(".ini"),
+	FORM(".form"),
+	JSON(".json"),
+	TXT(".txt");
 
+	private String suffix;
+	
+	private SupportedSuffixFilters(String suffix) {
+		this.suffix = suffix;
+	}
 
 	@Override
 	public String toString() {
-		switch(this) {
-			case JAVA:
-				return ".java";
-			case XML:
-				return ".xml";
-			case INI:
-				return ".ini";
-			case FORM:
-				return ".form";
-			case JSON:
-				return ".json";
-			case TXT:
-				return ".txt";
-				
-			default:
-				return null;
-		}
+		return suffix;
 	}
 }
