@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.Jfish</groupId>
   <artifactId>JCuttleFish</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1</version>
   <name>JCuttleFish</name>
   <description>Thesis: Java obfuscator for Java programs</description>
   <dependencies>
@@ -11,6 +11,11 @@
   		<artifactId>junit</artifactId>
   		<version>4.11</version>
   		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>commons-io</groupId>
+  		<artifactId>commons-io</artifactId>
+  		<version>2.4</version>
   	</dependency>
   </dependencies>
   <build>

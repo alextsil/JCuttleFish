@@ -18,55 +18,45 @@ public class PathsExtractorTest {
 
 	private String userGivenPath;
 	private PathsExtractor instance;
-	private File relativeToAbsolute;
+	private File pathToFile;
 	private List<File> resultsList;
 	
 	
 	@Before
 	public void setUp() throws Exception {
 		userGivenPath = "src/test/resources/sampleapplications/addressbook";
-		relativeToAbsolute = new File(userGivenPath);
-		instance = new PathsExtractor(relativeToAbsolute.getAbsolutePath());
-		
+		pathToFile = new File(userGivenPath);
+		instance = new PathsExtractor(pathToFile.getAbsolutePath());
 		resultsList = new ArrayList<File>();
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		instance = null;
-		relativeToAbsolute = null;
+		pathToFile = null;
 		resultsList = null;
 	}
 
-//	@Test
-//	public void unfilteredTest() {
-//		resultsList = instance.getFilesInstances();
-//		assertNotNull(resultsList);
-//		
+	@Test
+	public void getFilesInstancesUnfilteredTest() {
+		resultsList = instance.getFilesInstances();
+		assertNotNull(resultsList);
+		assertEquals(35, resultsList.size());
+
 //		for (File file : resultsList) {
 //			System.out.println(file.toString());
 //		}
-//		System.out.println(resultsList.size());	
-//	}
+	}
 	
 	@Test
-	public void filteredTest() {
+	public void getFilesInstancesFilteredTest() {
 		resultsList = instance.getFilesInstances(SupportedSuffixFilters.JAVA);
 		assertNotNull(resultsList);
-	
-		for (File file : resultsList) {
-			System.out.println(file.toString());
-		}
-		System.out.println(resultsList.size());	
-		
+		assertEquals(28, resultsList.size());	
 		
 		resultsList = instance.getFilesInstances(SupportedSuffixFilters.FORM);
 		assertNotNull(resultsList);
-		
-		for (File file : resultsList) {
-			System.out.println(file.toString());
-		}
-		System.out.println(resultsList.size());		
+		assertEquals(3, resultsList.size());	
 	}
 
 }

@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import regex.PrivateProtectedMatcher;
 
 
 public class AccessModificator {
@@ -17,29 +16,30 @@ public class AccessModificator {
 	public AccessModificator(File targetFile) {
 		this.targetFile = targetFile;
 	}
-		
-	public void modifyFileToPublic() {
+	
+	//Creates a new File in the same dir as targetFile, copies the target file line by line
+	//and replaces the first occurrence of the string:(private or protected) of each line with 
+	//the string public. The target file gets deleted and the new file gets renamed to the target file.
+	//@Returns - boolean, success or failure.
+	public boolean modifyFileToPublic() {
 		File newFile = createNewFileFromPath(this.targetFile);
+		PrivateProtectedMatcher matcher = new PrivateProtectedMatcher();
 		
 		try(Scanner scanner = new Scanner(this.targetFile,("UTF-8"));
 			PrintWriter writer = new PrintWriter(newFile,"UTF-8")) {
-			
-			String pattern = "protected|private";
-			Pattern patImpl = Pattern.compile(pattern);
-			//read-write file line by line
+
 			scanner.useDelimiter(";");
 			while (scanner.hasNext()) {
-				targetLine = scanner.nextLine();	
-				Matcher matcher = patImpl.matcher(targetLine);
-				targetLine = matcher.replaceFirst("public");
+				targetLine = matcher.applyMatcher(scanner.nextLine()); 	
 				writer.println(targetLine);
 			}
 		} 
 		catch (IOException e) {
 			e.printStackTrace();
 		} 
+		
 		this.targetFile.delete();
-		newFile.renameTo(targetFile);
+		return newFile.renameTo(targetFile); //TODO: success or failure
 	}
 	
 	//Creates a new File using the path and name of the file given as a parameter.

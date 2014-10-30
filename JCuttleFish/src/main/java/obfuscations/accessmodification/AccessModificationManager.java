@@ -27,7 +27,7 @@ public class AccessModificationManager implements IObfuscation {
 			AccessModificator aMod = new AccessModificator(file);
 			aMod.modifyFileToPublic();
 		}
-		return true; //success or failure
+		return true; //TODO: success or failure
 	}
 	
 	public void setPath(String path) {
