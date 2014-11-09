@@ -1,14 +1,13 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import extractor.filefilters.SuffixFilter;
+import extractor.filefilters.SuffixFolderFilter;
 import extractor.filefilters.SupportedSuffixFilters;
 
 
@@ -28,7 +27,7 @@ public class SuffixFilterTest {
 
 	@Test
 	public void iniFilterTest() {
-		FileFilter concreteFilter = new SuffixFilter(SupportedSuffixFilters.INI);
+		FileFilter concreteFilter = new SuffixFolderFilter(SupportedSuffixFilters.INI);
 		File initialFilePath = new File("src/test/resources/sampleapplications/addressbook/ini");
 		fileInstances = initialFilePath.listFiles(concreteFilter);
 		assertEquals(2, fileInstances.length);

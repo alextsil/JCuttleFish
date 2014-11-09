@@ -8,7 +8,7 @@ public class Main {
 		String userGivenPath = args[0];
 		
 		AccessModificationManager aModMan = new AccessModificationManager();
-		aModMan.setPath(userGivenPath);
+		aModMan.setParameters(userGivenPath);
 		aModMan.obfuscate();
 	}
 

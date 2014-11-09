@@ -5,87 +5,71 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 
-import extractor.filefilters.SuffixFilter;
-import extractor.filefilters.SupportedSuffixFilters;
-
 //This class resolves the path that was given to the constructor, verifies it exists and it's not empty,
 //and saves the File instances of all FILES in a List.
 
 //TODO: implement a validate function.
 public class PathsExtractor {
-	
-	//The list that contains all the File instances from the extracted paths
-	private List<File> targetFilesInstances; 
-	//User given path name - Defensive copy
-	private String pathName; 
-	
-	
+
+	// The list that contains all the File instances from the extracted paths
+	private List<File> targetFilesInstances;
+	// User given path name - Defensive copy
+	private String pathName;
+
 	public PathsExtractor(String pathName) {
-		this.pathName = pathName;		
-		//validate
+		this.pathName = pathName;
+		// validate
 	}
-	
-	
+
 	public List<File> getFilesInstances() {
 		initializeListImpl();
 		extractPathsRaw(pathName);
 		return this.targetFilesInstances;
 	}
 
-
-	public List<File> getFilesInstances(SupportedSuffixFilters filter) {
+	public List<File> getFilesInstances(FileFilter filter) {
 		initializeListImpl();
-		FileFilter concreteFilter = prepareFilter(filter);
-		extractPathsFiltered(pathName, concreteFilter);
+		extractPathsFiltered(pathName, filter);
 		return this.targetFilesInstances;
 	}
 
-
-	//temp copy - workaround
+	// temp copy - workaround
 	private void extractPathsRaw(String pathName) {
 		File initialFilePath = new File(pathName);
 		assert initialFilePath.isDirectory();
-		
+
 		File[] fileInstances = initialFilePath.listFiles();
-		
+
 		for (File fileInstance : fileInstances) {
-			if(fileInstance.isDirectory()) {
-				//recursive call - contained folder path
+			if (fileInstance.isDirectory()) {
+				// recursive call - contained folder path
 				extractPathsRaw(fileInstance.getAbsolutePath());
-			}
-			else {
+			} else {
 				targetFilesInstances.add(fileInstance);
 			}
 		}
 	}
-	
-	//temp copy - workaround
-	private void extractPathsFiltered(String pathName,FileFilter filter) {
+
+	// temp copy - workaround
+	private void extractPathsFiltered(String pathName, FileFilter filter) {
 		File initialFilePath = new File(pathName);
 		assert initialFilePath.isDirectory();
-		
+
 		File[] fileInstances = initialFilePath.listFiles(filter);
-		
+
 		for (File fileInstance : fileInstances) {
-			if(fileInstance.isDirectory()) {
-				//recursive call - contained folder path
-				extractPathsFiltered(fileInstance.getAbsolutePath(),filter);
-			}
-			else {
+			if (fileInstance.isDirectory()) {
+				// recursive call - contained folder path
+				extractPathsFiltered(fileInstance.getAbsolutePath(), filter);
+			} else {
 				targetFilesInstances.add(fileInstance);
 			}
 		}
 	}
-	
-	
-	private FileFilter prepareFilter(SupportedSuffixFilters filter) {
-		FileFilter concreteFilter = new SuffixFilter(filter);
-		return concreteFilter;
-	}
-	
+
 	private void initializeListImpl() {
-		targetFilesInstances = null; //ensure the list is empty
+		targetFilesInstances = null; // ensure the list is empty
 		targetFilesInstances = new ArrayList<File>();
 	}
-	
+
 }

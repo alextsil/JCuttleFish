@@ -1,18 +1,18 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import extractor.PathsExtractor;
+import extractor.filefilters.SuffixFolderFilter;
 import extractor.filefilters.SupportedSuffixFilters;
-
 
 public class PathsExtractorTest {
 
@@ -20,8 +20,8 @@ public class PathsExtractorTest {
 	private PathsExtractor instance;
 	private File pathToFile;
 	private List<File> resultsList;
-	
-	
+	private FileFilter filterImpl;
+
 	@Before
 	public void setUp() throws Exception {
 		userGivenPath = "src/test/resources/sampleapplications/addressbook";
@@ -35,6 +35,7 @@ public class PathsExtractorTest {
 		instance = null;
 		pathToFile = null;
 		resultsList = null;
+		filterImpl = null;
 	}
 
 	@Test
@@ -43,20 +44,22 @@ public class PathsExtractorTest {
 		assertNotNull(resultsList);
 		assertEquals(35, resultsList.size());
 
-//		for (File file : resultsList) {
-//			System.out.println(file.toString());
-//		}
+		// for (File file : resultsList) {
+		// System.out.println(file.toString());
+		// }
 	}
-	
+
 	@Test
 	public void getFilesInstancesFilteredTest() {
-		resultsList = instance.getFilesInstances(SupportedSuffixFilters.JAVA);
+		filterImpl = new SuffixFolderFilter(SupportedSuffixFilters.JAVA);
+		resultsList = instance.getFilesInstances(filterImpl);
 		assertNotNull(resultsList);
-		assertEquals(28, resultsList.size());	
-		
-		resultsList = instance.getFilesInstances(SupportedSuffixFilters.FORM);
+		assertEquals(28, resultsList.size());
+
+		filterImpl = new SuffixFolderFilter(SupportedSuffixFilters.FORM);
+		resultsList = instance.getFilesInstances(filterImpl);
 		assertNotNull(resultsList);
-		assertEquals(3, resultsList.size());	
+		assertEquals(3, resultsList.size());
 	}
 
 }

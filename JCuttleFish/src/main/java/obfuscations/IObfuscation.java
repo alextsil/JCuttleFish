@@ -1,6 +1,6 @@
 package obfuscations;
 
 public interface IObfuscation {
-	public void setPath(String path);
+	public void setParameters(String path);
 	public boolean obfuscate();
 }
