@@ -1,4 +1,4 @@
-package extractor.filefilters;
+package extractor.filefilters.enums;
 
 public enum SupportedSuffixFilters {
 	JAVA(".java"),

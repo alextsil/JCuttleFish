@@ -8,7 +8,7 @@ import java.util.List;
 import obfuscations.IObfuscation;
 import extractor.PathsExtractor;
 import extractor.filefilters.SuffixFolderFilter;
-import extractor.filefilters.SupportedSuffixFilters;
+import extractor.filefilters.enums.SupportedSuffixFilters;
 
 //Wraps the 2 classes that provide the access modification service
 public class AccessModificationManager implements IObfuscation {

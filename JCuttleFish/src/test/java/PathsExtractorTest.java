@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import extractor.PathsExtractor;
 import extractor.filefilters.SuffixFolderFilter;
-import extractor.filefilters.SupportedSuffixFilters;
+import extractor.filefilters.enums.SupportedSuffixFilters;
 
 public class PathsExtractorTest {
 

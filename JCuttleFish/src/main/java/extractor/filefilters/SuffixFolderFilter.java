@@ -6,6 +6,8 @@ import java.io.FileFilter;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 
+import extractor.filefilters.enums.SupportedSuffixFilters;
+
 public class SuffixFolderFilter implements FileFilter {
 
 	private String fileSuffix;

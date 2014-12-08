@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import extractor.filefilters.SuffixFolderFilter;
-import extractor.filefilters.SupportedSuffixFilters;
+import extractor.filefilters.enums.SupportedSuffixFilters;
 
 
 public class SuffixFilterTest {

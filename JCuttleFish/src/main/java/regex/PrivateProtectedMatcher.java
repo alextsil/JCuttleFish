@@ -16,7 +16,7 @@ public class PrivateProtectedMatcher implements IMatcher {
 	
 	
 	public String applyMatcher(String targetLine) {
-		this.targetLine = targetLine; //def copy
+		this.targetLine = targetLine;
 		matcher = patImpl.matcher(this.targetLine);
 		this.targetLine = matcher.replaceFirst("public");
 		return this.targetLine;
