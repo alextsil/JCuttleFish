@@ -3,7 +3,7 @@ package regex;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PrivateProtectedMatcher implements IMatcher {
+public class PrivateProtectedMatcher {
 	
 	private String pattern = "protected|private";
 	private String targetLine;

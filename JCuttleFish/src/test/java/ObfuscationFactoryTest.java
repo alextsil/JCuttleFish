@@ -1,7 +1,7 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import obfuscations.IObfuscation;
 import obfuscations.ObfuscationFactory;
-import obfuscations.abstractinterfacemodification.AbstractInterfaceModificationManager;
 import obfuscations.accessmodification.AccessModificationManager;
 import obfuscations.enums.SupportedObfuscations;
 
@@ -38,14 +38,4 @@ public class ObfuscationFactoryTest {
 		assertEquals(obfFromNew.getClass(), obfFromFactory.getClass());
 	}
 	
-	@Test
-	public void AbstractInterfaceModificationTest() {
-		obfFromNew = new AbstractInterfaceModificationManager();
-		assertNotNull(obfFromNew);
-		
-		obfFromFactory = ObfuscationFactory.buildObfuscation(SupportedObfuscations.ABSTRACT_INTERFACE_MODIFICATION);
-		assertNotNull(obfFromFactory);
-	
-		assertEquals(obfFromNew.getClass(), obfFromFactory.getClass());
-	}
 }

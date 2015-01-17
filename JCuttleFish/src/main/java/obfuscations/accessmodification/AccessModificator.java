@@ -25,7 +25,7 @@ public class AccessModificator {
 	public boolean modifyFileToPublic() {
 		File newFile = createNewFileFromPath(this.targetFile);
 		PrivateProtectedMatcher matcher = new PrivateProtectedMatcher();
-
+//TODO: na figoun
 		try (Scanner scanner = new Scanner(this.targetFile, ("UTF-8"));
 				PrintWriter writer = new PrintWriter(newFile, "UTF-8")) {
 

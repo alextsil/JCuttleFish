@@ -11,5 +11,5 @@ public class Main {
 		aModMan.setParameters(userGivenPath);
 		aModMan.obfuscate();
 	}
-
+	
 }
