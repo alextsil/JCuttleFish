@@ -5,14 +5,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CompilationUnitInitiator {
-	private static final Logger logger = LogManager.getLogger("CompilationUnitInitiator");
+	
+	private final Logger logger = LoggerFactory.getLogger( CompilationUnitInitiator.class );
 	
 	private String fileContents = ""; // Hosts the source code
 

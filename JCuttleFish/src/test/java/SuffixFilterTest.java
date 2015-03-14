@@ -6,6 +6,8 @@ import java.io.FileFilter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import extractor.filefilters.SuffixFolderFilter;
 import extractor.filefilters.enums.SupportedSuffixFilters;
@@ -15,9 +17,11 @@ public class SuffixFilterTest {
 	
 	FileFilter concreteFilter;
 	private File[] fileInstances;
+	private final Logger logger = LoggerFactory.getLogger( SuffixFilterTest.class );
 
 	@Before
 	public void setUp() throws Exception {
+		logger.debug("lol debug");
 	}
 
 	@After
@@ -27,6 +31,7 @@ public class SuffixFilterTest {
 
 	@Test
 	public void iniFilterTest() {
+		logger.warn("wtf");
 		FileFilter concreteFilter = new SuffixFolderFilter(SupportedSuffixFilters.INI);
 		File initialFilePath = new File("src/test/resources/sampleapplications/addressbook/ini");
 		fileInstances = initialFilePath.listFiles(concreteFilter);

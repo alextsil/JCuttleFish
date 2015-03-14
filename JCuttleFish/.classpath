@@ -27,16 +27,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alexei/Desktop/lib gia parsing/jdt441/plugins/org.eclipse.jdt.core_3.10.0.v20140902-0626.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alexei/Desktop/lib gia parsing/equinox/plugins/org.eclipse.core.jobs_3.6.0.v20140424-0053.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alexei/Desktop/lib gia parsing/equinox/plugins/org.eclipse.core.contenttype_3.4.200.v20140207-1251.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alexei/Desktop/lib gia parsing/old apo random site/org.eclipse.core.resources_3.5.2.R35x_v20091203-1235.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alexei/Desktop/lib gia parsing/equinox/plugins/org.eclipse.core.runtime_3.10.0.v20140318-2214.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alexei/Desktop/lib gia parsing/equinox/plugins/org.eclipse.osgi_3.10.1.v20140909-1633.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alexei/Desktop/lib gia parsing/jdt441/plugins/org.eclipse.jdt.compiler.apt_1.1.0.v20140509-1235.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alexei/Desktop/lib gia parsing/jdt441/plugins/org.eclipse.jdt.compiler.tool_1.0.300.v20140311-1758.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alexei/Desktop/lib gia parsing/jdt441/plugins/org.eclipse.jdt.core.manipulation_1.5.0.v20130605-1748.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alexei/Desktop/lib gia parsing/equinox/plugins/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alexei/Desktop/lib gia parsing/equinox/plugins/org.eclipse.equinox.preferences_3.5.200.v20140224-1527.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
