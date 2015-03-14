@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.10" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.10" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.core.contenttype:3.4.200.v20140207-1251" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.core.jobs:3.6.0.v20140424-0053" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.core.resources:3.9.1.v20140825-1431" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.core.runtime:3.10.0.v20140318-2214" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.equinox.common:3.6.200.v20130402-1505" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.equinox.preferences:3.5.200.v20140224-1527" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.maven-play-plugin.org.eclipse.jdt:org.eclipse.jdt.core:3.10.0.v20140604-1726" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse:org.eclipse.osgi:3.8.0.v20120529-1548" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jdt.compiler:tool:1.0.0-v_771" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.tycho:org.eclipse.jdt.compiler.apt:1.1.0.v20140509-1235" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jdt.core.manipulation:jdt.core.manipulation:1.5.0.v20130605-1748" level="project" />
+  </component>
+</module>
