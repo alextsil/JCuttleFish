@@ -5,19 +5,19 @@ import obfuscations.enums.SupportedObfuscations;
 
 public class ObfuscationFactory {
 
-	public static IObfuscation buildObfuscation(SupportedObfuscations type) {
-		IObfuscation obfuscation = null;
+    public static IObfuscation buildObfuscation ( SupportedObfuscations type ) {
+        IObfuscation obfuscation = null;
 
-		switch (type) {
+        switch ( type ) {
 
-		case ACCESS_MODIFICATION_PUBLIC:
-			obfuscation = new AccessModificationManager();
-			break;			
+            case ACCESS_MODIFICATION_PUBLIC:
+                obfuscation = new AccessModificationManager();
+                break;
 
-		default:
-			break;
+            default:
+                break;
 
-		}
-		return obfuscation;
-	}
+        }
+        return obfuscation;
+    }
 }
