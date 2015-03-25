@@ -1,8 +1,10 @@
 package parser;
 
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.internal.core.JavaProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,16 +28,15 @@ public class CompilationUnitInitiator {
         parser.setKind( ASTParser.K_COMPILATION_UNIT );
         parser.setSource( this.fileContents.toCharArray() );
         parser.setBindingsRecovery( true );
-
-        // parser.setUnitName("C:\\test\\src\\main\\java\\extractor\\PathsExtractor.java");
-        parser.setUnitName( "JCuttleFish\\src" ); // check ti paizei me / kai \\
-        //String[] classPath = { "C:\\Program Files\\Java\\jre1.8.0_31\\bin" };
-        String[] classPath = { System.getenv( "JAVA_HOME" ) + "\\bin" };
+        parser.setUnitName( "JCuttleFish" + System.lineSeparator() + "src" );
+        String[] classPath = { System.getenv( "JAVA_HOME" ) + System.lineSeparator() + "bin" };
         String[] srcPath = { "C:\\test\\JCuttleFish\\src" };
         parser.setEnvironment( classPath, srcPath, null, false );
 
         parser.setResolveBindings( true );
+
         CompilationUnit cu = ( CompilationUnit ) parser.createAST( null );
+        
         return cu;
     }
 
@@ -74,4 +75,7 @@ public class CompilationUnitInitiator {
         this.fileContents = fileData.toString();
     }
 
+    public String getFileContents () {
+        return fileContents;
+    }
 }

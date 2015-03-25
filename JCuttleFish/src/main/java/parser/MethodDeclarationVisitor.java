@@ -1,6 +1,9 @@
 package parser;
 
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 public class MethodDeclarationVisitor extends ASTVisitor {
 
@@ -26,20 +29,8 @@ public class MethodDeclarationVisitor extends ASTVisitor {
     public boolean visit ( FieldDeclaration field ) {
         System.out.println( "\n---- field declaration ----" );
         System.out.println( field );
+
         return true;
     }
 
-    public boolean visit ( TypeDeclaration typeDeclaration ) {
-        ITypeBinding tb = typeDeclaration.resolveBinding();
-        StringBuilder sb = new StringBuilder();
-        sb.append( System.lineSeparator() + "------------ Class or w/e declaration ------------ " );
-        sb.append( System.lineSeparator() + "is class: " + tb.isClass() );
-        sb.append( System.lineSeparator() + "name: " + tb.getName() );
-        sb.append( System.lineSeparator() + "full name: " + tb.getQualifiedName() );
-        sb.append( System.lineSeparator() + "kind: " + tb.getKind() ); //2=type=?
-        sb.append( System.lineSeparator() + "package: " + tb.getPackage().getName() );
-        sb.append( System.lineSeparator() );
-        System.out.print( sb.toString() );
-        return true;
-    }
 }

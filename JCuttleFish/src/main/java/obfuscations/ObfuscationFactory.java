@@ -2,6 +2,7 @@ package obfuscations;
 
 import obfuscations.accessmodification.AccessModificationManager;
 import obfuscations.enums.SupportedObfuscations;
+import obfuscations.variablename.VariableNameManager;
 
 public class ObfuscationFactory {
 
@@ -10,13 +11,16 @@ public class ObfuscationFactory {
 
         switch ( type ) {
 
-            case ACCESS_MODIFICATION_PUBLIC:
+            case ACCESS_MODIFICATION:
                 obfuscation = new AccessModificationManager();
+                break;
+
+            case VARIABLE_NAME:
+                obfuscation = new VariableNameManager();
                 break;
 
             default:
                 break;
-
         }
         return obfuscation;
     }

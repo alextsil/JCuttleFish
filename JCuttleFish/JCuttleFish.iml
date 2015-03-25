@@ -30,5 +30,6 @@
     <orderEntry type="library" name="Maven: org.eclipse.jdt.compiler:tool:1.0.0-v_771" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.tycho:org.eclipse.jdt.compiler.apt:1.1.0.v20140509-1235" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jdt.core.manipulation:jdt.core.manipulation:1.5.0.v20130605-1748" level="project" />
+    <orderEntry type="library" name="org.jibx.config.3rdparty.org.eclipse:org.eclipse.text:3.5.100.v20110505-0800" level="project" />
   </component>
 </module>

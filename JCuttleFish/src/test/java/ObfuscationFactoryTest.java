@@ -11,7 +11,7 @@ import static org.junit.Assert.assertNotNull;
 
 //Creates 2 objects and tests if they are of the same type.
 //One object is created using the factory while the other one is created using "new".
-//The 2 objects are compared, using reflection(.getClass()), to determine if they are of the same type or not.
+//The 2 objects are compared using .getClass()), to determine if they are of the same type or not.
 public class ObfuscationFactoryTest {
 
     IObfuscation obfFromFactory;
@@ -33,9 +33,8 @@ public class ObfuscationFactoryTest {
         obfFromNew = new AccessModificationManager();
         assertNotNull( obfFromNew );
 
-        obfFromFactory = ObfuscationFactory.buildObfuscation( SupportedObfuscations.ACCESS_MODIFICATION_PUBLIC );
+        obfFromFactory = ObfuscationFactory.buildObfuscation( SupportedObfuscations.ACCESS_MODIFICATION );
         assertNotNull( obfFromFactory );
-
         assertEquals( obfFromNew.getClass(), obfFromFactory.getClass() );
     }
 
