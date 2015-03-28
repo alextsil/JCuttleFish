@@ -1,10 +1,12 @@
 package parser;
 
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.internal.core.JavaProject;
+import org.apache.commons.io.FileUtils;
+import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
+import org.eclipse.text.edits.TextEdit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,16 +19,20 @@ public class CompilationUnitInitiator {
 
     private final Logger logger = LoggerFactory.getLogger( CompilationUnitInitiator.class );
 
-    private String fileContents = ""; // Hosts the source code
+    private String sourceFromFile = ""; // Hosts the source code
 
     public CompilationUnitInitiator ( File file ) {
         javaFileToString( file );
     }
 
+    public CompilationUnitInitiator () {
+
+    }
+
     public CompilationUnit fetchCompilationUnit () {
         ASTParser parser = ASTParser.newParser( AST.JLS8 );
         parser.setKind( ASTParser.K_COMPILATION_UNIT );
-        parser.setSource( this.fileContents.toCharArray() );
+        parser.setSource( this.sourceFromFile.toCharArray() );
         parser.setBindingsRecovery( true );
         parser.setUnitName( "JCuttleFish" + System.lineSeparator() + "src" );
         String[] classPath = { System.getenv( "JAVA_HOME" ) + System.lineSeparator() + "bin" };
@@ -36,7 +42,7 @@ public class CompilationUnitInitiator {
         parser.setResolveBindings( true );
 
         CompilationUnit cu = ( CompilationUnit ) parser.createAST( null );
-        
+
         return cu;
     }
 
@@ -72,10 +78,52 @@ public class CompilationUnitInitiator {
                 }
         }
 
-        this.fileContents = fileData.toString();
+        this.sourceFromFile = fileData.toString();
     }
 
-    public String getFileContents () {
-        return fileContents;
+    public void injectionAttempt () {
+        String filePath = "C:\\test\\JCuttleFish\\src\\main\\java\\extractor\\PathsExtractor.java";
+        File file = new File( filePath );
+        this.javaFileToString( file );
+
+        CompilationUnit astRoot = this.fetchCompilationUnit();
+        Document document = new Document( this.sourceFromFile );
+
+        MethodDeclarationVisitor mdv = new MethodDeclarationVisitor();
+        astRoot.accept( mdv );
+
+        ASTRewrite rewriter = ASTRewrite.create( astRoot.getAST() );
+        astRoot.recordModifications();
+
+        // for getting insertion position
+        TypeDeclaration typeDecl = ( TypeDeclaration ) astRoot.types().get( 0 );
+        MethodDeclaration methodDecl = typeDecl.getMethods()[ 0 ];
+        Block block = methodDecl.getBody();
+
+        // create new statements for insertion
+        MethodInvocation newInvocation = astRoot.getAST().newMethodInvocation();
+        newInvocation.setName( astRoot.getAST().newSimpleName( "add" ) );
+        Statement newStatement = astRoot.getAST().newExpressionStatement( newInvocation );
+
+        //create ListRewrite
+        ListRewrite listRewrite = rewriter.getListRewrite( block, Block.STATEMENTS_PROPERTY );
+        listRewrite.insertLast( newStatement, null );
+
+        TextEdit edits = rewriter.rewriteAST( document, null );
+        try {
+            edits.apply( document );
+        } catch ( BadLocationException e ) {
+            e.printStackTrace();
+        }
+        try {
+            File targetFile = new File( "C:\\targetfash.java" );
+            FileUtils.write( targetFile, document.get() );
+        } catch ( IOException e ) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getSourceFromFile () {
+        return sourceFromFile;
     }
 }
