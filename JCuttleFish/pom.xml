@@ -90,6 +90,21 @@
             <artifactId>jdt.core.manipulation</artifactId>
             <version>1.5.0.v20130605-1748</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jface</groupId>
+            <artifactId>org.eclipse.jface.text</artifactId>
+            <version>3.5.0.v20090602</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.text</groupId>
+            <artifactId>org.eclipse.text</artifactId>
+            <version>3.5.101</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jibx.config.3rdparty.org.eclipse</groupId>
+            <artifactId>org.eclipse.text</artifactId>
+            <version>3.5.100.v20110505-0800</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

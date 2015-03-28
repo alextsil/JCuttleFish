@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a5982666-6d89-4ae0-9e4b-3891b36ef3d5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/parser/CompilationUnitInitiator.java" afterPath="$PROJECT_DIR$/src/main/java/parser/CompilationUnitInitiator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/CompilationUnitInitiatorTest.java" afterPath="$PROJECT_DIR$/src/test/java/CompilationUnitInitiatorTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_core_org_eclipse_core_commands_3_6_0.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_equinox_org_eclipse_equinox_common_3_6_0.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jface_org_eclipse_jface_text_3_5_0_v20090602.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_text_org_eclipse_text_3_5_101.xml" />
+      <change type="DELETED" beforePath="C:\Users\Alex\git\JCuttleFish\JCuttleFish\.idea\libraries\org_jibx_config_3rdparty_org_eclipse_org_eclipse_text_3_5_100_v20110505_0800.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JCuttleFish.iml" afterPath="$PROJECT_DIR$/JCuttleFish.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="JCuttleFish.iws" />
@@ -47,14 +50,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CompilationUnitInitiatorTest.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CompilationUnitInitiatorTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/CompilationUnitInitiatorTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.25931928">
+            <state vertical-scroll-proportion="0.0">
               <caret line="8" column="34" selection-start-line="8" selection-start-column="34" selection-end-line="8" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.90275526">
+              <caret line="105" column="43" selection-start-line="105" selection-start-column="43" selection-end-line="105" selection-end-column="43" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -102,10 +115,10 @@
         <option value="$PROJECT_DIR$/src/main/java/obfuscations/enums/SupportedObfuscations.java" />
         <option value="$PROJECT_DIR$/src/main/java/obfuscations/variablename/VariableNameManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/obfuscations/ObfuscationFactory.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/parser/MethodDeclarationVisitor.java" />
         <option value="$PROJECT_DIR$/src/test/java/CompilationUnitInitiatorTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/parser/CompilationUnitInitiator.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -211,7 +224,7 @@
     <OptionsSetting value="true" id="Edit" />
     <OptionsSetting value="true" id="Undo Check Out" />
     <OptionsSetting value="true" id="Get Latest Version" />
-    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="2" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectView">
@@ -288,9 +301,9 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.47448015" />
+    <property name="project.structure.side.proportion" value="0.3691358" />
     <property name="options.lastSelected" value="preferences.pluginManager" />
     <property name="options.splitter.main.proportions" value="0.18075117" />
     <property name="options.splitter.details.proportions" value="0.2" />
@@ -325,7 +338,7 @@
     <property name="Downloaded.Files.Path.Enabled" value="true" />
     <property name="Repository.Attach.JavaDocs" value="true" />
     <property name="Repository.Attach.Sources" value="true" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
@@ -711,7 +724,7 @@
       <workItem from="1427316035886" duration="4929000" />
       <workItem from="1427534623785" duration="4092000" />
       <workItem from="1427551854742" duration="1600000" />
-      <workItem from="1427553488322" duration="603000" />
+      <workItem from="1427553488322" duration="997000" />
     </task>
     <task id="LOCAL-00001" summary="Added dependencies in pom.xml">
       <created>1426357478870</created>
@@ -731,11 +744,17 @@
       <option name="project" value="LOCAL" />
       <updated>1426422168924</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="ASTparser and ASTRewrite are both set. Example usage added. Code injection works.">
+      <created>1427554138025</created>
+      <option name="number" value="00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1427554138025</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="58984000" />
+    <option name="totallyTimeSpent" value="59378000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -808,7 +827,8 @@
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="Added dependencies in pom.xml" />
     <MESSAGE value="reformated all files" />
-    <option name="LAST_COMMIT_MESSAGE" value="reformated all files" />
+    <MESSAGE value="ASTparser and ASTRewrite are both set. Example usage added. Code injection works." />
+    <option name="LAST_COMMIT_MESSAGE" value="ASTparser and ASTRewrite are both set. Example usage added. Code injection works." />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -1227,14 +1247,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="73" column="25" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/birt/runtime/org.eclipse.equinox.common/3.6.200.v20130402-1505/org.eclipse.equinox.common-3.6.200.v20130402-1505.jar!/org/eclipse/core/runtime/Path.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3462838">
@@ -1250,6 +1262,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/CompilationUnitInitiatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="34" selection-start-line="8" selection-start-column="34" selection-end-line="8" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/parser/CompilationUnitInitiator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1261,13 +1283,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/CompilationUnitInitiatorTest.java">
+    <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25931928">
-          <caret line="8" column="34" selection-start-line="8" selection-start-column="34" selection-end-line="8" selection-end-column="34" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.90275526">
+          <caret line="105" column="43" selection-start-line="105" selection-start-column="43" selection-end-line="105" selection-end-column="43" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1280,7 +1300,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.47448015" />
+                <option value="0.3691358" />
               </list>
             </option>
           </splitter-proportions>
@@ -1304,7 +1324,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.47448015" />
+                <option value="0.3691358" />
               </list>
             </option>
           </splitter-proportions>
@@ -1360,11 +1380,11 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>org.eclipse.jface:org.eclipse.jface.text:3.5.0.v20090602</last-edited>
+          <last-edited>Maven: org.slf4j:slf4j-api:1.7.10</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.47448015" />
+                <option value="0.5414079" />
               </list>
             </option>
           </splitter-proportions>
