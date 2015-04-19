@@ -9,7 +9,6 @@ import java.util.List;
 //and saves the File instances of all FILES in a List.
 
 
-//TODO: implement a validate function.
 public class PathsExtractor {
 
     // The list that contains all the File instances from the extracted paths

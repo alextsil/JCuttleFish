@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.eclipse.jface:org.eclipse.jface.text:3.5.0.v20090602">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jface/org.eclipse.jface.text/3.5.0.v20090602/org.eclipse.jface.text-3.5.0.v20090602.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jface/org.eclipse.jface.text/3.5.0.v20090602/org.eclipse.jface.text-3.5.0.v20090602-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jface/org.eclipse.jface.text/3.5.0.v20090602/org.eclipse.jface.text-3.5.0.v20090602-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -29,7 +29,7 @@ public class PathsExtractorTest {
         userGivenPath = "src/test/resources/sampleapplications/addressbook";
         pathToFile = new File( userGivenPath );
         instance = new PathsExtractor( pathToFile.getAbsolutePath() );
-        resultsList = new ArrayList<File>();
+        resultsList = new ArrayList<>();
     }
 
     @After
@@ -49,21 +49,18 @@ public class PathsExtractorTest {
     }
 
     @Test
-    public void getFilesInstancesFilteredTest () {
+    public void getFilesInstancesFilterTest1 () {
         filterImpl = new SuffixFolderFilter( SupportedSuffixFilters.JAVA );
         resultsList = instance.getFilesInstances( filterImpl );
 
         assertEquals( 28, resultsList.size() );
+    }
 
-        //debug print
-        for ( File file : resultsList ) {
-            System.out.println( file.getPath() );
-        }
-
+    @Test
+    public void getFilesInstancesFilterTest2 () {
         filterImpl = new SuffixFolderFilter( SupportedSuffixFilters.FORM );
         resultsList = instance.getFilesInstances( filterImpl );
 
         assertEquals( 3, resultsList.size() );
     }
-
 }

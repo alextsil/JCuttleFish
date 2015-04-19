@@ -1,6 +1,5 @@
 <component name="libraryTable">
-  <library name="org.jibx.config.3rdparty.org.eclipse:org.eclipse.text:3.5.100.v20110505-0800" type="repository">
-    <properties maven-id="org.jibx.config.3rdparty.org.eclipse:org.eclipse.text:3.5.100.v20110505-0800" />
+  <library name="Maven: org.jibx.config.3rdparty.org.eclipse:org.eclipse.text:3.5.100.v20110505-0800">
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/org/jibx/config/3rdparty/org/eclipse/org.eclipse.text/3.5.100.v20110505-0800/org.eclipse.text-3.5.100.v20110505-0800.jar!/" />
     </CLASSES>
