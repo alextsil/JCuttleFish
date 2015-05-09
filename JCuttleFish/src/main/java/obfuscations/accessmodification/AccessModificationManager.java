@@ -12,7 +12,7 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.text.edits.TextEdit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import parser.CompilationUnitInitiator;
+import parser.UnitSourceInitiator;
 import pojo.UnitSource;
 
 import java.io.File;
@@ -29,7 +29,7 @@ public class AccessModificationManager {
     //TODO : replace if checks with .isClass() function of eclipse JDT (binding recovery)
     public boolean obfuscate ( List<File> targetFiles ) {
         for ( File file : targetFiles ) {
-            CompilationUnitInitiator initiator = new CompilationUnitInitiator();
+            UnitSourceInitiator initiator = new UnitSourceInitiator();
             logger.info( "path (String) extracted from File is : " + file.getPath() );
             UnitSource unitSource = initiator.fetchUnitSource( file.getPath() );
             Document document = new Document( unitSource.getSourceCode() );
@@ -39,6 +39,7 @@ public class AccessModificationManager {
 
             if ( !cu.types().isEmpty() ) {
 
+                //replace "if" with "typedecl.resolvebindings().isClass()";
                 TypeDeclaration typeDecl = ( TypeDeclaration ) cu.types().get( 0 );
                 if ( typeDecl.getFields().length != 0 ) {
                     for ( FieldDeclaration fieldDeclaration : typeDecl.getFields() ) {
