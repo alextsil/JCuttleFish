@@ -1,6 +1,6 @@
 package extractor.filefilters;
 
-import extractor.filefilters.enums.SupportedSuffixFilters;
+import extractor.filefilters.enums.SuffixFilters;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 
@@ -11,7 +11,7 @@ public class SuffixFolderFilter implements FileFilter {
 
     private String fileSuffix;
 
-    public SuffixFolderFilter ( SupportedSuffixFilters suffixFilter ) {
+    public SuffixFolderFilter ( SuffixFilters suffixFilter ) {
         this.fileSuffix = suffixFilter.toString();
     }
 

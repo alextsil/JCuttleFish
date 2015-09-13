@@ -1,6 +1,6 @@
 import extractor.PathsExtractor;
 import extractor.filefilters.SuffixFolderFilter;
-import extractor.filefilters.enums.SupportedSuffixFilters;
+import extractor.filefilters.enums.SuffixFilters;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +50,7 @@ public class PathsExtractorTest {
 
     @Test
     public void getFilesInstancesFilterTest1 () {
-        filterImpl = new SuffixFolderFilter( SupportedSuffixFilters.JAVA );
+        filterImpl = new SuffixFolderFilter( SuffixFilters.JAVA );
         resultsList = instance.getFilesInstances( filterImpl );
 
         assertEquals( 28, resultsList.size() );
@@ -58,7 +58,7 @@ public class PathsExtractorTest {
 
     @Test
     public void getFilesInstancesFilterTest2 () {
-        filterImpl = new SuffixFolderFilter( SupportedSuffixFilters.FORM );
+        filterImpl = new SuffixFolderFilter( SuffixFilters.FORM );
         resultsList = instance.getFilesInstances( filterImpl );
 
         assertEquals( 3, resultsList.size() );

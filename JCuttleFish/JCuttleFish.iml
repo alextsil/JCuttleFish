@@ -25,15 +25,14 @@
     <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.core.runtime:3.10.0.v20140318-2214" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.equinox.common:3.6.200.v20130402-1505" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.equinox.preferences:3.5.200.v20140224-1527" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.maven-play-plugin.org.eclipse.jdt:org.eclipse.jdt.core:3.10.0.v20140604-1726" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse:org.eclipse.osgi:3.8.0.v20120529-1548" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jdt.compiler:tool:1.0.0-v_771" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.tycho:org.eclipse.jdt.compiler.apt:1.1.0.v20140509-1235" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.jdt.core.manipulation:jdt.core.manipulation:1.5.0.v20130605-1748" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.jface:org.eclipse.jface.text:3.5.0.v20090602" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.text:org.eclipse.text:3.5.101" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.core:org.eclipse.core.commands:3.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.equinox:org.eclipse.equinox.common:3.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.jibx.config.3rdparty.org.eclipse:org.eclipse.text:3.5.100.v20110505-0800" level="project" />
+    <orderEntry type="library" name="org.eclipse.jdt.apt.core-3.4.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="org.eclipse.jdt.core-3.12.0-SNAPSHOT-sources" level="project" />
   </component>
 </module>

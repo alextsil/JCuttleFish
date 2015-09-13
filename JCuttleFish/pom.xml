@@ -65,11 +65,11 @@
             <artifactId>org.eclipse.equinox.preferences</artifactId>
             <version>3.5.200.v20140224-1527</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.code.maven-play-plugin.org.eclipse.jdt</groupId>
-            <artifactId>org.eclipse.jdt.core</artifactId>
-            <version>3.10.0.v20140604-1726</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.google.code.maven-play-plugin.org.eclipse.jdt</groupId>-->
+            <!--<artifactId>org.eclipse.jdt.core</artifactId>-->
+            <!--<version>3.10.0.v20140604-1726</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.eclipse</groupId>
             <artifactId>org.eclipse.osgi</artifactId>
@@ -85,16 +85,16 @@
             <artifactId>org.eclipse.jdt.compiler.apt</artifactId>
             <version>1.1.0.v20140509-1235</version>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.jdt.core.manipulation</groupId>
-            <artifactId>jdt.core.manipulation</artifactId>
-            <version>1.5.0.v20130605-1748</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jface</groupId>
-            <artifactId>org.eclipse.jface.text</artifactId>
-            <version>3.5.0.v20090602</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.eclipse.jdt.core.manipulation</groupId>-->
+            <!--<artifactId>jdt.core.manipulation</artifactId>-->
+            <!--<version>1.5.0.v20130605-1748</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.eclipse.jface</groupId>-->
+            <!--<artifactId>org.eclipse.jface.text</artifactId>-->
+            <!--<version>3.5.0.v20090602</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.eclipse.text</groupId>
             <artifactId>org.eclipse.text</artifactId>
@@ -108,11 +108,6 @@
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <groupId>maven-compiler-plugin</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>1.7</version>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -21,7 +21,7 @@ public class BackupFilesHelper {
                 FileUtils.forceDelete( destDir );
             }
         } catch ( IOException ioex1 ) {
-            //cannot delete exc
+            ioex1.printStackTrace();
             return false;
         }
         //loop all to replace root directory
@@ -33,6 +33,7 @@ public class BackupFilesHelper {
                 Files.createDirectories( new File( destPath ).toPath() );
                 Files.copy( sourceFile.toPath(), new File( destPath ).toPath(), StandardCopyOption.REPLACE_EXISTING );
             } catch ( IOException ioex2 ) {
+                ioex2.printStackTrace();
                 return false;
             }
         }

@@ -14,7 +14,7 @@ public class PathsExtractor {
     // The list that contains all the File instances from the extracted paths
     private List<File> targetFilesInstances;
 
-    // User given path name - Defensive copy
+    // User given path name
     private String pathName;
 
     public PathsExtractor ( String pathName ) {

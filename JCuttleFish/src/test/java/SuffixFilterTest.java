@@ -1,5 +1,5 @@
 import extractor.filefilters.SuffixFolderFilter;
-import extractor.filefilters.enums.SupportedSuffixFilters;
+import extractor.filefilters.enums.SuffixFilters;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class SuffixFilterTest {
 
     @Test
     public void iniFilterTest () {
-        FileFilter concreteFilter = new SuffixFolderFilter( SupportedSuffixFilters.INI );
+        FileFilter concreteFilter = new SuffixFolderFilter( SuffixFilters.INI );
         File initialFilePath = new File( "src/test/resources/sampleapplications/addressbook/ini" );
         fileInstances = initialFilePath.listFiles( concreteFilter );
         assertEquals( 2, fileInstances.length );
