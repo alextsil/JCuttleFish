@@ -1,23 +1,38 @@
 package pojo;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jface.text.Document;
 
-public class UnitSource {
+
+public class UnitSource
+{
 
     private CompilationUnit compilationUnit;
 
-    private String sourceCode;
+    //Hosts the source code as text
+    private Document document;
 
-    public UnitSource ( CompilationUnit compilationUnit, String sourceCode ) {
+    private String filePath;
+
+    public UnitSource ( CompilationUnit compilationUnit, String sourceCode, String filePath )
+    {
         this.compilationUnit = compilationUnit;
-        this.sourceCode = sourceCode;
+        this.document = new Document( sourceCode );
+        this.filePath = filePath;
     }
 
-    public CompilationUnit getCompilationUnit () {
+    public CompilationUnit getCompilationUnit ()
+    {
         return compilationUnit;
     }
 
-    public String getSourceCode () {
-        return sourceCode;
+    public Document getDocument ()
+    {
+        return document;
+    }
+
+    public String getFilePath ()
+    {
+        return filePath;
     }
 }

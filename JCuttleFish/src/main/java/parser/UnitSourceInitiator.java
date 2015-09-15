@@ -40,7 +40,7 @@ public class UnitSourceInitiator {
         parser.setResolveBindings( true );
 
         CompilationUnit cu = ( CompilationUnit ) parser.createAST( null );
-        UnitSource unitSource = new UnitSource( cu, this.sourceCode );
+        UnitSource unitSource = new UnitSource( cu, this.sourceCode, sourceFilePath );
         return unitSource;
     }
 
