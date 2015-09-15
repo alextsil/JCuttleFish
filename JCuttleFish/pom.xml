@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.Jfish</groupId>
     <artifactId>JCuttleFish</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
     <name>JCuttleFish</name>
     <description>Thesis: Java obfuscator for Java programs</description>
     <dependencies>
