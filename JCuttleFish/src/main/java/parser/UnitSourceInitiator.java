@@ -1,31 +1,29 @@
 package parser;
 
 import configuration.ObfuscationEnvironment;
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.UnitSource;
-import util.ReadFileHelper;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
 
-public class UnitSourceInitiator {
+public class UnitSourceInitiator
+{
 
     private final Logger logger = LoggerFactory.getLogger( UnitSourceInitiator.class );
 
     private String sourceCode = null;
 
-    public UnitSourceInitiator () {
+    public UnitSourceInitiator ()
+    {
 
     }
 
-    public UnitSource fetchUnitSource ( String sourceFilePath ) {
-        try {
-            this.sourceCode = ReadFileHelper.readFile( sourceFilePath, Charset.forName( "UTF-8" ) );
-        } catch ( IOException e ) {
-            e.printStackTrace();
-        }
+    public UnitSource fetchUnitSource ( String sourceCode )
+    {
+        this.sourceCode = sourceCode;
         ObfuscationEnvironment obfuscationEnvironment = new ObfuscationEnvironment();
         ASTParser parser = ASTParser.newParser( AST.JLS8 );
         parser.setKind( ASTParser.K_COMPILATION_UNIT );
@@ -40,10 +38,9 @@ public class UnitSourceInitiator {
         parser.setResolveBindings( true );
 
         CompilationUnit cu = ( CompilationUnit ) parser.createAST( null );
-        UnitSource unitSource = new UnitSource( cu, this.sourceCode, sourceFilePath );
+        UnitSource unitSource = new UnitSource( cu, this.sourceCode );
         return unitSource;
     }
-
 
     //obso. retain for example.
 //    private void injectionAttempt () {

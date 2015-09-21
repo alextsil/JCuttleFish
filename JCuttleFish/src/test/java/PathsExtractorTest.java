@@ -12,7 +12,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class PathsExtractorTest {
+
+public class PathsExtractorTest
+{
 
     private String userGivenPath;
 
@@ -25,7 +27,8 @@ public class PathsExtractorTest {
     private FileFilter filterImpl;
 
     @Before
-    public void setUp () throws Exception {
+    public void setUp () throws Exception
+    {
         userGivenPath = "src/test/resources/sampleapplications/addressbook";
         pathToFile = new File( userGivenPath );
         instance = new PathsExtractor( pathToFile.getAbsolutePath() );
@@ -33,7 +36,8 @@ public class PathsExtractorTest {
     }
 
     @After
-    public void tearDown () throws Exception {
+    public void tearDown () throws Exception
+    {
         instance = null;
         pathToFile = null;
         resultsList = null;
@@ -41,15 +45,16 @@ public class PathsExtractorTest {
     }
 
     @Test
-    public void getFilesInstancesUnfilteredTest () {
+    public void getFilesInstances_UnfilteredTest ()
+    {
         resultsList = instance.getFilesInstances();
 
         assertEquals( 35, resultsList.size() );
-
     }
 
     @Test
-    public void getFilesInstancesFilterTest1 () {
+    public void getFilesInstances_JavaFilterTest ()
+    {
         filterImpl = new SuffixFolderFilter( SuffixFilters.JAVA );
         resultsList = instance.getFilesInstances( filterImpl );
 
@@ -57,7 +62,8 @@ public class PathsExtractorTest {
     }
 
     @Test
-    public void getFilesInstancesFilterTest2 () {
+    public void getFilesInstancesFormFilterTest ()
+    {
         filterImpl = new SuffixFolderFilter( SuffixFilters.FORM );
         resultsList = instance.getFilesInstances( filterImpl );
 

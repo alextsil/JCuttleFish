@@ -5,12 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.UnitSource;
 import util.ApplyChanges;
+import util.ObfuscatedNamesProvider;
+import util.enums.ObfuscatedNamesVariations;
 
 import java.util.Deque;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class LayoutManager
@@ -18,14 +17,12 @@ public class LayoutManager
 
     private final Logger logger = LoggerFactory.getLogger( LayoutManager.class );
 
-    public boolean obfuscate ( UnitSource unitSource )
+    public UnitSource obfuscate ( UnitSource unitSource )
     {
         CompilationUnit cu = unitSource.getCompilationUnit();
         cu.recordModifications();
-
-        //TODO: stream from file.
-        Stream<String> variableNamesStream = Stream.of( "a", "b", "c", "d", "e", "f", "g", "h", "i" );
-        Deque<String> obfuscatedVariableNames = variableNamesStream.distinct().collect( Collectors.toCollection( LinkedList::new ) );
+        ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
+        Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
 
         if ( !cu.types().isEmpty() )
         {
@@ -106,6 +103,37 @@ public class LayoutManager
                                         {
                                             simpleName.setIdentifier( obfuscatedVarName );
                                         }
+                                    } else if ( assignment.getRightHandSide().getNodeType() == ASTNode.METHOD_INVOCATION )
+                                    {
+                                        MethodInvocation methodInvocation = ( MethodInvocation ) assignment.getRightHandSide();
+
+                                        SimpleName invocationExpression = ( SimpleName ) methodInvocation.getExpression();
+                                        if ( invocationExpression.getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
+                                        {
+                                            invocationExpression.setIdentifier( obfuscatedVarName );
+                                        }
+
+                                        //Replace arguments
+                                        List<? extends ASTNode> arguments = methodInvocation.arguments();
+                                        for ( ASTNode argument : arguments )
+                                        {
+                                            if ( argument.getNodeType() == ASTNode.SIMPLE_NAME )
+                                            {
+                                                SimpleName simpleName = ( SimpleName ) argument;
+                                                if ( simpleName.getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
+                                                {
+                                                    simpleName.setIdentifier( obfuscatedVarName );
+                                                }
+                                            }
+                                            if ( argument.getNodeType() == ASTNode.FIELD_ACCESS )
+                                            {
+                                                FieldAccess fieldAccess = ( FieldAccess ) argument;
+                                                if ( fieldAccess.getName().getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
+                                                {
+                                                    fieldAccess.getName().setIdentifier( obfuscatedVarName );
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             } else if ( statement.getNodeType() == ASTNode.RETURN_STATEMENT )
@@ -129,7 +157,7 @@ public class LayoutManager
                                 }
                             } else if ( statement.getNodeType() == ASTNode.VARIABLE_DECLARATION_STATEMENT )
                             {
-                                //Never userd. probably wrong casting.
+                                //Never used. probably wrong casting.
                                 VariableDeclarationStatement vds = ( VariableDeclarationStatement ) statement;
                                 VariableDeclarationFragment localVdf = ( VariableDeclarationFragment ) vds.fragments().get( 0 );
                                 ClassInstanceCreation initializer = ( ClassInstanceCreation ) localVdf.getInitializer();

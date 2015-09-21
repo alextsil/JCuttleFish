@@ -3,6 +3,7 @@ package obfuscations;
 import obfuscations.layout.LayoutManager;
 import parser.UnitSourceInitiator;
 import pojo.UnitSource;
+import providers.FileSourceCodeProvider;
 
 import java.io.File;
 
@@ -16,10 +17,10 @@ public class ObfuscationCoordinator
         //TODO : backup before any action
 
         LayoutManager layoutManager = new LayoutManager();
-        File target = new File( "C:/1backup/main/java/configuration/ObfuscationEnvironment.java" );
+        File target = new File( "C:/1backup/main/java/pojo/UnitSource.java" );
         UnitSourceInitiator unitSourceInitiator = new UnitSourceInitiator();
-        UnitSource unitSource = unitSourceInitiator.fetchUnitSource( target.getPath() );
+        FileSourceCodeProvider sourceCodeProvider = new FileSourceCodeProvider();
+        UnitSource unitSource = unitSourceInitiator.fetchUnitSource( sourceCodeProvider.get( target ) );
         layoutManager.obfuscate( unitSource );
-
     }
 }

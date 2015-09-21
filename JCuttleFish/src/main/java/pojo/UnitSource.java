@@ -12,13 +12,10 @@ public class UnitSource
     //Hosts the source code as text
     private Document document;
 
-    private String filePath;
-
-    public UnitSource ( CompilationUnit compilationUnit, String sourceCode, String filePath )
+    public UnitSource ( CompilationUnit compilationUnit, String sourceCode )
     {
         this.compilationUnit = compilationUnit;
         this.document = new Document( sourceCode );
-        this.filePath = filePath;
     }
 
     public CompilationUnit getCompilationUnit ()
@@ -31,8 +28,4 @@ public class UnitSource
         return document;
     }
 
-    public String getFilePath ()
-    {
-        return filePath;
-    }
 }
