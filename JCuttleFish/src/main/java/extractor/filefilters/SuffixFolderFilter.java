@@ -18,7 +18,7 @@ public class SuffixFolderFilter implements FileFilter {
     // using commonsio filter implementations
     //The directory filter ensures that the filter will only apply on files. - do not remove.
     public boolean accept ( File pathName ) {
-        return new SuffixFileFilter( fileSuffix ).accept( pathName )
+        return new SuffixFileFilter( this.fileSuffix ).accept( pathName )
                 || DirectoryFileFilter.INSTANCE.accept( pathName );
     }
 

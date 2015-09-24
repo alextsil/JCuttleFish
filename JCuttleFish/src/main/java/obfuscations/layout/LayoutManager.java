@@ -33,9 +33,9 @@ public class LayoutManager
                 for ( FieldDeclaration fieldDeclaration : typeDecl.getFields() )
                 {
                     //get(0) translates to get variable declaration fragment.
-                    VariableDeclarationFragment vdf = ( VariableDeclarationFragment ) fieldDeclaration.fragments().get( 0 );
+                    VariableDeclarationFragment originalVdf = ( VariableDeclarationFragment ) fieldDeclaration.fragments().get( 0 );
 
-                    SimpleName originalVarSimpleName = vdf.getName();
+                    SimpleName originalVarSimpleName = originalVdf.getName();
 
                     String obfuscatedVarName = obfuscatedVariableNames.pollFirst();
 
@@ -75,34 +75,22 @@ public class LayoutManager
                                     if ( assignment.getLeftHandSide().getNodeType() == ASTNode.FIELD_ACCESS )
                                     {
                                         FieldAccess fieldAccess = ( FieldAccess ) assignment.getLeftHandSide();
-                                        if ( fieldAccess.getName().getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
-                                        {
-                                            fieldAccess.getName().setIdentifier( obfuscatedVarName );
-                                        }
+                                        RenameVariables.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
                                     } else if ( assignment.getLeftHandSide().getNodeType() == ASTNode.SIMPLE_NAME )
                                     {
                                         SimpleName simpleName = ( SimpleName ) assignment.getLeftHandSide();
-                                        if ( simpleName.getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
-                                        {
-                                            simpleName.setIdentifier( obfuscatedVarName );
-                                        }
+                                        RenameVariables.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
                                     } else if ( assignment.getLeftHandSide().getNodeType() == ASTNode.ARRAY_ACCESS )
                                     {
                                         ArrayAccess arrayAccess = ( ArrayAccess ) assignment.getLeftHandSide();
                                         FieldAccess fieldAccess = ( FieldAccess ) arrayAccess.getArray();
-                                        if ( fieldAccess.getName().getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
-                                        {
-                                            fieldAccess.getName().setIdentifier( obfuscatedVarName );
-                                        }
+                                        RenameVariables.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
                                     }
 
                                     if ( assignment.getRightHandSide().getNodeType() == ASTNode.SIMPLE_NAME )
                                     {
                                         SimpleName simpleName = ( SimpleName ) assignment.getRightHandSide();
-                                        if ( simpleName.getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
-                                        {
-                                            simpleName.setIdentifier( obfuscatedVarName );
-                                        }
+                                        RenameVariables.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
                                     } else if ( assignment.getRightHandSide().getNodeType() == ASTNode.METHOD_INVOCATION )
                                     {
                                         MethodInvocation methodInvocation = ( MethodInvocation ) assignment.getRightHandSide();
@@ -114,26 +102,7 @@ public class LayoutManager
                                         }
 
                                         //Replace arguments
-                                        List<? extends ASTNode> arguments = methodInvocation.arguments();
-                                        for ( ASTNode argument : arguments )
-                                        {
-                                            if ( argument.getNodeType() == ASTNode.SIMPLE_NAME )
-                                            {
-                                                SimpleName simpleName = ( SimpleName ) argument;
-                                                if ( simpleName.getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
-                                                {
-                                                    simpleName.setIdentifier( obfuscatedVarName );
-                                                }
-                                            }
-                                            if ( argument.getNodeType() == ASTNode.FIELD_ACCESS )
-                                            {
-                                                FieldAccess fieldAccess = ( FieldAccess ) argument;
-                                                if ( fieldAccess.getName().getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
-                                                {
-                                                    fieldAccess.getName().setIdentifier( obfuscatedVarName );
-                                                }
-                                            }
-                                        }
+                                        RenameVariables.renameMethodInvocationArguments( methodInvocation.arguments(), originalVarSimpleName, obfuscatedVarName );
                                     }
                                 }
                             } else if ( statement.getNodeType() == ASTNode.RETURN_STATEMENT )
@@ -143,32 +112,32 @@ public class LayoutManager
                                 if ( expression.getNodeType() == ASTNode.FIELD_ACCESS )
                                 {
                                     FieldAccess fieldAccess = ( FieldAccess ) expression;
-                                    if ( fieldAccess.getName().getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
-                                    {
-                                        fieldAccess.getName().setIdentifier( obfuscatedVarName );
-                                    }
+                                    RenameVariables.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
                                 } else if ( expression.getNodeType() == ASTNode.SIMPLE_NAME )
                                 {
                                     SimpleName simpleName = ( SimpleName ) expression;
-                                    if ( simpleName.getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
+                                    RenameVariables.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
+                                } else if ( expression.getNodeType() == ASTNode.INFIX_EXPRESSION )
+                                {
+                                    InfixExpression infixExpression = ( InfixExpression ) expression;
+                                    if ( infixExpression.getLeftOperand().getNodeType() == ASTNode.METHOD_INVOCATION )
                                     {
-                                        simpleName.setIdentifier( obfuscatedVarName );
+                                        MethodInvocation infixMethodInvocation = ( MethodInvocation ) infixExpression.getLeftOperand();
+                                        if ( infixMethodInvocation.getExpression().getNodeType() == ASTNode.CLASS_INSTANCE_CREATION )
+                                        {
+                                            ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation ) infixMethodInvocation.getExpression();
+                                            //Replace arguments
+                                            RenameVariables.renameMethodInvocationArguments( classInstanceCreation.arguments(), originalVarSimpleName, obfuscatedVarName );
+                                        }
                                     }
                                 }
                             } else if ( statement.getNodeType() == ASTNode.VARIABLE_DECLARATION_STATEMENT )
                             {
-                                //Never used. probably wrong casting.
+                                logger.debug( "Not mapped yet" );
                                 VariableDeclarationStatement vds = ( VariableDeclarationStatement ) statement;
                                 VariableDeclarationFragment localVdf = ( VariableDeclarationFragment ) vds.fragments().get( 0 );
-                                ClassInstanceCreation initializer = ( ClassInstanceCreation ) localVdf.getInitializer();
-                                for ( Object argumentObj : initializer.arguments() )
-                                {
-                                    SimpleName simpleName = ( SimpleName ) argumentObj;
-                                    if ( simpleName.getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
-                                    {
-                                        simpleName.setIdentifier( obfuscatedVarName );
-                                    }
-                                }
+                                ClassInstanceCreation methodInvocation = ( ClassInstanceCreation ) localVdf.getInitializer();
+
                             } else
                             {
                                 logger.debug( "Not mapped yet" );
@@ -176,7 +145,7 @@ public class LayoutManager
                         }
                     }
                     //Change declaration name after modifying all usages.
-                    vdf.getName().setIdentifier( obfuscatedVarName );
+                    originalVdf.getName().setIdentifier( obfuscatedVarName );
                 }
             }
         }
