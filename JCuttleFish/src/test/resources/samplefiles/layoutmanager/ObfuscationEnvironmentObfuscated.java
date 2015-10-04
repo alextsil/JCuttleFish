@@ -1,11 +1,5 @@
 package test;
 
-import com.sun.media.jfxmedia.logging.Logger;
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
-
 //Holds the target project specific paths and the JAVA_HOME path.
 public class ObfuscationEnvironment {
 
@@ -22,14 +16,14 @@ public class ObfuscationEnvironment {
     }
 
     public String getRelativeSourcePath () {
-        return a;
+        return this.a;
     }
 
     public String[] getAbsoluteSourcePath () {
-        return b;
+        return this.b;
     }
 
     public String[] getClasspath () {
-        return c;
+        return this.c;
     }
 }

@@ -26,9 +26,8 @@ public class LayoutManager
 
         if ( !cu.types().isEmpty() )
         {
-            //replace "if" with "typedecl.resolvebindings().isClass()";
             TypeDeclaration typeDecl = ( TypeDeclaration ) cu.types().get( 0 );
-            if ( typeDecl.getFields().length != 0 )
+            if ( typeDecl.resolveBinding().isClass() )
             {
                 for ( FieldDeclaration fieldDeclaration : typeDecl.getFields() )
                 {
@@ -36,37 +35,40 @@ public class LayoutManager
                     VariableDeclarationFragment originalVdf = ( VariableDeclarationFragment ) fieldDeclaration.fragments().get( 0 );
 
                     SimpleName originalVarSimpleName = originalVdf.getName();
-
                     String obfuscatedVarName = obfuscatedVariableNames.pollFirst();
 
                     for ( MethodDeclaration methodDeclaration : typeDecl.getMethods() )
                     {
-                        //debug var
-                        Block methodBody = methodDeclaration.getBody();
-
-                        List<SingleVariableDeclaration> methodParameters = methodDeclaration.parameters();
-                        if ( !methodParameters.isEmpty() )
-                        {
-                            methodParameters.stream()
-                                    .filter( svd -> svd.getName().getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
-                                    .forEach( svd -> svd.getName().setIdentifier( obfuscatedVarName ) );
-                        }
-
                         List<Statement> statements = methodDeclaration.getBody().statements();
                         for ( Statement statement : statements )
                         {
                             Expression expression = null;
-
                             if ( statement.getNodeType() == ASTNode.EXPRESSION_STATEMENT )
                             {
                                 expression = ( ( ExpressionStatement ) statement ).getExpression();
                                 if ( expression.getNodeType() == ASTNode.METHOD_INVOCATION )
                                 {
                                     MethodInvocation methodInvocation = ( MethodInvocation ) expression;
-                                    List<SimpleName> arguments = methodInvocation.arguments();
-                                    arguments.stream()
-                                            .filter( argument -> argument.getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
-                                            .forEach( argument -> argument.setIdentifier( obfuscatedVarName ) );
+                                    //TODO : Move this chunk to ModifyAst class
+                                    if ( methodInvocation.getExpression() != null )
+                                    {
+                                        if ( methodInvocation.getExpression().getNodeType() == ASTNode.SIMPLE_NAME ) //Means the line is: Class (no this)
+                                        {
+                                            //Rename class' name
+                                            SimpleName simpleName = ( SimpleName ) methodInvocation.getExpression();
+                                            ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
+                                            ModifyAst.thisifyMethodInvocationSimpleName( cu.getAST(), methodInvocation, simpleName );
+                                        } else if ( methodInvocation.getExpression().getNodeType() == ASTNode.FIELD_ACCESS ) //Means the line is: this.Class
+                                        {
+                                            FieldAccess fieldAccess = ( FieldAccess ) methodInvocation.getExpression();
+                                            ModifyAst.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
+                                        }
+                                    }
+
+                                    //Rename arguments
+                                    List<? extends ASTNode> arguments = methodInvocation.arguments();
+                                    ModifyAst.renameMethodInvocationArguments( arguments, originalVarSimpleName, obfuscatedVarName );
+                                    ModifyAst.thisifyMethodInvocationArguments( cu.getAST(), methodInvocation );
                                 }
 
                                 if ( expression.getNodeType() == ASTNode.ASSIGNMENT )
@@ -75,48 +77,57 @@ public class LayoutManager
                                     if ( assignment.getLeftHandSide().getNodeType() == ASTNode.FIELD_ACCESS )
                                     {
                                         FieldAccess fieldAccess = ( FieldAccess ) assignment.getLeftHandSide();
-                                        RenameVariables.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
+                                        ModifyAst.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
                                     } else if ( assignment.getLeftHandSide().getNodeType() == ASTNode.SIMPLE_NAME )
                                     {
                                         SimpleName simpleName = ( SimpleName ) assignment.getLeftHandSide();
-                                        RenameVariables.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
+                                        IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
+                                        if ( varBinding.isField() )
+                                        {
+                                            ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
+                                            ModifyAst.thisifyAssignmentSimpleName( cu.getAST(), assignment, simpleName );
+                                        }
                                     } else if ( assignment.getLeftHandSide().getNodeType() == ASTNode.ARRAY_ACCESS )
                                     {
                                         ArrayAccess arrayAccess = ( ArrayAccess ) assignment.getLeftHandSide();
                                         FieldAccess fieldAccess = ( FieldAccess ) arrayAccess.getArray();
-                                        RenameVariables.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
+                                        ModifyAst.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
                                     }
 
                                     if ( assignment.getRightHandSide().getNodeType() == ASTNode.SIMPLE_NAME )
                                     {
                                         SimpleName simpleName = ( SimpleName ) assignment.getRightHandSide();
-                                        RenameVariables.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
+                                        IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
+                                        if ( varBinding.isField() )
+                                        {
+                                            ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
+                                        }
                                     } else if ( assignment.getRightHandSide().getNodeType() == ASTNode.METHOD_INVOCATION )
                                     {
                                         MethodInvocation methodInvocation = ( MethodInvocation ) assignment.getRightHandSide();
 
                                         SimpleName invocationExpression = ( SimpleName ) methodInvocation.getExpression();
-                                        if ( invocationExpression.getIdentifier().equals( originalVarSimpleName.getIdentifier() ) )
-                                        {
-                                            invocationExpression.setIdentifier( obfuscatedVarName );
-                                        }
+                                        ModifyAst.renameSimpleName( invocationExpression, originalVarSimpleName, obfuscatedVarName );
+                                        ModifyAst.renameMethodInvocationArguments( methodInvocation.arguments(), originalVarSimpleName, obfuscatedVarName );
 
-                                        //Replace arguments
-                                        RenameVariables.renameMethodInvocationArguments( methodInvocation.arguments(), originalVarSimpleName, obfuscatedVarName );
                                     }
                                 }
                             } else if ( statement.getNodeType() == ASTNode.RETURN_STATEMENT )
                             {
                                 expression = ( ( ReturnStatement ) statement ).getExpression();
-
                                 if ( expression.getNodeType() == ASTNode.FIELD_ACCESS )
                                 {
                                     FieldAccess fieldAccess = ( FieldAccess ) expression;
-                                    RenameVariables.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
+                                    ModifyAst.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
                                 } else if ( expression.getNodeType() == ASTNode.SIMPLE_NAME )
                                 {
                                     SimpleName simpleName = ( SimpleName ) expression;
-                                    RenameVariables.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
+                                    IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
+                                    if ( varBinding.isField() )
+                                    {
+                                        ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
+                                        ModifyAst.thisifyStatement( cu.getAST(), statement );
+                                    }
                                 } else if ( expression.getNodeType() == ASTNode.INFIX_EXPRESSION )
                                 {
                                     InfixExpression infixExpression = ( InfixExpression ) expression;
@@ -126,18 +137,13 @@ public class LayoutManager
                                         if ( infixMethodInvocation.getExpression().getNodeType() == ASTNode.CLASS_INSTANCE_CREATION )
                                         {
                                             ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation ) infixMethodInvocation.getExpression();
-                                            //Replace arguments
-                                            RenameVariables.renameMethodInvocationArguments( classInstanceCreation.arguments(), originalVarSimpleName, obfuscatedVarName );
+                                            ModifyAst.renameMethodInvocationArguments( classInstanceCreation.arguments(), originalVarSimpleName, obfuscatedVarName );
                                         }
                                     }
                                 }
                             } else if ( statement.getNodeType() == ASTNode.VARIABLE_DECLARATION_STATEMENT )
                             {
-                                logger.debug( "Not mapped yet" );
-                                VariableDeclarationStatement vds = ( VariableDeclarationStatement ) statement;
-                                VariableDeclarationFragment localVdf = ( VariableDeclarationFragment ) vds.fragments().get( 0 );
-                                ClassInstanceCreation methodInvocation = ( ClassInstanceCreation ) localVdf.getInitializer();
-
+                                //List<VariableDeclarationFragment> variableDeclarationFragments = ( ( VariableDeclarationStatement ) statement ).fragments();
                             } else
                             {
                                 logger.debug( "Not mapped yet" );
@@ -147,9 +153,12 @@ public class LayoutManager
                     //Change declaration name after modifying all usages.
                     originalVdf.getName().setIdentifier( obfuscatedVarName );
                 }
+            } else
+            {
+                throw new RuntimeException( "Bad input. isClass returned false." );
             }
         }
-
+        //TODO: Move "apply" to ObfuscationCoordinator
         return ApplyChanges.apply( unitSource );
     }
 }

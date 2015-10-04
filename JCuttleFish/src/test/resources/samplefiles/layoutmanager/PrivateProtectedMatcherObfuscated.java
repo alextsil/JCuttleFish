@@ -14,12 +14,12 @@ public class PrivateProtectedMatcher {
     private Matcher d;
 
     public PrivateProtectedMatcher () {
-        c = Pattern.compile( a );
+        this.c = Pattern.compile( a );
     }
 
-    public String applyMatcher ( String b ) {
-        this.b = b;
-        d = c.matcher( this.b );
+    public String applyMatcher ( String targetLine ) {
+        this.b = targetLine;
+        this.d = c.matcher( this.b );
         this.b = d.replaceFirst( "public" );
         return this.b;
     }

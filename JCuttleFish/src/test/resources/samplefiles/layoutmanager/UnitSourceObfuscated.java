@@ -8,16 +8,16 @@ public class UnitSource {
 
     private String b;
 
-    public UnitSource ( CompilationUnit a, String b ) {
-        this.a = a;
-        this.b = b;
+    public UnitSource ( CompilationUnit compilationUnit, String sourceCode ) {
+        this.a = compilationUnit;
+        this.b = sourceCode;
     }
 
     public CompilationUnit getCompilationUnit () {
-        return a;
+        return this.a;
     }
 
     public String getSourceCode () {
-        return b;
+        return this.b;
     }
 }

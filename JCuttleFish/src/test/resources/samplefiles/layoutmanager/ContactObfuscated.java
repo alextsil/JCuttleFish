@@ -27,10 +27,10 @@ public class Contact implements IContact {
      * @param firstname
      * @param telephone 
      */
-    public Contact(String b, String e)
+    public Contact(String firstname, String telephone)
     {
-        this.b = b;
-        this.e = e;
+        this.b = firstname;
+        this.e = telephone;
         this.a = "";
         this.c = "";
         this.d = "";
@@ -55,81 +55,81 @@ public class Contact implements IContact {
     }
 
     @Override
-    public void setId(String a) {
-        this.a = a;
+    public void setId(String id) {
+        this.a = id;
     }
    
     @Override
     public String getId() {
-        return a;
+        return this.a;
     }
     @Override
     public String getFirstname() {
-        return b;
+        return this.b;
     }
 
     @Override
-    public void setFirstname(String b) {
-        this.b = b;
+    public void setFirstname(String firstname) {
+        this.b = firstname;
     }
 
     @Override
     public String getLastname() {
-        return c;
+        return this.c;
     }
 
     @Override
-    public void setLastname(String c) {
-        this.c = c;
+    public void setLastname(String lastname) {
+        this.c = lastname;
     }
 
     @Override
     public String getEmail() {
-        return d;
+        return this.d;
     }
 
     @Override
-    public void setEmail(String d) {
-        this.d = d;
+    public void setEmail(String email) {
+        this.d = email;
     }
 
     @Override
     public String getTelephone() {
-        return e;
+        return this.e;
     }
 
     @Override
-    public void setTelephone(String e) {
-        this.e = e;
+    public void setTelephone(String telephone) {
+        this.e = telephone;
     }
 
     @Override
     public String getMtelephone() {
-        return f;
+        return this.f;
     }
 
     @Override
-    public void setMtelephone(String f) {
-        this.f = f;
+    public void setMtelephone(String mtelephone) {
+        this.f = mtelephone;
     }
 
     @Override
     public String getAddress() {
-        return g;
+        return this.g;
     }
 
     @Override
-    public void setAddress(String g) {
-        this.g = g;
+    public void setAddress(String address) {
+        this.g = address;
     }
 
     @Override
     public String getCity() {
-        return h;
+        return this.h;
     }
 
     @Override
-    public void setCity(String h) {
-        this.h = h;
+    public void setCity(String city) {
+        this.h = city;
     }
 }

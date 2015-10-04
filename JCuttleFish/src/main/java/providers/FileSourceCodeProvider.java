@@ -18,7 +18,6 @@ public class FileSourceCodeProvider implements SourceCodeProvider<File>
     @Override
     public String get ( File file )
     {
-        logger.debug( "path in : " + file.toPath().toString() );
         byte[] encoded = null;
         try
         {

@@ -8,7 +8,6 @@ import providers.FileSourceCodeProvider;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 
 public class LayoutManagerTest
@@ -72,6 +71,18 @@ public class LayoutManagerTest
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/SuffixFolderFilterOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/SuffixFolderFilterObfuscated.java" );
+
+        assertEquals( sourceCodeProvider.get( obfuscatedFile ),
+                layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
+    //Tests naming collisions. (function parameter and variable declaration colliding with obfuscation dictionary)
+    @Test
+    public void testObfuscate_SwingSingle ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/SwingSingleOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/SwingSingleObfuscated.java" );
 
         assertEquals( sourceCodeProvider.get( obfuscatedFile ),
                 layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
