@@ -11,14 +11,14 @@ import API.IContact;
  */
 public class Contact implements IContact {
     
-    protected String a;
-    protected String b;
-    protected String c;
-    protected String d;
-    protected String e;
-    protected String f;
-    protected String g;
-    protected String h;
+    private String a;
+    private String b;
+    private String c;
+    private String d;
+    private String e;
+    private String f;
+    private String g;
+    private String h;
     
     /**
      * Contact type objects constructor

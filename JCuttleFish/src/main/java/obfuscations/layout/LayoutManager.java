@@ -5,7 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.UnitSource;
 import util.ApplyChanges;
-import util.ObfuscatedNamesProvider;
+import providers.ObfuscatedNamesProvider;
+import util.ConvenienceWrappers;
 import util.enums.ObfuscatedNamesVariations;
 
 import java.util.Deque;
@@ -29,11 +30,9 @@ public class LayoutManager
             TypeDeclaration typeDecl = ( TypeDeclaration ) cu.types().get( 0 );
             if ( typeDecl.resolveBinding().isClass() )
             {
-                for ( FieldDeclaration fieldDeclaration : typeDecl.getFields() )
+                for ( FieldDeclaration fieldDeclaration : ConvenienceWrappers.getPrivateFieldDeclarations( typeDecl ) )
                 {
-                    //get(0) translates to get variable declaration fragment.
                     VariableDeclarationFragment originalVdf = ( VariableDeclarationFragment ) fieldDeclaration.fragments().get( 0 );
-
                     SimpleName originalVarSimpleName = originalVdf.getName();
                     String obfuscatedVarName = obfuscatedVariableNames.pollFirst();
 
