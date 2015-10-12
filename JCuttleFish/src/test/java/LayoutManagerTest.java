@@ -77,12 +77,39 @@ public class LayoutManagerTest
                         .getDocument().get() );
     }
 
-    //Tests naming collisions. (function parameter and variable declaration colliding with obfuscation dictionary)
     @Test
     public void testObfuscate_SwingSingle ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/SwingSingleOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/SwingSingleObfuscated.java" );
+
+        assertEquals( sourceCodeProvider.get( obfuscatedFile ),
+                layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
+    /* Testing :
+    - Multiple arguments on return
+    - Static variable obfuscation.
+    - Private only (class) fields obfuscation
+    */
+    @Test
+    public void testObfuscate_Stopwatch ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/StopwatchOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/StopwatchObfuscated.java" );
+
+        assertEquals( sourceCodeProvider.get( obfuscatedFile ),
+                layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
+    //A "scratchpad" test
+    @Test
+    public void onthefly ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/ontheflyOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/ontheflyObfuscated.java" );
 
         assertEquals( sourceCodeProvider.get( obfuscatedFile ),
                 layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
