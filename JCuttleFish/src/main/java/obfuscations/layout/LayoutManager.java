@@ -1,8 +1,10 @@
 package obfuscations.layout;
 
+import obfuscations.layout.visitors.thisify.ThisifyReturnStatementVisitor;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import obfuscations.layout.visitors.ExpressionVisitor;
 import pojo.UnitSource;
 import util.ApplyChanges;
 import providers.ObfuscatedNamesProvider;
@@ -114,32 +116,12 @@ public class LayoutManager
                             } else if ( statement.getNodeType() == ASTNode.RETURN_STATEMENT )
                             {
                                 expression = ( ( ReturnStatement ) statement ).getExpression();
-                                if ( expression.getNodeType() == ASTNode.FIELD_ACCESS )
-                                {
-                                    FieldAccess fieldAccess = ( FieldAccess ) expression;
-                                    ModifyAst.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
-                                } else if ( expression.getNodeType() == ASTNode.SIMPLE_NAME )
-                                {
-                                    SimpleName simpleName = ( SimpleName ) expression;
-                                    IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
-                                    if ( varBinding.isField() )
-                                    {
-                                        ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
-                                        ModifyAst.thisifyStatement( cu.getAST(), statement );
-                                    }
-                                } else if ( expression.getNodeType() == ASTNode.INFIX_EXPRESSION )
-                                {
-                                    InfixExpression infixExpression = ( InfixExpression ) expression;
-                                    if ( infixExpression.getLeftOperand().getNodeType() == ASTNode.METHOD_INVOCATION )
-                                    {
-                                        MethodInvocation infixMethodInvocation = ( MethodInvocation ) infixExpression.getLeftOperand();
-                                        if ( infixMethodInvocation.getExpression().getNodeType() == ASTNode.CLASS_INSTANCE_CREATION )
-                                        {
-                                            ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation ) infixMethodInvocation.getExpression();
-                                            ModifyAst.renameMethodInvocationArguments( classInstanceCreation.arguments(), originalVarSimpleName, obfuscatedVarName );
-                                        }
-                                    }
-                                }
+                                ExpressionVisitor expressionVisitor = new ExpressionVisitor( originalVarSimpleName, obfuscatedVarName, statement, cu.getAST() );
+                                expressionVisitor.preVisit2( expression );
+
+                                ThisifyReturnStatementVisitor thisifyReturnStatementVisitor = new ThisifyReturnStatementVisitor( cu.getAST(), statement );
+                                thisifyReturnStatementVisitor.preVisit2( expression );
+
                             } else if ( statement.getNodeType() == ASTNode.VARIABLE_DECLARATION_STATEMENT )
                             {
                                 //List<VariableDeclarationFragment> variableDeclarationFragments = ( ( VariableDeclarationStatement ) statement ).fragments();

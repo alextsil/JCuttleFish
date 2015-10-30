@@ -85,10 +85,14 @@ public class ModifyAst
             if ( returnStatement.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
             {
                 SimpleName simpleName = ( SimpleName ) returnStatement.getExpression();
-                FieldAccess fieldAccess = ast.newFieldAccess();
-                fieldAccess.setExpression( ast.newThisExpression() );
-                fieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
-                returnStatement.setExpression( fieldAccess );
+                IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
+                if ( varBinding.isField() )
+                {
+                    FieldAccess fieldAccess = ast.newFieldAccess();
+                    fieldAccess.setExpression( ast.newThisExpression() );
+                    fieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
+                    returnStatement.setExpression( fieldAccess );
+                }
             }
         } else
         {

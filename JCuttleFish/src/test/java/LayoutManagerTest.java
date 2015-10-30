@@ -105,7 +105,7 @@ public class LayoutManagerTest
     }
 
     //A "scratchpad" test
-    @Test
+    //@Test
     public void onthefly ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/ontheflyOriginal.java" );
