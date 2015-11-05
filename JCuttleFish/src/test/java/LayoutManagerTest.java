@@ -104,8 +104,35 @@ public class LayoutManagerTest
                         .getDocument().get() );
     }
 
+    /* Testing :
+    - Static variable obfuscation
+    - Final variable obfuscation
+    - Static final variable ofbuscation
+     */
+    @Test
+    public void staticFinalTest ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/staticFinalOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/staticFinalObfuscated.java" );
+
+        assertEquals( sourceCodeProvider.get( obfuscatedFile ),
+                layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
+    @Test
+    public void animationsTest ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/animationsOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/animationsObfuscated.java" );
+
+        assertEquals( sourceCodeProvider.get( obfuscatedFile ),
+                layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
     //A "scratchpad" test
-    //@Test
+    @Test
     public void onthefly ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/ontheflyOriginal.java" );

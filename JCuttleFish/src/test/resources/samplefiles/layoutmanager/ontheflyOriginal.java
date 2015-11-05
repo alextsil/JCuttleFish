@@ -1,16 +1,27 @@
 package test;
 
-public class Onthefly
-{
+import android.graphics.Paint;
+import android.graphics.RectF;
+import su.levenetc.android.textsurface.common.Position;
 
-    public String alpha;
+/**
+ * Created by Eugene Levenetc.
+ */
+public class Text implements Comparable<Text> {
 
-    private String beta;
+    private Paint paint;
+    private final String text;
+    private Position position;
+    private RectF padding;
 
-    public Onthefly ( String alpha, String beta )
-    {
-        this.alpha = alpha;
-        this.beta = beta;
+
+    public Text(String text, Position position, RectF padding, Paint paint) {
+        this.text = text;
+        this.position = position;
+        this.padding = padding;
+        this.paint = paint;
+
+        initBounds(text);
     }
 
 }

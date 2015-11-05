@@ -108,10 +108,14 @@ public class ModifyAst
             if ( methodInvocation.arguments().get( i ) instanceof SimpleName )
             {
                 SimpleName simpleName = ( SimpleName ) methodInvocation.arguments().get( i );
-                FieldAccess fieldAccess = ast.newFieldAccess();
-                fieldAccess.setExpression( ast.newThisExpression() );
-                fieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
-                methodInvocation.arguments().set( i, fieldAccess );
+                IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
+                if ( varBinding.isField() )
+                {
+                    FieldAccess fieldAccess = ast.newFieldAccess();
+                    fieldAccess.setExpression( ast.newThisExpression() );
+                    fieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
+                    methodInvocation.arguments().set( i, fieldAccess );
+                }
             }
             i++;
         }

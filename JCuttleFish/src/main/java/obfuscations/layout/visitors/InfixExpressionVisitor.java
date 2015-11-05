@@ -46,7 +46,7 @@ public class InfixExpressionVisitor extends ASTVisitor
         } else if ( infixExpression.getLeftOperand().getNodeType() == ASTNode.SIMPLE_NAME )
         {
             SimpleName simpleName = ( SimpleName ) infixExpression.getLeftOperand();
-            SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.statement, this.ast );
+            SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
             simpleNameVisitor.visit( simpleName );
         } else if ( infixExpression.getLeftOperand().getNodeType() == ASTNode.FIELD_ACCESS )
         {
@@ -75,7 +75,7 @@ public class InfixExpressionVisitor extends ASTVisitor
         } else if ( infixExpression.getRightOperand().getNodeType() == ASTNode.SIMPLE_NAME )
         {
             SimpleName simpleName = ( SimpleName ) infixExpression.getRightOperand();
-            SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.statement, this.ast );
+            SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
             simpleNameVisitor.visit( simpleName );
         } else if ( infixExpression.getLeftOperand().getNodeType() == ASTNode.FIELD_ACCESS )
         {

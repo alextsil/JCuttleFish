@@ -19,7 +19,7 @@
         <processorPath useClasspath="true" />
       </profile>
       <profile default="false" name="Annotation profile for JCuttleFish" enabled="true">
-        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
