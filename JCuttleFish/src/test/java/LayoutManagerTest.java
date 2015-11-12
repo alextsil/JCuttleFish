@@ -120,6 +120,20 @@ public class LayoutManagerTest
                         .getDocument().get() );
     }
 
+    /* Testing : Issue #36
+    - Rename and thisify class field when there is a METHOD_INVOCATION on it
+     */
+    @Test
+    public void issue36 ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue36Original.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue36Obfuscated.java" );
+
+        assertEquals( sourceCodeProvider.get( obfuscatedFile ),
+                layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
     @Test
     public void animationsTest ()
     {

@@ -36,7 +36,7 @@ public class ExpressionVisitor extends ASTVisitor
         } else if ( expression.getNodeType() == ASTNode.FIELD_ACCESS )
         {
             FieldAccess fieldAccess = ( FieldAccess ) expression;
-            FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
+            FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             fieldAccessVisitor.visit( fieldAccess );
         } else if ( expression.getNodeType() == ASTNode.SIMPLE_NAME )
         {

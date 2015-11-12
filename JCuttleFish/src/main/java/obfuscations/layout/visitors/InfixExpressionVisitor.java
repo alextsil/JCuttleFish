@@ -51,7 +51,7 @@ public class InfixExpressionVisitor extends ASTVisitor
         } else if ( infixExpression.getLeftOperand().getNodeType() == ASTNode.FIELD_ACCESS )
         {
             FieldAccess fieldAccess = ( FieldAccess ) infixExpression.getLeftOperand();
-            FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
+            FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             fieldAccessVisitor.visit( fieldAccess );
         }
 
@@ -80,7 +80,7 @@ public class InfixExpressionVisitor extends ASTVisitor
         } else if ( infixExpression.getLeftOperand().getNodeType() == ASTNode.FIELD_ACCESS )
         {
             FieldAccess fieldAccess = ( FieldAccess ) infixExpression.getLeftOperand();
-            FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
+            FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             fieldAccessVisitor.visit( fieldAccess );
         }
 

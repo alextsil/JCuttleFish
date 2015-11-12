@@ -27,6 +27,6 @@ public class SimpleNameVisitor extends ASTVisitor
         {
             ModifyAst.renameSimpleName( simpleName, this.originalVarSimpleName, this.obfuscatedVarName );
         }
-        return super.visit( simpleName );
+        return false;
     }
 }

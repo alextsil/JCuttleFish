@@ -1,5 +1,8 @@
 package obfuscations.layout;
 
+import obfuscations.layout.visitors.FieldAccessVisitor;
+import obfuscations.layout.visitors.QualifiedNameVisitor;
+import obfuscations.layout.visitors.SimpleNameVisitor;
 import obfuscations.layout.visitors.thisify.ThisifyReturnStatementVisitor;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
@@ -93,6 +96,11 @@ public class LayoutManager
                                         ArrayAccess arrayAccess = ( ArrayAccess ) assignment.getLeftHandSide();
                                         FieldAccess fieldAccess = ( FieldAccess ) arrayAccess.getArray();
                                         ModifyAst.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
+                                    } else if ( assignment.getLeftHandSide().getNodeType() == ASTNode.QUALIFIED_NAME )
+                                    {
+                                        QualifiedName qualifiedName = ( QualifiedName ) assignment.getLeftHandSide();
+                                        QualifiedNameVisitor qualifiedNameVisitor = new QualifiedNameVisitor( originalVarSimpleName, obfuscatedVarName, cu.getAST(), assignment );
+                                        qualifiedNameVisitor.visit( qualifiedName );
                                     }
 
                                     if ( assignment.getRightHandSide().getNodeType() == ASTNode.SIMPLE_NAME )
@@ -103,6 +111,11 @@ public class LayoutManager
                                         {
                                             ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
                                         }
+                                    } else if ( assignment.getRightHandSide().getNodeType() == ASTNode.FIELD_ACCESS )
+                                    {
+                                        FieldAccess fieldAccess = ( FieldAccess ) assignment.getRightHandSide();
+                                        FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( originalVarSimpleName, obfuscatedVarName, cu.getAST() );
+                                        fieldAccessVisitor.visit( fieldAccess );
                                     } else if ( assignment.getRightHandSide().getNodeType() == ASTNode.METHOD_INVOCATION )
                                     {
                                         MethodInvocation methodInvocation = ( MethodInvocation ) assignment.getRightHandSide();

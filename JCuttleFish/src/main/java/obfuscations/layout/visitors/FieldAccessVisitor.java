@@ -1,9 +1,7 @@
 package obfuscations.layout.visitors;
 
 import obfuscations.layout.ModifyAst;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.FieldAccess;
-import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.*;
 
 
 public class FieldAccessVisitor extends ASTVisitor
@@ -13,16 +11,31 @@ public class FieldAccessVisitor extends ASTVisitor
 
     private String obfuscatedVarName;
 
-    public FieldAccessVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName )
+    private AST ast;
+
+    public FieldAccessVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
     {
         this.originalVarSimpleName = originalVarSimpleName;
         this.obfuscatedVarName = obfuscatedVarName;
+        this.ast = ast;
     }
 
     @Override
     public boolean visit ( FieldAccess fieldAccess )
     {
-        ModifyAst.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
-        return super.visit( fieldAccess );
+        if ( fieldAccess.getExpression().getNodeType() == ASTNode.METHOD_INVOCATION )
+        {
+            MethodInvocation methodInvocation = ( MethodInvocation ) fieldAccess.getExpression();
+            if ( methodInvocation.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
+            {
+                ModifyAst.renameSimpleName( ( SimpleName ) methodInvocation.getExpression(), this.originalVarSimpleName, this.obfuscatedVarName );
+                //TODO : use a visitor to choose which thisify function will be used.
+                ModifyAst.thisifyMethodInvocationSimpleName( this.ast, methodInvocation, ( SimpleName ) methodInvocation.getExpression() );
+            }
+        } else
+        {
+            ModifyAst.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
+        }
+        return true;
     }
 }
