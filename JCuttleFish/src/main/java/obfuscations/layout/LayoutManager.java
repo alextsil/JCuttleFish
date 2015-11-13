@@ -1,13 +1,10 @@
 package obfuscations.layout;
 
-import obfuscations.layout.visitors.FieldAccessVisitor;
-import obfuscations.layout.visitors.QualifiedNameVisitor;
-import obfuscations.layout.visitors.SimpleNameVisitor;
+import obfuscations.layout.visitors.*;
 import obfuscations.layout.visitors.thisify.ThisifyReturnStatementVisitor;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import obfuscations.layout.visitors.ExpressionVisitor;
 import pojo.UnitSource;
 import util.ApplyChanges;
 import providers.ObfuscatedNamesProvider;
@@ -124,6 +121,11 @@ public class LayoutManager
                                         ModifyAst.renameSimpleName( invocationExpression, originalVarSimpleName, obfuscatedVarName );
                                         ModifyAst.renameMethodInvocationArguments( methodInvocation.arguments(), originalVarSimpleName, obfuscatedVarName );
 
+                                    } else if ( assignment.getRightHandSide().getNodeType() == ASTNode.INFIX_EXPRESSION )
+                                    {
+                                        InfixExpression infixExpression = ( InfixExpression ) assignment.getRightHandSide();
+                                        InfixExpressionVisitor visitor = new InfixExpressionVisitor( originalVarSimpleName, obfuscatedVarName, statement, cu.getAST() );
+                                        visitor.visit( infixExpression );
                                     }
                                 }
                             } else if ( statement.getNodeType() == ASTNode.RETURN_STATEMENT )

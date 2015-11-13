@@ -121,4 +121,12 @@ public class ModifyAst
         }
     }
 
+    public static void thisifyInfixExpressionRightOperand ( AST ast, InfixExpression infixExpression, SimpleName simpleName )
+    {
+        FieldAccess fieldAccess = ast.newFieldAccess();
+        fieldAccess.setExpression( ast.newThisExpression() );
+        fieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
+        infixExpression.setRightOperand( fieldAccess );
+    }
+
 }

@@ -122,12 +122,13 @@ public class LayoutManagerTest
 
     /* Testing : Issue #36
     - Rename and thisify class field when there is a METHOD_INVOCATION on it
+
      */
     @Test
-    public void issue36 ()
+    public void issue36_37_38 ()
     {
-        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue36Original.java" );
-        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue36Obfuscated.java" );
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue36_37_38Original.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue36_37_38Obfuscated.java" );
 
         assertEquals( sourceCodeProvider.get( obfuscatedFile ),
                 layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )

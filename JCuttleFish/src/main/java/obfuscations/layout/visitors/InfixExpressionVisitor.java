@@ -2,18 +2,18 @@ package obfuscations.layout.visitors;
 
 import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class InfixExpressionVisitor extends ASTVisitor
 {
 
     private SimpleName originalVarSimpleName;
-
     private String obfuscatedVarName;
-
     private Statement statement;
-
     private AST ast;
+    private final Logger logger = LoggerFactory.getLogger( InfixExpressionVisitor.class );
 
     public InfixExpressionVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, Statement statement, AST ast )
     {
@@ -36,6 +36,16 @@ public class InfixExpressionVisitor extends ASTVisitor
                 {
                     ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation ) infixMethodInvocation.getExpression();
                     ModifyAst.renameMethodInvocationArguments( classInstanceCreation.arguments(), this.originalVarSimpleName, this.obfuscatedVarName );
+                } else if ( infixMethodInvocation.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
+                {
+                    SimpleName simpleName = ( SimpleName ) infixMethodInvocation.getExpression();
+                    SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
+                    simpleNameVisitor.visit( simpleName );
+
+                    if ( simpleName.getIdentifier().equals( obfuscatedVarName ) )
+                    {
+                        ModifyAst.thisifyMethodInvocationSimpleName( this.ast, infixMethodInvocation, simpleName );
+                    }
                 }
             }
         } else if ( infixExpression.getLeftOperand().getNodeType() == ASTNode.PARENTHESIZED_EXPRESSION )
@@ -65,6 +75,16 @@ public class InfixExpressionVisitor extends ASTVisitor
                 {
                     ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation ) infixMethodInvocation.getExpression();
                     ModifyAst.renameMethodInvocationArguments( classInstanceCreation.arguments(), this.originalVarSimpleName, this.obfuscatedVarName );
+                } else if ( infixMethodInvocation.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
+                {
+                    SimpleName simpleName = ( SimpleName ) infixMethodInvocation.getExpression();
+                    SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
+                    simpleNameVisitor.visit( simpleName );
+
+                    if ( simpleName.getIdentifier().equals( obfuscatedVarName ) )
+                    {
+                        ModifyAst.thisifyMethodInvocationSimpleName( this.ast, infixMethodInvocation, simpleName );
+                    }
                 }
             }
         } else if ( infixExpression.getRightOperand().getNodeType() == ASTNode.PARENTHESIZED_EXPRESSION )
@@ -77,6 +97,11 @@ public class InfixExpressionVisitor extends ASTVisitor
             SimpleName simpleName = ( SimpleName ) infixExpression.getRightOperand();
             SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
             simpleNameVisitor.visit( simpleName );
+
+            if ( simpleName.getIdentifier().equals( obfuscatedVarName ) )
+            {
+                ModifyAst.thisifyInfixExpressionRightOperand( this.ast, infixExpression, simpleName );
+            }
         } else if ( infixExpression.getLeftOperand().getNodeType() == ASTNode.FIELD_ACCESS )
         {
             FieldAccess fieldAccess = ( FieldAccess ) infixExpression.getLeftOperand();
