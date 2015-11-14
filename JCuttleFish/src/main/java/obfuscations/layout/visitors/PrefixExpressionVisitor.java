@@ -1,6 +1,5 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,17 +34,8 @@ public class PrefixExpressionVisitor extends ASTVisitor
             MethodInvocation methodInvocation = ( MethodInvocation ) prefixExpression.getOperand();
             if ( methodInvocation.getExpression() != null )
             {
-                if ( methodInvocation.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
-                {
-                    SimpleName simpleName = ( SimpleName ) methodInvocation.getExpression();
-                    SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
-                    simpleNameVisitor.visit( simpleName );
-
-                    if ( simpleName.getIdentifier().equals( obfuscatedVarName ) )
-                    {
-                        ModifyAst.thisifyMethodInvocationSimpleName( this.ast, methodInvocation, simpleName );
-                    }
-                }
+                MethodInvocationExpressionVisitor visitor = new MethodInvocationExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+                visitor.visit( methodInvocation );
             }
         }
         return false;
