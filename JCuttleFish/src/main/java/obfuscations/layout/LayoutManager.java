@@ -6,8 +6,8 @@ import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.UnitSource;
-import util.ApplyChanges;
 import providers.ObfuscatedNamesProvider;
+import util.ApplyChanges;
 import util.ConvenienceWrappers;
 import util.enums.ObfuscatedNamesVariations;
 
@@ -126,6 +126,11 @@ public class LayoutManager
                                         InfixExpression infixExpression = ( InfixExpression ) assignment.getRightHandSide();
                                         InfixExpressionVisitor visitor = new InfixExpressionVisitor( originalVarSimpleName, obfuscatedVarName, statement, cu.getAST() );
                                         visitor.visit( infixExpression );
+                                    } else if ( assignment.getRightHandSide().getNodeType() == ASTNode.PREFIX_EXPRESSION )
+                                    {
+                                        PrefixExpression prefixExpression = ( PrefixExpression ) assignment.getRightHandSide();
+                                        PrefixExpressionVisitor visitor = new PrefixExpressionVisitor( originalVarSimpleName, obfuscatedVarName, statement, cu.getAST() );
+                                        visitor.visit( prefixExpression );
                                     }
                                 }
                             } else if ( statement.getNodeType() == ASTNode.RETURN_STATEMENT )
