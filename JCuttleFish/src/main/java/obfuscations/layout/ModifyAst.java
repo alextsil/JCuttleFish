@@ -17,11 +17,11 @@ public class ModifyAst
      * @param originalName   The SimpleName to search for
      * @param obfuscatedName The String to replace a match
      */
-    public static void renameMethodInvocationArguments ( List<? extends ASTNode> arguments, SimpleName originalName, String obfuscatedName )
+    public static void renameMethodInvocationArguments ( List<Object> arguments, SimpleName originalName, String obfuscatedName )
     {
-        for ( ASTNode argument : arguments )
+        for ( Object argument : arguments )
         {
-            if ( argument.getNodeType() == ASTNode.SIMPLE_NAME )
+            if ( argument instanceof SimpleName )
             {
                 SimpleName simpleName = ( SimpleName ) argument;
                 Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
@@ -31,15 +31,24 @@ public class ModifyAst
                     simpleName.setIdentifier( obfuscatedName );
                 }
             }
-            if ( argument.getNodeType() == ASTNode.FIELD_ACCESS )
+            if ( argument instanceof FieldAccess )
             {
                 FieldAccess fieldAccess = ( FieldAccess ) argument;
-                //Might need the optionalIvb to check if it's really a local field.
                 //Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( fieldAccess );
-
                 if ( fieldAccess.getName().getIdentifier().equals( originalName.getIdentifier() ) )
                 {
                     fieldAccess.getName().setIdentifier( obfuscatedName );
+                }
+            }
+            if ( argument instanceof QualifiedName )
+            {
+                QualifiedName qualifiedName = ( QualifiedName ) argument;
+                SimpleName simpleName = ( SimpleName ) qualifiedName.getQualifier();
+                Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
+                if ( simpleName.getIdentifier().equals( originalName.getIdentifier() )
+                        && optionalIvb.map( i -> i.isField() ).orElse( false ) )
+                {
+                    simpleName.setIdentifier( obfuscatedName );
                 }
             }
         }
@@ -100,33 +109,27 @@ public class ModifyAst
         }
     }
 
-    public static void thisifyMethodInvocationArguments ( AST ast, MethodInvocation methodInvocation )
-    {
-        int size = methodInvocation.arguments().size();
-        for ( int i = 0; i < size; methodInvocation.arguments() )
-        {
-            if ( methodInvocation.arguments().get( i ) instanceof SimpleName )
-            {
-                SimpleName simpleName = ( SimpleName ) methodInvocation.arguments().get( i );
-                IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
-                if ( varBinding.isField() )
-                {
-                    FieldAccess fieldAccess = ast.newFieldAccess();
-                    fieldAccess.setExpression( ast.newThisExpression() );
-                    fieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
-                    methodInvocation.arguments().set( i, fieldAccess );
-                }
-            }
-            i++;
-        }
-    }
-
-    public static void thisifyInfixExpressionRightOperand ( AST ast, InfixExpression infixExpression, SimpleName simpleName )
+    public static FieldAccess thisifySimpleName ( AST ast, SimpleName simpleName )
     {
         FieldAccess fieldAccess = ast.newFieldAccess();
         fieldAccess.setExpression( ast.newThisExpression() );
         fieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
-        infixExpression.setRightOperand( fieldAccess );
+        return fieldAccess;
+    }
+
+    public static FieldAccess thisifyQualifiedName ( AST ast, QualifiedName qualifiedName )
+    {
+        SimpleName functionName = qualifiedName.getName();
+        //Creating 2 FieldAccess nodes to represent ThisExpression and nested calls
+        FieldAccess fieldAccess1 = ast.newFieldAccess();
+        fieldAccess1.setName( ast.newSimpleName( functionName.getIdentifier() ) ); //Outer call
+
+        FieldAccess fieldAccess2 = ast.newFieldAccess();
+        fieldAccess2.setExpression( ast.newThisExpression() );
+        fieldAccess2.setName( ast.newSimpleName( ( ( SimpleName ) qualifiedName.getQualifier() ).getIdentifier() ) );
+
+        fieldAccess1.setExpression( fieldAccess2 );
+        return fieldAccess1;
     }
 
 }

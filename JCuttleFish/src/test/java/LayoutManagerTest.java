@@ -110,7 +110,7 @@ public class LayoutManagerTest
     - Static final variable ofbuscation
      */
     @Test
-    public void staticFinalTest ()
+    public void testObfuscate_StaticFinalTest ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/staticFinalOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/staticFinalObfuscated.java" );
@@ -120,12 +120,13 @@ public class LayoutManagerTest
                         .getDocument().get() );
     }
 
-    /* Testing : Issue #36
-    - Rename and thisify class field when there is a METHOD_INVOCATION on it
-
+    /* Testing :
+    - #36 Rename and thisify class field when there is a METHOD_INVOCATION on it
+    - #37 Rename and thisify class field when there is an InfixExpression on the assignment
+    - #38 Rename and thisify class field when there is an PrefixExpression on the assignment
      */
     @Test
-    public void issue36_37_38 ()
+    public void testObfuscate_Issue36_37_38 ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue36_37_38Original.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue36_37_38Obfuscated.java" );
@@ -136,7 +137,7 @@ public class LayoutManagerTest
     }
 
     @Test
-    public void animationsTest ()
+    public void testObfuscate_AnimationsTest ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/animationsOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/animationsObfuscated.java" );
@@ -146,8 +147,22 @@ public class LayoutManagerTest
                         .getDocument().get() );
     }
 
-    //A "scratchpad" test
+    /* Testing :
+    - #40 Obfuscate method invocation arguements that are of type QUALIFIED_NAME
+     */
     @Test
+    public void testObfuscate_Issue40 ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue40Original.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue40Obfuscated.java" );
+
+        assertEquals( sourceCodeProvider.get( obfuscatedFile ),
+                layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
+    //A "scratchpad" test
+    //@Test
     public void onthefly ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/ontheflyOriginal.java" );

@@ -53,13 +53,13 @@ public class LayoutManager
                                     //TODO : Move this chunk to ModifyAst class
                                     if ( methodInvocation.getExpression() != null )
                                     {
-                                        if ( methodInvocation.getExpression().getNodeType() == ASTNode.SIMPLE_NAME ) //Means the line is: Class (no this)
+                                        if ( methodInvocation.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
                                         {
                                             //Rename class' name
                                             SimpleName simpleName = ( SimpleName ) methodInvocation.getExpression();
                                             ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
                                             ModifyAst.thisifyMethodInvocationSimpleName( cu.getAST(), methodInvocation, simpleName );
-                                        } else if ( methodInvocation.getExpression().getNodeType() == ASTNode.FIELD_ACCESS ) //Means the line is: this.Class
+                                        } else if ( methodInvocation.getExpression().getNodeType() == ASTNode.FIELD_ACCESS )
                                         {
                                             FieldAccess fieldAccess = ( FieldAccess ) methodInvocation.getExpression();
                                             ModifyAst.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
@@ -67,9 +67,10 @@ public class LayoutManager
                                     }
 
                                     //Rename arguments
-                                    List<? extends ASTNode> arguments = methodInvocation.arguments();
+                                    List<Object> arguments = methodInvocation.arguments();
                                     ModifyAst.renameMethodInvocationArguments( arguments, originalVarSimpleName, obfuscatedVarName );
-                                    ModifyAst.thisifyMethodInvocationArguments( cu.getAST(), methodInvocation );
+                                    MethodArgumentsVisitor visitor = new MethodArgumentsVisitor( obfuscatedVarName, cu.getAST() );
+                                    visitor.visit( arguments );
                                 }
 
                                 if ( expression.getNodeType() == ASTNode.ASSIGNMENT )

@@ -78,7 +78,7 @@ public class InfixExpressionVisitor extends ASTVisitor
 
             if ( simpleName.getIdentifier().equals( obfuscatedVarName ) )
             {
-                ModifyAst.thisifyInfixExpressionRightOperand( this.ast, infixExpression, simpleName );
+                infixExpression.setRightOperand( ModifyAst.thisifySimpleName( this.ast, simpleName ) );
             }
         } else if ( infixExpression.getLeftOperand().getNodeType() == ASTNode.FIELD_ACCESS )
         {
