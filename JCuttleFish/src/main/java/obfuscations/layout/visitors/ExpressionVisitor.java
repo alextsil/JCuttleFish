@@ -10,15 +10,12 @@ public class ExpressionVisitor extends ASTVisitor
 
     private String obfuscatedVarName;
 
-    private Statement statement;
-
     private AST ast;
 
-    public ExpressionVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, Statement statement, AST ast )
+    public ExpressionVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
     {
         this.originalVarSimpleName = originalVarSimpleName;
         this.obfuscatedVarName = obfuscatedVarName;
-        this.statement = statement;
         this.ast = ast;
     }
 
@@ -31,7 +28,7 @@ public class ExpressionVisitor extends ASTVisitor
         if ( expression.getNodeType() == ASTNode.INFIX_EXPRESSION )
         {
             InfixExpression infixExpression = ( InfixExpression ) expression;
-            InfixExpressionVisitor infixExpressionVisitor = new InfixExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.statement, this.ast );
+            InfixExpressionVisitor infixExpressionVisitor = new InfixExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             infixExpressionVisitor.visit( infixExpression );
         } else if ( expression.getNodeType() == ASTNode.FIELD_ACCESS )
         {
@@ -46,9 +43,9 @@ public class ExpressionVisitor extends ASTVisitor
         } else if ( expression.getNodeType() == ASTNode.PARENTHESIZED_EXPRESSION )
         {
             ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression ) expression;
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.statement, this.ast );
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             expressionVisitor.preVisit2( parenthesizedExpression.getExpression() );
         }
-        return true;
+        return false;
     }
 }

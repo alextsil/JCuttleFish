@@ -43,7 +43,7 @@ public class StatementVisitor
                 //Rename arguments
                 List<Object> arguments = methodInvocation.arguments();
                 ModifyAst.renameMethodInvocationArguments( arguments, originalVarSimpleName, obfuscatedVarName );
-                MethodArgumentsVisitor visitor2 = new MethodArgumentsVisitor( obfuscatedVarName, this.ast );
+                MethodArgumentsVisitor visitor2 = new MethodArgumentsVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
                 visitor2.visit( arguments );
             }
 
@@ -103,19 +103,19 @@ public class StatementVisitor
                 } else if ( assignment.getRightHandSide().getNodeType() == ASTNode.INFIX_EXPRESSION )
                 {
                     InfixExpression infixExpression = ( InfixExpression ) assignment.getRightHandSide();
-                    InfixExpressionVisitor visitor = new InfixExpressionVisitor( originalVarSimpleName, obfuscatedVarName, statement, this.ast );
+                    InfixExpressionVisitor visitor = new InfixExpressionVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
                     visitor.visit( infixExpression );
                 } else if ( assignment.getRightHandSide().getNodeType() == ASTNode.PREFIX_EXPRESSION )
                 {
                     PrefixExpression prefixExpression = ( PrefixExpression ) assignment.getRightHandSide();
-                    PrefixExpressionVisitor visitor = new PrefixExpressionVisitor( originalVarSimpleName, obfuscatedVarName, statement, this.ast );
+                    PrefixExpressionVisitor visitor = new PrefixExpressionVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
                     visitor.visit( prefixExpression );
                 }
             }
         } else if ( statement.getNodeType() == ASTNode.RETURN_STATEMENT )
         {
             expression = ( ( ReturnStatement ) statement ).getExpression();
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor( originalVarSimpleName, obfuscatedVarName, statement, this.ast );
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
             expressionVisitor.preVisit2( expression );
 
             ThisifyReturnStatementVisitor thisifyReturnStatementVisitor = new ThisifyReturnStatementVisitor( this.ast, statement );

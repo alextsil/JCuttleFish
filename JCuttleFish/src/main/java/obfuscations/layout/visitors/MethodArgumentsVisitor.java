@@ -11,14 +11,17 @@ import java.util.List;
 public class MethodArgumentsVisitor
 {
 
+    private SimpleName originalVarSimpleName;
+
     private String obfuscatedVarName;
 
     private AST ast;
 
     private final Logger logger = LoggerFactory.getLogger( MethodArgumentsVisitor.class );
 
-    public MethodArgumentsVisitor ( String obfuscatedVarName, AST ast )
+    public MethodArgumentsVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
     {
+        this.originalVarSimpleName = originalVarSimpleName;
         this.obfuscatedVarName = obfuscatedVarName;
         this.ast = ast;
     }
@@ -48,6 +51,14 @@ public class MethodArgumentsVisitor
                 {
                     arguments.set( i, ModifyAst.thisifyQualifiedName( ast, qualifiedName ) );
                 }
+            } else if ( arguments.get( i ) instanceof InfixExpression )
+            {
+                InfixExpression infixExpression = ( InfixExpression ) arguments.get( i );
+                InfixExpressionVisitor visitor = new InfixExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+                visitor.visit( infixExpression );
+            } else
+            {
+                logger.warn( "Not mapped yet" );
             }
         }
         return false;

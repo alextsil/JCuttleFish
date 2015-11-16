@@ -13,17 +13,14 @@ public class InfixExpressionVisitor extends ASTVisitor
 
     private String obfuscatedVarName;
 
-    private Statement statement;
-
     private AST ast;
 
     private final Logger logger = LoggerFactory.getLogger( InfixExpressionVisitor.class );
 
-    public InfixExpressionVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, Statement statement, AST ast )
+    public InfixExpressionVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
     {
         this.originalVarSimpleName = originalVarSimpleName;
         this.obfuscatedVarName = obfuscatedVarName;
-        this.statement = statement;
         this.ast = ast;
     }
 
@@ -42,7 +39,7 @@ public class InfixExpressionVisitor extends ASTVisitor
         } else if ( infixExpression.getLeftOperand().getNodeType() == ASTNode.PARENTHESIZED_EXPRESSION )
         {
             ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression ) infixExpression.getLeftOperand();
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.statement, this.ast );
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             expressionVisitor.preVisit2( parenthesizedExpression.getExpression() );
         } else if ( infixExpression.getLeftOperand().getNodeType() == ASTNode.SIMPLE_NAME )
         {
@@ -54,6 +51,11 @@ public class InfixExpressionVisitor extends ASTVisitor
             FieldAccess fieldAccess = ( FieldAccess ) infixExpression.getLeftOperand();
             FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             fieldAccessVisitor.visit( fieldAccess );
+        } else if ( infixExpression.getLeftOperand().getNodeType() == ASTNode.PREFIX_EXPRESSION )
+        {
+            PrefixExpression prefixExpression = ( PrefixExpression ) infixExpression.getLeftOperand();
+            PrefixExpressionVisitor visitor = new PrefixExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+            visitor.visit( prefixExpression );
         }
 
         //Right
@@ -68,7 +70,7 @@ public class InfixExpressionVisitor extends ASTVisitor
         } else if ( infixExpression.getRightOperand().getNodeType() == ASTNode.PARENTHESIZED_EXPRESSION )
         {
             ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression ) infixExpression.getRightOperand();
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.statement, this.ast );
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             expressionVisitor.preVisit2( parenthesizedExpression.getExpression() );
         } else if ( infixExpression.getRightOperand().getNodeType() == ASTNode.SIMPLE_NAME )
         {
@@ -87,6 +89,6 @@ public class InfixExpressionVisitor extends ASTVisitor
             fieldAccessVisitor.visit( fieldAccess );
         }
 
-        return super.visit( infixExpression );
+        return false;
     }
 }
