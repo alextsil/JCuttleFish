@@ -27,6 +27,10 @@ public class MethodInvocationExpressionVisitor extends ASTVisitor
     @Override
     public boolean visit ( MethodInvocation methodInvocation )
     {
+        if ( methodInvocation.getExpression() == null )
+        {
+            return false;
+        }
         if ( methodInvocation.getExpression().getNodeType() == ASTNode.CLASS_INSTANCE_CREATION )
         {
             ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation ) methodInvocation.getExpression();

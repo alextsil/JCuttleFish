@@ -50,30 +50,14 @@ public class LayoutManager
                                 if ( expression.getNodeType() == ASTNode.METHOD_INVOCATION )
                                 {
                                     MethodInvocation methodInvocation = ( MethodInvocation ) expression;
-                                    //TODO : Move this chunk to ModifyAst class
-                                    if ( methodInvocation.getExpression() != null )
-                                    {
-                                        if ( methodInvocation.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
-                                        {
-                                            //Rename class' name
-                                            SimpleName simpleName = ( SimpleName ) methodInvocation.getExpression();
-                                            ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
-                                            if ( simpleName.getIdentifier().equals( obfuscatedVarName ) )
-                                            {
-                                                methodInvocation.setExpression( ModifyAst.thisifySimpleName( cu.getAST(), simpleName ) );
-                                            }
-                                        } else if ( methodInvocation.getExpression().getNodeType() == ASTNode.FIELD_ACCESS )
-                                        {
-                                            FieldAccess fieldAccess = ( FieldAccess ) methodInvocation.getExpression();
-                                            ModifyAst.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
-                                        }
-                                    }
+                                    MethodInvocationExpressionVisitor visitor = new MethodInvocationExpressionVisitor( originalVarSimpleName, obfuscatedVarName, cu.getAST() );
+                                    visitor.visit( methodInvocation );
 
                                     //Rename arguments
                                     List<Object> arguments = methodInvocation.arguments();
                                     ModifyAst.renameMethodInvocationArguments( arguments, originalVarSimpleName, obfuscatedVarName );
-                                    MethodArgumentsVisitor visitor = new MethodArgumentsVisitor( obfuscatedVarName, cu.getAST() );
-                                    visitor.visit( arguments );
+                                    MethodArgumentsVisitor visitor2 = new MethodArgumentsVisitor( obfuscatedVarName, cu.getAST() );
+                                    visitor2.visit( arguments );
                                 }
 
                                 if ( expression.getNodeType() == ASTNode.ASSIGNMENT )
@@ -156,6 +140,21 @@ public class LayoutManager
                                 VariableDeclarationStatement vds = ( VariableDeclarationStatement ) statement;
                                 VariableDeclarationStatementVisitor visitor = new VariableDeclarationStatementVisitor( originalVarSimpleName, obfuscatedVarName, cu.getAST() );
                                 visitor.visit( vds );
+                            } else if ( statement.getNodeType() == ASTNode.IF_STATEMENT )
+                            {
+                                IfStatement ifStatement = ( IfStatement ) statement;
+                                if ( ifStatement.getExpression().getNodeType() == ASTNode.METHOD_INVOCATION )
+                                {
+                                    MethodInvocation methodInvocation = ( MethodInvocation ) ifStatement.getExpression();
+                                    MethodInvocationExpressionVisitor visitor = new MethodInvocationExpressionVisitor( originalVarSimpleName, obfuscatedVarName, cu.getAST() );
+                                    visitor.visit( methodInvocation );
+
+                                    //Rename arguments
+                                    List<Object> arguments = methodInvocation.arguments();
+                                    ModifyAst.renameMethodInvocationArguments( arguments, originalVarSimpleName, obfuscatedVarName );
+                                    MethodArgumentsVisitor visitor2 = new MethodArgumentsVisitor( obfuscatedVarName, cu.getAST() );
+                                    visitor2.visit( arguments );
+                                }
                             } else
                             {
                                 logger.debug( "Not mapped yet" );

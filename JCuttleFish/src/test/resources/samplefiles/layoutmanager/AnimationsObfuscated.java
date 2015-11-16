@@ -104,7 +104,7 @@ public class Text implements Comparable<Text> {
 
         final float finalX = this.f.left;
 
-        if ( this.j.isEmpty()) {
+        if (this.j.isEmpty()) {
             canvas.drawText( this.b, finalX, -this.f.bottom - this.l, this.a );
         } else {
             for (ITextEffect effect : this.j ) {
