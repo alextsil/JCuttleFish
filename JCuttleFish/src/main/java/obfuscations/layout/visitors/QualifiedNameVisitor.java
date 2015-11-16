@@ -1,7 +1,9 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.ModifyAst;
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.QualifiedName;
+import org.eclipse.jdt.core.dom.SimpleName;
 
 
 public class QualifiedNameVisitor extends ASTVisitor
@@ -13,14 +15,11 @@ public class QualifiedNameVisitor extends ASTVisitor
 
     private AST ast;
 
-    private Assignment assignment;
-
-    public QualifiedNameVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast, Assignment assignment )
+    public QualifiedNameVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
     {
         this.originalVarSimpleName = originalVarSimpleName;
         this.obfuscatedVarName = obfuscatedVarName;
         this.ast = ast;
-        this.assignment = assignment;
     }
 
     @Override
@@ -28,12 +27,6 @@ public class QualifiedNameVisitor extends ASTVisitor
     {
         SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
         simpleNameVisitor.visit( ( SimpleName ) qualifiedName.getQualifier() );
-
-        //Run only if the variable has been obfuscated
-        if ( ( ( SimpleName ) qualifiedName.getQualifier() ).getIdentifier().equals( this.obfuscatedVarName ) )
-        {
-            this.assignment.setLeftHandSide( ModifyAst.thisifyQualifiedName( this.ast, qualifiedName ) );
-        }
         return false;
     }
 }

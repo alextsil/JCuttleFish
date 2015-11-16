@@ -100,7 +100,7 @@ public class Text implements Comparable<Text> {
         layout(textSurface);
 
         canvas.save();
-        canvas.concat(matrix);
+        canvas.concat( matrix );
 
         final float finalX = padding.left;
 

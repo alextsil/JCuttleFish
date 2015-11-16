@@ -58,7 +58,10 @@ public class LayoutManager
                                             //Rename class' name
                                             SimpleName simpleName = ( SimpleName ) methodInvocation.getExpression();
                                             ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
-                                            methodInvocation.setExpression( ModifyAst.thisifySimpleName( cu.getAST(), simpleName ) );
+                                            if ( simpleName.getIdentifier().equals( obfuscatedVarName ) )
+                                            {
+                                                methodInvocation.setExpression( ModifyAst.thisifySimpleName( cu.getAST(), simpleName ) );
+                                            }
                                         } else if ( methodInvocation.getExpression().getNodeType() == ASTNode.FIELD_ACCESS )
                                         {
                                             FieldAccess fieldAccess = ( FieldAccess ) methodInvocation.getExpression();
@@ -97,8 +100,13 @@ public class LayoutManager
                                     } else if ( assignment.getLeftHandSide().getNodeType() == ASTNode.QUALIFIED_NAME )
                                     {
                                         QualifiedName qualifiedName = ( QualifiedName ) assignment.getLeftHandSide();
-                                        QualifiedNameVisitor qualifiedNameVisitor = new QualifiedNameVisitor( originalVarSimpleName, obfuscatedVarName, cu.getAST(), assignment );
+                                        QualifiedNameVisitor qualifiedNameVisitor = new QualifiedNameVisitor( originalVarSimpleName, obfuscatedVarName, cu.getAST() );
                                         qualifiedNameVisitor.visit( qualifiedName );
+
+                                        if ( ( ( SimpleName ) qualifiedName.getQualifier() ).getIdentifier().equals( obfuscatedVarName ) )
+                                        {
+                                            assignment.setLeftHandSide( ModifyAst.thisifyQualifiedName( cu.getAST(), qualifiedName ) );
+                                        }
                                     }
 
                                     if ( assignment.getRightHandSide().getNodeType() == ASTNode.SIMPLE_NAME )
@@ -145,7 +153,9 @@ public class LayoutManager
 
                             } else if ( statement.getNodeType() == ASTNode.VARIABLE_DECLARATION_STATEMENT )
                             {
-                                //List<VariableDeclarationFragment> variableDeclarationFragments = ( ( VariableDeclarationStatement ) statement ).fragments();
+                                VariableDeclarationStatement vds = ( VariableDeclarationStatement ) statement;
+                                VariableDeclarationStatementVisitor visitor = new VariableDeclarationStatementVisitor( originalVarSimpleName, obfuscatedVarName, cu.getAST() );
+                                visitor.visit( vds );
                             } else
                             {
                                 logger.debug( "Not mapped yet" );

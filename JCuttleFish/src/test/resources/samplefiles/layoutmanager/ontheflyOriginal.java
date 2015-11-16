@@ -3,16 +3,11 @@ package test;
 public class Text implements Comparable<Text>
 {
 
-    private RectF defaultSize;
+    private RectF padding;
 
     public Text ()
     {
-        defaultSize.set(
-                defaultSize.left,
-                defaultSize.top,
-                defaultSize.right,
-                defaultSize.bottom
-        );
+        final float finalX = padding.left;
     }
 
 }
