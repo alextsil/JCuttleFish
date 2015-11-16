@@ -38,12 +38,23 @@ public class IfStatementVisitor extends ASTVisitor
             visitor2.visit( arguments );
         }
 
-        //Now visit ThenStatement
-        Block statements = ( Block ) node.getThenStatement();
-        for ( Object statement : statements.statements() )
+        //Visit ThenStatement
+        Block thenStatements = ( Block ) node.getThenStatement();
+        for ( Object statement : thenStatements.statements() )
         {
             StatementVisitor visitor = new StatementVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             visitor.visit( ( Statement ) statement );
+        }
+
+        //Visit ElseStatement
+        Block elseStatements = ( Block ) node.getElseStatement();
+        if ( elseStatements != null )
+        {
+            for ( Object statement : elseStatements.statements() )
+            {
+                StatementVisitor visitor = new StatementVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+                visitor.visit( ( Statement ) statement );
+            }
         }
         return false;
     }

@@ -105,9 +105,9 @@ public class Text implements Comparable<Text> {
         final float finalX = this.f.left;
 
         if (this.j.isEmpty()) {
-            canvas.drawText( this.b, finalX, -this.f.bottom - this.l, this.a );
+            canvas.drawText(this.b, finalX, -this.f.bottom - this.l, this.a);
         } else {
-            for (ITextEffect effect : this.j ) {
+            for (ITextEffect effect : this.j) {
                 canvas.save();
                 effect.apply(canvas, this.b, finalX, -this.f.bottom, this.a );
                 canvas.drawText( this.b, finalX, -this.f.bottom, this.a );
@@ -131,7 +131,7 @@ public class Text implements Comparable<Text> {
 
     void layout(TextSurface textSurface) {
 
-        this. d.set( this.c.left, this.c.top, this.c.right, this.c.bottom);
+        this.d.set(this.c.left, this.c.top, this.c.right, this.c.bottom);
 
         final float sx = this.h.getScaleX();
         final float sy = this.h.getScaleY();
@@ -143,7 +143,7 @@ public class Text implements Comparable<Text> {
         this.i.reset();
         this.i.preTranslate(x, y);
         this.i.preScale(sx, sy, sPivotX, sPivotY);
-        this.i.mapRect( this.d );
+        this.i.mapRect(this.d);
     }
 
     public float getY(TextSurface textSurface) {
@@ -191,15 +191,15 @@ public class Text implements Comparable<Text> {
     }
 
     @Override public int compareTo(@NonNull Text another) {
-        return this.b.compareTo(another.b );
+        return this.b.compareTo(another.b);
     }
 
     public float getWidth() {
-        return ( this.d.width() + this.f.left + this.f.right);
+        return (this.d.width() + this.f.left + this.f.right);
     }
 
     public float getHeight() {
-        return ( this.d.height() + this.f.top + this.f.bottom);
+        return (this.d.height() + this.f.top + this.f.bottom);
     }
 
     public Position getPosition() {

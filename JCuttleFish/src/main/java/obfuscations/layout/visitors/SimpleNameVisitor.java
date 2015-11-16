@@ -27,8 +27,7 @@ public class SimpleNameVisitor extends ASTVisitor
         IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
         if ( varBinding == null )
         {
-            //log it
-            logger.warn( "Variable binding is null. Returning." );
+            logger.info( "Variable binding is null. Returning." );
             return false;
         }
         if ( varBinding.isField() )

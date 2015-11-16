@@ -23,7 +23,7 @@ public class ThisifyInfixExpressionVisitor extends ASTVisitor
     @Override
     public boolean visit ( InfixExpression node )
     {
-        //Left
+        //LEFT
         if ( node.getLeftOperand().getNodeType() == ASTNode.METHOD_INVOCATION )
         {
             //call method expression thisify visitor
@@ -46,7 +46,7 @@ public class ThisifyInfixExpressionVisitor extends ASTVisitor
             }
         }
 
-        //Right
+        //RIGHT
         if ( node.getRightOperand().getNodeType() == ASTNode.METHOD_INVOCATION )
         {
             //call method expression thisify visitor
