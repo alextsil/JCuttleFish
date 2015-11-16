@@ -58,7 +58,7 @@ public class LayoutManager
                                             //Rename class' name
                                             SimpleName simpleName = ( SimpleName ) methodInvocation.getExpression();
                                             ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
-                                            ModifyAst.thisifyMethodInvocationSimpleName( cu.getAST(), methodInvocation, simpleName );
+                                            methodInvocation.setExpression( ModifyAst.thisifySimpleName( cu.getAST(), simpleName ) );
                                         } else if ( methodInvocation.getExpression().getNodeType() == ASTNode.FIELD_ACCESS )
                                         {
                                             FieldAccess fieldAccess = ( FieldAccess ) methodInvocation.getExpression();
@@ -87,7 +87,7 @@ public class LayoutManager
                                         if ( varBinding.isField() )
                                         {
                                             ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
-                                            ModifyAst.thisifyAssignmentSimpleName( cu.getAST(), assignment, simpleName );
+                                            assignment.setLeftHandSide( ModifyAst.thisifySimpleName( cu.getAST(), simpleName ) );
                                         }
                                     } else if ( assignment.getLeftHandSide().getNodeType() == ASTNode.ARRAY_ACCESS )
                                     {

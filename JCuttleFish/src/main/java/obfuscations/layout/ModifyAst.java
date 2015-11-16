@@ -70,22 +70,6 @@ public class ModifyAst
         }
     }
 
-    public static void thisifyAssignmentSimpleName ( AST ast, Assignment assignment, SimpleName simpleName )
-    {
-        FieldAccess fieldAccess = ast.newFieldAccess();
-        fieldAccess.setExpression( ast.newThisExpression() );
-        fieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
-        assignment.setLeftHandSide( fieldAccess );
-    }
-
-    public static void thisifyMethodInvocationSimpleName ( AST ast, MethodInvocation methodInvocation, SimpleName simpleName )
-    {
-        FieldAccess fieldAccess = ast.newFieldAccess();
-        fieldAccess.setExpression( ast.newThisExpression() );
-        fieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
-        methodInvocation.setExpression( fieldAccess );
-    }
-
     public static void thisifyStatement ( AST ast, Statement statement )
     {
         if ( statement.getNodeType() == ASTNode.RETURN_STATEMENT )
@@ -97,10 +81,7 @@ public class ModifyAst
                 IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
                 if ( varBinding.isField() )
                 {
-                    FieldAccess fieldAccess = ast.newFieldAccess();
-                    fieldAccess.setExpression( ast.newThisExpression() );
-                    fieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
-                    returnStatement.setExpression( fieldAccess );
+                    returnStatement.setExpression( thisifySimpleName( ast, simpleName ) );
                 }
             }
         } else

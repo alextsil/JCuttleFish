@@ -30,7 +30,7 @@ public class FieldAccessVisitor extends ASTVisitor
             {
                 ModifyAst.renameSimpleName( ( SimpleName ) methodInvocation.getExpression(), this.originalVarSimpleName, this.obfuscatedVarName );
                 //TODO : use a visitor to choose which thisify function will be used.
-                ModifyAst.thisifyMethodInvocationSimpleName( this.ast, methodInvocation, ( SimpleName ) methodInvocation.getExpression() );
+                methodInvocation.setExpression( ModifyAst.thisifySimpleName( this.ast, ( SimpleName ) methodInvocation.getExpression() ) );
             }
         } else
         {

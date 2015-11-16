@@ -39,7 +39,7 @@ public class MethodInvocationExpressionVisitor extends ASTVisitor
 
             if ( simpleName.getIdentifier().equals( obfuscatedVarName ) )
             {
-                ModifyAst.thisifyMethodInvocationSimpleName( this.ast, methodInvocation, simpleName );
+                methodInvocation.setExpression( ModifyAst.thisifySimpleName( this.ast, simpleName ) );
             }
         }
         return false;
