@@ -45,6 +45,11 @@ public class ExpressionVisitor extends ASTVisitor
             ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression ) expression;
             ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             expressionVisitor.preVisit2( parenthesizedExpression.getExpression() );
+        } else if ( expression.getNodeType() == ASTNode.METHOD_INVOCATION )
+        {
+            MethodInvocation methodInvocation = ( MethodInvocation ) expression;
+            MethodInvocationExpressionVisitor visitor = new MethodInvocationExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+            visitor.visit( methodInvocation );
         }
         return false;
     }

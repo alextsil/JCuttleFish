@@ -56,6 +56,11 @@ public class MethodArgumentsVisitor
                 InfixExpression infixExpression = ( InfixExpression ) arguments.get( i );
                 InfixExpressionVisitor visitor = new InfixExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
                 visitor.visit( infixExpression );
+            } else if ( arguments.get( i ) instanceof PrefixExpression )
+            {
+                PrefixExpression prefixExpression = ( PrefixExpression ) arguments.get( i );
+                PrefixExpressionVisitor visitor = new PrefixExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+                visitor.visit( prefixExpression );
             } else
             {
                 logger.warn( "Not mapped yet" );

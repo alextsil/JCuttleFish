@@ -20,7 +20,6 @@ public class StatementVisitor
 
     private final Logger logger = LoggerFactory.getLogger( StatementVisitor.class );
 
-
     public StatementVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
     {
         this.originalVarSimpleName = originalVarSimpleName;
@@ -131,6 +130,11 @@ public class StatementVisitor
             IfStatement ifStatement = ( IfStatement ) statement;
             IfStatementVisitor visitor = new IfStatementVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
             visitor.visit( ifStatement );
+        } else if ( statement.getNodeType() == ASTNode.ENHANCED_FOR_STATEMENT )
+        {
+            EnhancedForStatement enhancedForStatement = ( EnhancedForStatement ) statement;
+            EnhancedForStatementVisitor visitor = new EnhancedForStatementVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+            visitor.visit( enhancedForStatement );
         } else
         {
             logger.debug( "Not mapped yet" );

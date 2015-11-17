@@ -45,6 +45,10 @@ public class MethodInvocationExpressionVisitor extends ASTVisitor
             {
                 methodInvocation.setExpression( ModifyAst.thisifySimpleName( this.ast, simpleName ) );
             }
+        } else if ( methodInvocation.getExpression().getNodeType() == ASTNode.METHOD_INVOCATION )
+        {
+            MethodInvocation nestedMethodInvocation = ( MethodInvocation ) methodInvocation.getExpression();
+            this.visit( nestedMethodInvocation );
         }
         return false;
     }

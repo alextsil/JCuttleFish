@@ -109,8 +109,8 @@ public class Text implements Comparable<Text> {
         } else {
             for (ITextEffect effect : this.j) {
                 canvas.save();
-                effect.apply(canvas, this.b, finalX, -this.f.bottom, this.a );
-                canvas.drawText( this.b, finalX, -this.f.bottom, this.a );
+                effect.apply(canvas, this.b, finalX, -this.f.bottom, this.a);
+                canvas.drawText(this.b, finalX, -this.f.bottom, this.a);
                 canvas.restore();
             }
 
@@ -191,7 +191,7 @@ public class Text implements Comparable<Text> {
     }
 
     @Override public int compareTo(@NonNull Text another) {
-        return this.b.compareTo(another.b);
+        return this.b.compareTo(another.text);
     }
 
     public float getWidth() {
