@@ -10,7 +10,7 @@ public class Text implements Comparable<Text>
 
     public void setScalePivot ( float x, float y )
     {
-        this.a.getPivot().set( x, y );
+        final float sPivotX = position.getRelativeX((int) this.a.getPivot().x, this, false);
     }
 
 }

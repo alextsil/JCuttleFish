@@ -23,8 +23,6 @@ public class ExpressionVisitor extends ASTVisitor
     //mono gia return_expression
     public boolean preVisit2 ( ASTNode expression )
     {
-        int nodeType = expression.getNodeType();
-
         if ( expression.getNodeType() == ASTNode.INFIX_EXPRESSION )
         {
             InfixExpression infixExpression = ( InfixExpression ) expression;

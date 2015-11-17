@@ -61,6 +61,11 @@ public class MethodArgumentsVisitor
                 PrefixExpression prefixExpression = ( PrefixExpression ) arguments.get( i );
                 PrefixExpressionVisitor visitor = new PrefixExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
                 visitor.visit( prefixExpression );
+            } else if ( arguments.get( i ) instanceof CastExpression )
+            {
+                CastExpression castExpression = ( CastExpression ) arguments.get( i );
+                ExpressionVisitor visitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+                visitor.preVisit2( castExpression.getExpression() );
             } else
             {
                 logger.warn( "Not mapped yet" );

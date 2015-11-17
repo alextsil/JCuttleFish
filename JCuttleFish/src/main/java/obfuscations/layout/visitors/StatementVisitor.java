@@ -119,7 +119,6 @@ public class StatementVisitor
 
             ThisifyReturnStatementVisitor thisifyReturnStatementVisitor = new ThisifyReturnStatementVisitor( this.ast, statement );
             thisifyReturnStatementVisitor.preVisit2( expression );
-
         } else if ( statement.getNodeType() == ASTNode.VARIABLE_DECLARATION_STATEMENT )
         {
             VariableDeclarationStatement vds = ( VariableDeclarationStatement ) statement;

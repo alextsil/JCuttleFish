@@ -28,9 +28,12 @@ public class FieldAccessVisitor extends ASTVisitor
             MethodInvocation methodInvocation = ( MethodInvocation ) fieldAccess.getExpression();
             if ( methodInvocation.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
             {
+                SimpleName simpleName = ( SimpleName ) methodInvocation.getExpression();
                 ModifyAst.renameSimpleName( ( SimpleName ) methodInvocation.getExpression(), this.originalVarSimpleName, this.obfuscatedVarName );
-                //TODO : use a visitor to choose which thisify function will be used.
-                methodInvocation.setExpression( ModifyAst.thisifySimpleName( this.ast, ( SimpleName ) methodInvocation.getExpression() ) );
+                if ( simpleName.getIdentifier().equals( this.obfuscatedVarName ) )
+                {
+                    methodInvocation.setExpression( ModifyAst.thisifySimpleName( this.ast, ( SimpleName ) methodInvocation.getExpression() ) );
+                }
             }
         } else
         {

@@ -216,7 +216,7 @@ public class Text implements Comparable<Text> {
 
     @Override public String toString() {
         return "Text{" +
-                "b='" + this.b + '\'' +
+                "text='" + this.b + '\'' +
                 '}';
     }
 
