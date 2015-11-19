@@ -39,8 +39,7 @@ public class MethodArgumentsVisitor
                     IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
                     if ( varBinding.isField() )
                     {
-                        FieldAccess fieldAccess = ModifyAst.thisifySimpleName( this.ast, simpleName );
-                        arguments.set( i, fieldAccess );
+                        ModifyAst.thisifySimpleName( this.ast, simpleName );
                     }
                 }
             } else if ( arguments.get( i ) instanceof QualifiedName )

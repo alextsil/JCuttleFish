@@ -1,6 +1,10 @@
 package obfuscations.layout.visitors;
 
+import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
+import util.OptionalUtils;
+
+import java.util.Optional;
 
 
 public class ExpressionVisitor extends ASTVisitor
@@ -38,6 +42,13 @@ public class ExpressionVisitor extends ASTVisitor
             SimpleName simpleName = ( SimpleName ) expression;
             SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
             simpleNameVisitor.visit( simpleName );
+            Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
+            if ( simpleName.getIdentifier().equals( this.obfuscatedVarName )
+                    && optionalIvb.map( i -> i.isField() ).orElse( false ) )
+            {
+                ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
+                ModifyAst.thisifySimpleName( this.ast, simpleName );
+            }
         } else if ( expression.getNodeType() == ASTNode.PARENTHESIZED_EXPRESSION )
         {
             ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression ) expression;
@@ -46,8 +57,12 @@ public class ExpressionVisitor extends ASTVisitor
         } else if ( expression.getNodeType() == ASTNode.METHOD_INVOCATION )
         {
             MethodInvocation methodInvocation = ( MethodInvocation ) expression;
-            MethodInvocationExpressionVisitor visitor = new MethodInvocationExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+            MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             visitor.visit( methodInvocation );
+        } else if ( expression.getNodeType() == ASTNode.CLASS_INSTANCE_CREATION )
+        {
+            ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation ) expression;
+            ModifyAst.renameMethodInvocationArguments( classInstanceCreation.arguments(), this.originalVarSimpleName, this.obfuscatedVarName );
         }
         return false;
     }

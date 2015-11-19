@@ -32,7 +32,7 @@ public class PrefixExpressionVisitor extends ASTVisitor
             MethodInvocation methodInvocation = ( MethodInvocation ) prefixExpression.getOperand();
             if ( methodInvocation.getExpression() != null )
             {
-                MethodInvocationExpressionVisitor visitor = new MethodInvocationExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+                MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
                 visitor.visit( methodInvocation );
             }
         } else if ( prefixExpression.getOperand().getNodeType() == ASTNode.QUALIFIED_NAME )

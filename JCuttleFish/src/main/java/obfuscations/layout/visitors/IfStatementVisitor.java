@@ -28,7 +28,7 @@ public class IfStatementVisitor extends ASTVisitor
         if ( node.getExpression().getNodeType() == ASTNode.METHOD_INVOCATION )
         {
             MethodInvocation methodInvocation = ( MethodInvocation ) node.getExpression();
-            MethodInvocationExpressionVisitor visitor = new MethodInvocationExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+            MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             visitor.visit( methodInvocation );
 
             //Rename arguments

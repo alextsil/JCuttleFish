@@ -43,7 +43,7 @@ public class StatementVisitor
             if ( expression.getNodeType() == ASTNode.METHOD_INVOCATION )
             {
                 MethodInvocation methodInvocation = ( MethodInvocation ) expression;
-                MethodInvocationExpressionVisitor visitor = new MethodInvocationExpressionVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
+                MethodInvocationVisitor visitor = new MethodInvocationVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
                 visitor.visit( methodInvocation );
 
                 //Rename arguments

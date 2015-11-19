@@ -39,7 +39,7 @@ public class VariableDeclarationStatementVisitor extends ASTVisitor
         } else if ( vdf.getInitializer().getNodeType() == ASTNode.METHOD_INVOCATION )
         {
             MethodInvocation methodInvocation = ( MethodInvocation ) vdf.getInitializer();
-            MethodInvocationExpressionVisitor visitor = new MethodInvocationExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+            MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             visitor.visit( methodInvocation );
 
             //Rename arguments

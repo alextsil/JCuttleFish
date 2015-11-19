@@ -32,7 +32,7 @@ public class FieldAccessVisitor extends ASTVisitor
                 ModifyAst.renameSimpleName( ( SimpleName ) methodInvocation.getExpression(), this.originalVarSimpleName, this.obfuscatedVarName );
                 if ( simpleName.getIdentifier().equals( this.obfuscatedVarName ) )
                 {
-                    methodInvocation.setExpression( ModifyAst.thisifySimpleName( this.ast, ( SimpleName ) methodInvocation.getExpression() ) );
+                    ModifyAst.thisifySimpleName( this.ast, ( SimpleName ) methodInvocation.getExpression() );
                 }
             }
         } else

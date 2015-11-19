@@ -70,32 +70,70 @@ public class ModifyAst
         }
     }
 
-    public static void thisifyStatement ( AST ast, Statement statement )
+    /**
+     * Thisifies the SimpleName by converting it to FieldAccess
+     * and sets it back to its parent.
+     * SimpleName can have any parent, and every parent requires different treatment. We treat all cases.
+     */
+    public static void thisifySimpleName ( AST ast, SimpleName simpleName )
     {
-        if ( statement.getNodeType() == ASTNode.RETURN_STATEMENT )
-        {
-            ReturnStatement returnStatement = ( ReturnStatement ) statement;
-            if ( returnStatement.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
-            {
-                SimpleName simpleName = ( SimpleName ) returnStatement.getExpression();
-                IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
-                if ( varBinding.isField() )
-                {
-                    returnStatement.setExpression( thisifySimpleName( ast, simpleName ) );
-                }
-            }
-        } else
-        {
-            throw new RuntimeException( "Input not mapped yet" );
-        }
-    }
-
-    public static FieldAccess thisifySimpleName ( AST ast, SimpleName simpleName )
-    {
+        //Thisify SimpleName by converting it to FieldAccess
         FieldAccess fieldAccess = ast.newFieldAccess();
         fieldAccess.setExpression( ast.newThisExpression() );
         fieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
-        return fieldAccess;
+
+        //This might occur if there's a method invocation a simple name ( text.get )
+        //or if "text" is in the arguments list. So i check for both and replace accordingly.
+        if ( simpleName.getParent().getNodeType() == ASTNode.METHOD_INVOCATION )
+        {
+            MethodInvocation methodInvocation = ( MethodInvocation ) simpleName.getParent();
+            if ( methodInvocation.getExpression() != null )
+            {
+                if ( methodInvocation.getExpression().equals( simpleName ) )
+                {
+                    methodInvocation.setExpression( fieldAccess );
+                }
+            }
+
+            if ( methodInvocation.arguments().contains( simpleName ) )
+            {
+                methodInvocation.arguments().set( methodInvocation.arguments().indexOf( simpleName ), fieldAccess );
+            }
+        } else if ( simpleName.getParent().getNodeType() == ASTNode.ASSIGNMENT )
+        {
+            Assignment assignment = ( Assignment ) simpleName.getParent();
+            if ( assignment.getLeftHandSide().equals( simpleName ) )
+            {
+                assignment.setLeftHandSide( fieldAccess );
+            } else if ( assignment.getRightHandSide().equals( simpleName ) )
+            {
+                assignment.setRightHandSide( fieldAccess );
+            }
+        } else if ( simpleName.getParent().getNodeType() == ASTNode.RETURN_STATEMENT )
+        {
+            ReturnStatement returnStatement = ( ReturnStatement ) simpleName.getParent();
+            returnStatement.setExpression( fieldAccess );
+        } else if ( simpleName.getParent().getNodeType() == ASTNode.INFIX_EXPRESSION )
+        {
+            InfixExpression infixExpression = ( InfixExpression ) simpleName.getParent();
+            if ( infixExpression.getLeftOperand().equals( simpleName ) )
+            {
+                infixExpression.setLeftOperand( fieldAccess );
+            } else if ( infixExpression.getRightOperand().equals( simpleName ) )
+            {
+                infixExpression.setRightOperand( fieldAccess );
+            } else if ( infixExpression.extendedOperands().contains( simpleName ) )
+            {
+                throw new RuntimeException( "time to fix this." );
+            }
+        } else if ( simpleName.getParent().getNodeType() == ASTNode.ENHANCED_FOR_STATEMENT )
+        {
+            EnhancedForStatement enhancedForStatement = ( EnhancedForStatement ) simpleName.getParent();
+            enhancedForStatement.setExpression( fieldAccess );
+        } else
+        {
+            int debugLine = 1;
+        }
     }
 
     public static FieldAccess thisifyQualifiedName ( AST ast, QualifiedName qualifiedName )

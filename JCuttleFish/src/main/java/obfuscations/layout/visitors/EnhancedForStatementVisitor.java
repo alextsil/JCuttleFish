@@ -33,7 +33,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor
             SimpleName simpleName = ( SimpleName ) node.getExpression();
             if ( simpleName.getIdentifier().equals( this.obfuscatedVarName ) )
             {
-                node.setExpression( ModifyAst.thisifySimpleName( this.ast, simpleName ) );
+                ModifyAst.thisifySimpleName( this.ast, simpleName );
             }
         }
 

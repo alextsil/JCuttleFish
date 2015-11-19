@@ -57,7 +57,7 @@ public class InfixExpressionVisitor extends ASTVisitor
             MethodInvocation infixMethodInvocation = ( MethodInvocation ) operand;
             if ( infixMethodInvocation.getExpression() != null )
             {
-                MethodInvocationExpressionVisitor visitor = new MethodInvocationExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+                MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
                 visitor.visit( infixMethodInvocation );
             }
         } else if ( operand.getNodeType() == ASTNode.PARENTHESIZED_EXPRESSION )
@@ -73,7 +73,7 @@ public class InfixExpressionVisitor extends ASTVisitor
 
             if ( simpleName.getIdentifier().equals( obfuscatedVarName ) )
             {
-                this.setNewOperand( ModifyAst.thisifySimpleName( this.ast, simpleName ), expression, type, pos );
+                ModifyAst.thisifySimpleName( this.ast, simpleName );
             }
         } else if ( operand.getNodeType() == ASTNode.FIELD_ACCESS )
         {
