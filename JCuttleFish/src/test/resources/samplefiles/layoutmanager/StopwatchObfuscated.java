@@ -21,7 +21,7 @@ public class Stopwatch
 
     public double time ()
     {
-        return ( this.b - this.a ) / this.NANOS_PER_SEC;
+        return ( this.b - this.a ) / NANOS_PER_SEC;
     }
 
     public String toString ()

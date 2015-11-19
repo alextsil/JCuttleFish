@@ -1,7 +1,6 @@
 package obfuscations.layout.visitors;
 
 import obfuscations.layout.ModifyAst;
-import obfuscations.layout.visitors.thisify.ThisifyReturnStatementVisitor;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,13 +10,6 @@ import java.util.List;
 
 public class StatementVisitor
 {
-
-    private enum Side
-    {
-        LEFT,
-        RIGHT
-    }
-
 
     private SimpleName originalVarSimpleName;
 
@@ -64,9 +56,6 @@ public class StatementVisitor
             expression = ( ( ReturnStatement ) statement ).getExpression();
             ExpressionVisitor expressionVisitor = new ExpressionVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
             expressionVisitor.preVisit2( expression );
-
-            ThisifyReturnStatementVisitor thisifyReturnStatementVisitor = new ThisifyReturnStatementVisitor( this.ast, statement );
-            thisifyReturnStatementVisitor.preVisit2( expression );
         } else if ( statement.getNodeType() == ASTNode.VARIABLE_DECLARATION_STATEMENT )
         {
             VariableDeclarationStatement vds = ( VariableDeclarationStatement ) statement;
