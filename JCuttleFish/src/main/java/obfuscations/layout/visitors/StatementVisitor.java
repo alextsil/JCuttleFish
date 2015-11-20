@@ -28,11 +28,14 @@ public class StatementVisitor
 
     public boolean visit ( Statement statement )
     {
-        Expression expression = null;
-        if ( statement.getNodeType() == ASTNode.EXPRESSION_STATEMENT )
+        Expression expression;
+        int statementNodeType = statement.getNodeType();
+
+        if ( statementNodeType == ASTNode.EXPRESSION_STATEMENT )
         {
             expression = ( ( ExpressionStatement ) statement ).getExpression();
-            if ( expression.getNodeType() == ASTNode.METHOD_INVOCATION )
+            int expressionNodeType = expression.getNodeType();
+            if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
             {
                 MethodInvocation methodInvocation = ( MethodInvocation ) expression;
                 MethodInvocationVisitor visitor = new MethodInvocationVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
@@ -45,28 +48,28 @@ public class StatementVisitor
                 visitor2.visit( arguments );
             }
 
-            if ( expression.getNodeType() == ASTNode.ASSIGNMENT )
+            if ( expressionNodeType == ASTNode.ASSIGNMENT )
             {
                 Assignment assignment = ( Assignment ) expression;
                 AssignmentVisitor visitor = new AssignmentVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
                 visitor.visit( assignment );
             }
-        } else if ( statement.getNodeType() == ASTNode.RETURN_STATEMENT )
+        } else if ( statementNodeType == ASTNode.RETURN_STATEMENT )
         {
             expression = ( ( ReturnStatement ) statement ).getExpression();
             ExpressionVisitor expressionVisitor = new ExpressionVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
             expressionVisitor.preVisit2( expression );
-        } else if ( statement.getNodeType() == ASTNode.VARIABLE_DECLARATION_STATEMENT )
+        } else if ( statementNodeType == ASTNode.VARIABLE_DECLARATION_STATEMENT )
         {
             VariableDeclarationStatement vds = ( VariableDeclarationStatement ) statement;
             VariableDeclarationStatementVisitor visitor = new VariableDeclarationStatementVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
             visitor.visit( vds );
-        } else if ( statement.getNodeType() == ASTNode.IF_STATEMENT )
+        } else if ( statementNodeType == ASTNode.IF_STATEMENT )
         {
             IfStatement ifStatement = ( IfStatement ) statement;
             IfStatementVisitor visitor = new IfStatementVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
             visitor.visit( ifStatement );
-        } else if ( statement.getNodeType() == ASTNode.ENHANCED_FOR_STATEMENT )
+        } else if ( statementNodeType == ASTNode.ENHANCED_FOR_STATEMENT )
         {
             EnhancedForStatement enhancedForStatement = ( EnhancedForStatement ) statement;
             EnhancedForStatementVisitor visitor = new EnhancedForStatementVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );

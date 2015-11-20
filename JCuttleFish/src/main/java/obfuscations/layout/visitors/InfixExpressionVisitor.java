@@ -52,7 +52,8 @@ public class InfixExpressionVisitor extends ASTVisitor
     //not being able to set the operand to the InfixExpression otherwise.HACK
     public boolean visitOperand ( Expression operand, InfixExpression expression, OperandType type, int pos )
     {
-        if ( operand.getNodeType() == ASTNode.METHOD_INVOCATION )
+        int operandNodeType = operand.getNodeType();
+        if ( operandNodeType == ASTNode.METHOD_INVOCATION )
         {
             MethodInvocation infixMethodInvocation = ( MethodInvocation ) operand;
             if ( infixMethodInvocation.getExpression() != null )
@@ -60,12 +61,12 @@ public class InfixExpressionVisitor extends ASTVisitor
                 MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
                 visitor.visit( infixMethodInvocation );
             }
-        } else if ( operand.getNodeType() == ASTNode.PARENTHESIZED_EXPRESSION )
+        } else if ( operandNodeType == ASTNode.PARENTHESIZED_EXPRESSION )
         {
             ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression ) operand;
             ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             expressionVisitor.preVisit2( parenthesizedExpression.getExpression() );
-        } else if ( operand.getNodeType() == ASTNode.SIMPLE_NAME )
+        } else if ( operandNodeType == ASTNode.SIMPLE_NAME )
         {
             SimpleName simpleName = ( SimpleName ) operand;
             SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
@@ -75,17 +76,17 @@ public class InfixExpressionVisitor extends ASTVisitor
             {
                 ModifyAst.thisifySimpleName( this.ast, simpleName );
             }
-        } else if ( operand.getNodeType() == ASTNode.FIELD_ACCESS )
+        } else if ( operandNodeType == ASTNode.FIELD_ACCESS )
         {
             FieldAccess fieldAccess = ( FieldAccess ) operand;
             FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             fieldAccessVisitor.visit( fieldAccess );
-        } else if ( operand.getNodeType() == ASTNode.PREFIX_EXPRESSION )
+        } else if ( operandNodeType == ASTNode.PREFIX_EXPRESSION )
         {
             PrefixExpression prefixExpression = ( PrefixExpression ) operand;
             PrefixExpressionVisitor visitor = new PrefixExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             visitor.visit( prefixExpression );
-        } else if ( operand.getNodeType() == ASTNode.QUALIFIED_NAME )
+        } else if ( operandNodeType == ASTNode.QUALIFIED_NAME )
         {
             QualifiedName qualifiedName = ( QualifiedName ) operand;
             QualifiedNameVisitor visitor = new QualifiedNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );

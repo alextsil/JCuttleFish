@@ -82,7 +82,7 @@ public class ModifyAst
         fieldAccess.setExpression( ast.newThisExpression() );
         fieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
 
-        //This might occur if there's a method invocation a simple name ( text.get )
+        //This might occur if there's a method invocation on a simple name ( text.get )
         //or if "text" is in the arguments list. So i check for both and replace accordingly.
         if ( simpleName.getParent().getNodeType() == ASTNode.METHOD_INVOCATION )
         {
@@ -136,6 +136,8 @@ public class ModifyAst
         }
     }
 
+    //TODO : decouple this. combine into one function called thisifyName
+    @Deprecated
     public static FieldAccess thisifyQualifiedName ( AST ast, QualifiedName qualifiedName )
     {
         SimpleName functionName = qualifiedName.getName();
@@ -149,6 +151,11 @@ public class ModifyAst
 
         fieldAccess1.setExpression( fieldAccess2 );
         return fieldAccess1;
+    }
+
+    public static void thisifyName ( AST ast, Name name )
+    {
+        //if simple or qualified
     }
 
 }

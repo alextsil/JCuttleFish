@@ -23,22 +23,24 @@ public class VariableDeclarationStatementVisitor extends ASTVisitor
     }
 
     @Override
-    public boolean visit ( VariableDeclarationStatement node )
+    public boolean visit ( VariableDeclarationStatement variableDeclarationStatement )
     {
-        VariableDeclarationFragment vdf = ( VariableDeclarationFragment ) node.fragments().get( 0 );
-        if ( vdf.getInitializer().getNodeType() == ASTNode.QUALIFIED_NAME )
+        VariableDeclarationFragment variableDeclarationFragment = ( VariableDeclarationFragment ) variableDeclarationStatement.fragments().get( 0 );
+        int variableDeclarationFragmentInitializerNodeType = variableDeclarationFragment.getInitializer().getNodeType();
+
+        if ( variableDeclarationFragmentInitializerNodeType == ASTNode.QUALIFIED_NAME )
         {
-            QualifiedName qualifiedName = ( QualifiedName ) vdf.getInitializer();
+            QualifiedName qualifiedName = ( QualifiedName ) variableDeclarationFragment.getInitializer();
             QualifiedNameVisitor visitor = new QualifiedNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             visitor.visit( qualifiedName );
 
             if ( ( ( SimpleName ) qualifiedName.getQualifier() ).getIdentifier().equals( obfuscatedVarName ) )
             {
-                vdf.setInitializer( ModifyAst.thisifyQualifiedName( this.ast, qualifiedName ) );
+                variableDeclarationFragment.setInitializer( ModifyAst.thisifyQualifiedName( this.ast, qualifiedName ) );
             }
-        } else if ( vdf.getInitializer().getNodeType() == ASTNode.METHOD_INVOCATION )
+        } else if ( variableDeclarationFragmentInitializerNodeType == ASTNode.METHOD_INVOCATION )
         {
-            MethodInvocation methodInvocation = ( MethodInvocation ) vdf.getInitializer();
+            MethodInvocation methodInvocation = ( MethodInvocation ) variableDeclarationFragment.getInitializer();
             MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             visitor.visit( methodInvocation );
 

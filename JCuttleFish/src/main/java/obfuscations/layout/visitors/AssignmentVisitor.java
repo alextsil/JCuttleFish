@@ -37,12 +37,14 @@ public class AssignmentVisitor extends ASTVisitor
 
     public void visitAssignmentSideExpression ( Assignment assignment, Expression expression, Side expressionSide )
     {
-        if ( expression.getNodeType() == ASTNode.FIELD_ACCESS )
+        int expressionNodeType = expression.getNodeType();
+
+        if ( expressionNodeType == ASTNode.FIELD_ACCESS )
         {
             FieldAccess fieldAccess = ( FieldAccess ) expression;
             FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
             fieldAccessVisitor.visit( fieldAccess );
-        } else if ( expression.getNodeType() == ASTNode.SIMPLE_NAME )
+        } else if ( expressionNodeType == ASTNode.SIMPLE_NAME )
         {
             SimpleName simpleName = ( SimpleName ) expression;
             IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
@@ -51,12 +53,12 @@ public class AssignmentVisitor extends ASTVisitor
                 ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
                 ModifyAst.thisifySimpleName( this.ast, simpleName );
             }
-        } else if ( expression.getNodeType() == ASTNode.ARRAY_ACCESS )
+        } else if ( expressionNodeType == ASTNode.ARRAY_ACCESS )
         {
             ArrayAccess arrayAccess = ( ArrayAccess ) expression;
             FieldAccess fieldAccess = ( FieldAccess ) arrayAccess.getArray();
             ModifyAst.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
-        } else if ( expression.getNodeType() == ASTNode.QUALIFIED_NAME )
+        } else if ( expressionNodeType == ASTNode.QUALIFIED_NAME )
         {
             QualifiedName qualifiedName = ( QualifiedName ) expression;
             QualifiedNameVisitor qualifiedNameVisitor = new QualifiedNameVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
@@ -67,19 +69,19 @@ public class AssignmentVisitor extends ASTVisitor
                 //TODO : remove by moving logic to thisifier
                 this.setSideExpressionOnAssignment( assignment, ModifyAst.thisifyQualifiedName( this.ast, qualifiedName ), expressionSide );
             }
-        } else if ( expression.getNodeType() == ASTNode.METHOD_INVOCATION )
+        } else if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
         {
             MethodInvocation methodInvocation = ( MethodInvocation ) expression;
             SimpleName invocationExpression = ( SimpleName ) methodInvocation.getExpression();
             ModifyAst.renameSimpleName( invocationExpression, originalVarSimpleName, obfuscatedVarName );
             ModifyAst.renameMethodInvocationArguments( methodInvocation.arguments(), originalVarSimpleName, obfuscatedVarName );
 
-        } else if ( expression.getNodeType() == ASTNode.INFIX_EXPRESSION )
+        } else if ( expressionNodeType == ASTNode.INFIX_EXPRESSION )
         {
             InfixExpression infixExpression = ( InfixExpression ) expression;
             InfixExpressionVisitor visitor = new InfixExpressionVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
             visitor.visit( infixExpression );
-        } else if ( expression.getNodeType() == ASTNode.PREFIX_EXPRESSION )
+        } else if ( expressionNodeType == ASTNode.PREFIX_EXPRESSION )
         {
             PrefixExpression prefixExpression = ( PrefixExpression ) expression;
             PrefixExpressionVisitor visitor = new PrefixExpressionVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );

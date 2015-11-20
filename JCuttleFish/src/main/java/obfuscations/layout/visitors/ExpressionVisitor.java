@@ -27,17 +27,18 @@ public class ExpressionVisitor extends ASTVisitor
     //mono gia return_expression
     public boolean preVisit2 ( ASTNode expression )
     {
-        if ( expression.getNodeType() == ASTNode.INFIX_EXPRESSION )
+        int expressionNodeType = expression.getNodeType();
+        if ( expressionNodeType == ASTNode.INFIX_EXPRESSION )
         {
             InfixExpression infixExpression = ( InfixExpression ) expression;
             InfixExpressionVisitor infixExpressionVisitor = new InfixExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             infixExpressionVisitor.visit( infixExpression );
-        } else if ( expression.getNodeType() == ASTNode.FIELD_ACCESS )
+        } else if ( expressionNodeType == ASTNode.FIELD_ACCESS )
         {
             FieldAccess fieldAccess = ( FieldAccess ) expression;
             FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             fieldAccessVisitor.visit( fieldAccess );
-        } else if ( expression.getNodeType() == ASTNode.SIMPLE_NAME )
+        } else if ( expressionNodeType == ASTNode.SIMPLE_NAME )
         {
             SimpleName simpleName = ( SimpleName ) expression;
             SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
@@ -49,17 +50,17 @@ public class ExpressionVisitor extends ASTVisitor
                 ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
                 ModifyAst.thisifySimpleName( this.ast, simpleName );
             }
-        } else if ( expression.getNodeType() == ASTNode.PARENTHESIZED_EXPRESSION )
+        } else if ( expressionNodeType == ASTNode.PARENTHESIZED_EXPRESSION )
         {
             ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression ) expression;
             ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             expressionVisitor.preVisit2( parenthesizedExpression.getExpression() );
-        } else if ( expression.getNodeType() == ASTNode.METHOD_INVOCATION )
+        } else if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
         {
             MethodInvocation methodInvocation = ( MethodInvocation ) expression;
             MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             visitor.visit( methodInvocation );
-        } else if ( expression.getNodeType() == ASTNode.CLASS_INSTANCE_CREATION )
+        } else if ( expressionNodeType == ASTNode.CLASS_INSTANCE_CREATION )
         {
             ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation ) expression;
             ModifyAst.renameMethodInvocationArguments( classInstanceCreation.arguments(), this.originalVarSimpleName, this.obfuscatedVarName );

@@ -23,21 +23,21 @@ public class EnhancedForStatementVisitor extends ASTVisitor
     }
 
     @Override
-    public boolean visit ( EnhancedForStatement node )
+    public boolean visit ( EnhancedForStatement enhancedForStatement )
     {
         ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-        expressionVisitor.preVisit2( node.getExpression() );
+        expressionVisitor.preVisit2( enhancedForStatement.getExpression() );
 
-        if ( node.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
+        if ( enhancedForStatement.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
         {
-            SimpleName simpleName = ( SimpleName ) node.getExpression();
+            SimpleName simpleName = ( SimpleName ) enhancedForStatement.getExpression();
             if ( simpleName.getIdentifier().equals( this.obfuscatedVarName ) )
             {
                 ModifyAst.thisifySimpleName( this.ast, simpleName );
             }
         }
 
-        List<Statement> statements = ( ( Block ) node.getBody() ).statements();
+        List<Statement> statements = ( ( Block ) enhancedForStatement.getBody() ).statements();
         for ( Statement statement : statements )
         {
             StatementVisitor visitor = new StatementVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );

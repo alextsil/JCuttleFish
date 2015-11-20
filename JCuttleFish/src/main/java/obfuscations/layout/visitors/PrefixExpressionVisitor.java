@@ -27,7 +27,8 @@ public class PrefixExpressionVisitor extends ASTVisitor
     @Override
     public boolean visit ( PrefixExpression prefixExpression )
     {
-        if ( prefixExpression.getOperand().getNodeType() == ASTNode.METHOD_INVOCATION )
+        int prefixExpressionOperandNodeType = prefixExpression.getOperand().getNodeType();
+        if ( prefixExpressionOperandNodeType == ASTNode.METHOD_INVOCATION )
         {
             MethodInvocation methodInvocation = ( MethodInvocation ) prefixExpression.getOperand();
             if ( methodInvocation.getExpression() != null )
@@ -35,7 +36,7 @@ public class PrefixExpressionVisitor extends ASTVisitor
                 MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
                 visitor.visit( methodInvocation );
             }
-        } else if ( prefixExpression.getOperand().getNodeType() == ASTNode.QUALIFIED_NAME )
+        } else if ( prefixExpressionOperandNodeType == ASTNode.QUALIFIED_NAME )
         {
             QualifiedName qualifiedName = ( QualifiedName ) prefixExpression.getOperand();
             QualifiedNameVisitor visitor = new QualifiedNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
