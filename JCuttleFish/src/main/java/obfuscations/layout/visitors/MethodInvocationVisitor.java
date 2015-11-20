@@ -1,9 +1,12 @@
 package obfuscations.layout.visitors;
 
+import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
+
+import java.util.List;
 
 
 public class MethodInvocationVisitor extends ASTVisitor
@@ -25,13 +28,17 @@ public class MethodInvocationVisitor extends ASTVisitor
     @Override
     public boolean visit ( MethodInvocation methodInvocation )
     {
-        if ( methodInvocation.getExpression() == null )
+        if ( methodInvocation.getExpression() != null )
         {
-            return false;
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+            expressionVisitor.preVisit2( methodInvocation.getExpression() );
         }
-        ExpressionVisitor visitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-        visitor.preVisit2( methodInvocation.getExpression() );
 
+        //Rename and thisify arguments
+        List<Object> arguments = methodInvocation.arguments();
+        ModifyAst.renameMethodInvocationArguments( arguments, this.originalVarSimpleName, this.obfuscatedVarName );
+        MethodArgumentsVisitor methodArgumentsVisitor = new MethodArgumentsVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+        methodArgumentsVisitor.visit( arguments );
         return false;
     }
 }

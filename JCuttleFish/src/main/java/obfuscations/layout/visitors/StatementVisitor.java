@@ -1,11 +1,8 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 
 public class StatementVisitor
@@ -38,21 +35,15 @@ public class StatementVisitor
             if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
             {
                 MethodInvocation methodInvocation = ( MethodInvocation ) expression;
-                MethodInvocationVisitor visitor = new MethodInvocationVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
-                visitor.visit( methodInvocation );
-
-                //Rename arguments
-                List<Object> arguments = methodInvocation.arguments();
-                ModifyAst.renameMethodInvocationArguments( arguments, originalVarSimpleName, obfuscatedVarName );
-                MethodArgumentsVisitor visitor2 = new MethodArgumentsVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-                visitor2.visit( arguments );
+                MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
+                methodInvocationVisitor.visit( methodInvocation );
             }
 
             if ( expressionNodeType == ASTNode.ASSIGNMENT )
             {
                 Assignment assignment = ( Assignment ) expression;
-                AssignmentVisitor visitor = new AssignmentVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-                visitor.visit( assignment );
+                AssignmentVisitor assignmentVisitor = new AssignmentVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+                assignmentVisitor.visit( assignment );
             }
         } else if ( statementNodeType == ASTNode.RETURN_STATEMENT )
         {

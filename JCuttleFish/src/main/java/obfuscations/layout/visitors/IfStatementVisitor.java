@@ -1,9 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
-
-import java.util.List;
 
 
 public class IfStatementVisitor extends ASTVisitor
@@ -30,12 +27,6 @@ public class IfStatementVisitor extends ASTVisitor
             MethodInvocation methodInvocation = ( MethodInvocation ) node.getExpression();
             MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             visitor.visit( methodInvocation );
-
-            //Rename arguments
-            List<Object> arguments = methodInvocation.arguments();
-            ModifyAst.renameMethodInvocationArguments( arguments, this.originalVarSimpleName, this.obfuscatedVarName );
-            MethodArgumentsVisitor visitor2 = new MethodArgumentsVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-            visitor2.visit( arguments );
         }
 
         //Visit ThenStatement

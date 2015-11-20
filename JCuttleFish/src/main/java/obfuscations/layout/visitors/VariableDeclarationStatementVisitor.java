@@ -3,8 +3,6 @@ package obfuscations.layout.visitors;
 import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
 
-import java.util.List;
-
 
 public class VariableDeclarationStatementVisitor extends ASTVisitor
 {
@@ -43,12 +41,6 @@ public class VariableDeclarationStatementVisitor extends ASTVisitor
             MethodInvocation methodInvocation = ( MethodInvocation ) variableDeclarationFragment.getInitializer();
             MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
             visitor.visit( methodInvocation );
-
-            //Rename arguments
-            List<Object> arguments = methodInvocation.arguments();
-            ModifyAst.renameMethodInvocationArguments( arguments, originalVarSimpleName, obfuscatedVarName );
-            MethodArgumentsVisitor visitor2 = new MethodArgumentsVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-            visitor2.visit( arguments );
         }
         return false;
     }

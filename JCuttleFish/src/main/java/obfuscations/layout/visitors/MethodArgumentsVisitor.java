@@ -2,6 +2,8 @@ package obfuscations.layout.visitors;
 
 import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -14,6 +16,8 @@ public class MethodArgumentsVisitor
     private String obfuscatedVarName;
 
     private AST ast;
+
+    private final Logger logger = LoggerFactory.getLogger( MethodArgumentsVisitor.class );
 
     public MethodArgumentsVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
     {
@@ -68,7 +72,7 @@ public class MethodArgumentsVisitor
                 methodInvocationVisitor.visit( methodInvocation );
             } else
             {
-                throw new RuntimeException( "Not mapped yet" );
+                logger.warn( "Not mapped yet" );
             }
         }
         return false;
