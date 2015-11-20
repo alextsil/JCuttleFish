@@ -51,7 +51,7 @@ public class AssignmentVisitor extends ASTVisitor
             if ( varBinding.isField() )
             {
                 ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
-                ModifyAst.thisifySimpleName( this.ast, simpleName );
+                ModifyAst.thisifyName( this.ast, simpleName );
             }
         } else if ( expressionNodeType == ASTNode.ARRAY_ACCESS )
         {
@@ -66,8 +66,7 @@ public class AssignmentVisitor extends ASTVisitor
 
             if ( ( ( SimpleName ) qualifiedName.getQualifier() ).getIdentifier().equals( obfuscatedVarName ) )
             {
-                //TODO : remove by moving logic to thisifier
-                this.setSideExpressionOnAssignment( assignment, ModifyAst.thisifyQualifiedName( this.ast, qualifiedName ), expressionSide );
+                ModifyAst.thisifyName( this.ast, qualifiedName );
             }
         } else if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
         {
@@ -86,18 +85,6 @@ public class AssignmentVisitor extends ASTVisitor
             PrefixExpression prefixExpression = ( PrefixExpression ) expression;
             PrefixExpressionVisitor visitor = new PrefixExpressionVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
             visitor.visit( prefixExpression );
-        }
-    }
-
-    @Deprecated
-    public void setSideExpressionOnAssignment ( Assignment assignment, Expression expression, Side expressionSide )
-    {
-        if ( expressionSide == Side.LEFT )
-        {
-            assignment.setLeftHandSide( expression );
-        } else
-        {
-            assignment.setRightHandSide( expression );
         }
     }
 }

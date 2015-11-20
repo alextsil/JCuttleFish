@@ -4,8 +4,6 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class MethodInvocationVisitor extends ASTVisitor
@@ -16,8 +14,6 @@ public class MethodInvocationVisitor extends ASTVisitor
     private String obfuscatedVarName;
 
     private AST ast;
-
-    private final Logger logger = LoggerFactory.getLogger( MethodInvocationVisitor.class );
 
     public MethodInvocationVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
     {

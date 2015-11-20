@@ -44,7 +44,7 @@ public class PrefixExpressionVisitor extends ASTVisitor
 
             if ( ( ( SimpleName ) qualifiedName.getQualifier() ).getIdentifier().equals( obfuscatedVarName ) )
             {
-                prefixExpression.setOperand( ModifyAst.thisifyQualifiedName( this.ast, qualifiedName ) );
+                ModifyAst.thisifyName( this.ast, qualifiedName );
             }
         }
         return false;

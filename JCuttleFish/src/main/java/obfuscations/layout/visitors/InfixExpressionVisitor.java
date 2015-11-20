@@ -2,30 +2,16 @@ package obfuscations.layout.visitors;
 
 import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 
 public class InfixExpressionVisitor extends ASTVisitor
 {
-
-    private enum OperandType
-    {
-        LEFT,
-        RIGHT,
-        EXTRA
-    }
-
 
     private SimpleName originalVarSimpleName;
 
     private String obfuscatedVarName;
 
     private AST ast;
-
-    private final Logger logger = LoggerFactory.getLogger( InfixExpressionVisitor.class );
 
     public InfixExpressionVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
     {
@@ -37,20 +23,20 @@ public class InfixExpressionVisitor extends ASTVisitor
     @Override
     public boolean visit ( InfixExpression infixExpression )
     {
-        this.visitOperand( infixExpression.getLeftOperand(), infixExpression, OperandType.LEFT, -1 );
-        this.visitOperand( infixExpression.getRightOperand(), infixExpression, OperandType.RIGHT, -1 );
+        this.visitOperand( infixExpression.getLeftOperand() );
+        this.visitOperand( infixExpression.getRightOperand() );
 
         for ( int i = 0; i < infixExpression.extendedOperands().size(); i++ )
         {
             Expression expression = ( Expression ) infixExpression.extendedOperands().get( i );
-            this.visitOperand( expression, infixExpression, OperandType.EXTRA, i );
+            this.visitOperand( expression );
         }
         return false;
     }
 
     //Inserting InfixExpression, operand type and position(only for extended operands) as a workaround to the thisifier
     //not being able to set the operand to the InfixExpression otherwise.HACK
-    public boolean visitOperand ( Expression operand, InfixExpression expression, OperandType type, int pos )
+    public boolean visitOperand ( Expression operand )
     {
         int operandNodeType = operand.getNodeType();
         if ( operandNodeType == ASTNode.METHOD_INVOCATION )
@@ -74,7 +60,7 @@ public class InfixExpressionVisitor extends ASTVisitor
 
             if ( simpleName.getIdentifier().equals( obfuscatedVarName ) )
             {
-                ModifyAst.thisifySimpleName( this.ast, simpleName );
+                ModifyAst.thisifyName( this.ast, simpleName );
             }
         } else if ( operandNodeType == ASTNode.FIELD_ACCESS )
         {
@@ -94,25 +80,9 @@ public class InfixExpressionVisitor extends ASTVisitor
 
             if ( qualifiedName.getQualifier().getFullyQualifiedName().equals( obfuscatedVarName ) )
             {
-                this.setNewOperand( ModifyAst.thisifyQualifiedName( this.ast, qualifiedName ), expression, type, pos );
+                ModifyAst.thisifyName( this.ast, qualifiedName );
             }
         }
         return true;
-    }
-
-    public void setNewOperand ( Expression operand, InfixExpression expression, OperandType type, int pos )
-    {
-        if ( type == OperandType.LEFT )
-        {
-            expression.setLeftOperand( operand );
-        } else if ( type == OperandType.RIGHT )
-        {
-            expression.setRightOperand( operand );
-        } else
-        {
-            //Operand is the thisified element.
-            List<Expression> extendedOperands = expression.extendedOperands();
-            extendedOperands.set( pos, operand );
-        }
     }
 }

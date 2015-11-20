@@ -70,92 +70,95 @@ public class ModifyAst
         }
     }
 
-    /**
-     * Thisifies the SimpleName by converting it to FieldAccess
-     * and sets it back to its parent.
-     * SimpleName can have any parent, and every parent requires different treatment. We treat all cases.
-     */
-    public static void thisifySimpleName ( AST ast, SimpleName simpleName )
+    public static void thisifyName ( AST ast, Name name )
     {
-        //Thisify SimpleName by converting it to FieldAccess
-        FieldAccess fieldAccess = ast.newFieldAccess();
-        fieldAccess.setExpression( ast.newThisExpression() );
-        fieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
+        FieldAccess generatedFieldAccess = ModifyAst.convertNameToFieldAccess( ast, name );
+        int nameParentNodeType = name.getParent().getNodeType();
 
         //This might occur if there's a method invocation on a simple name ( text.get )
         //or if "text" is in the arguments list. So i check for both and replace accordingly.
-        if ( simpleName.getParent().getNodeType() == ASTNode.METHOD_INVOCATION )
+        if ( nameParentNodeType == ASTNode.METHOD_INVOCATION )
         {
-            MethodInvocation methodInvocation = ( MethodInvocation ) simpleName.getParent();
+            MethodInvocation methodInvocation = ( MethodInvocation ) name.getParent();
             if ( methodInvocation.getExpression() != null )
             {
-                if ( methodInvocation.getExpression().equals( simpleName ) )
+                if ( methodInvocation.getExpression().equals( name ) )
                 {
-                    methodInvocation.setExpression( fieldAccess );
+                    methodInvocation.setExpression( generatedFieldAccess );
                 }
             }
-
-            if ( methodInvocation.arguments().contains( simpleName ) )
+            if ( methodInvocation.arguments().contains( name ) )
             {
-                methodInvocation.arguments().set( methodInvocation.arguments().indexOf( simpleName ), fieldAccess );
+                methodInvocation.arguments().set( methodInvocation.arguments().indexOf( name ), generatedFieldAccess );
             }
-        } else if ( simpleName.getParent().getNodeType() == ASTNode.ASSIGNMENT )
+        } else if ( nameParentNodeType == ASTNode.ASSIGNMENT )
         {
-            Assignment assignment = ( Assignment ) simpleName.getParent();
-            if ( assignment.getLeftHandSide().equals( simpleName ) )
+            Assignment assignment = ( Assignment ) name.getParent();
+            if ( assignment.getLeftHandSide().equals( name ) )
             {
-                assignment.setLeftHandSide( fieldAccess );
-            } else if ( assignment.getRightHandSide().equals( simpleName ) )
+                assignment.setLeftHandSide( generatedFieldAccess );
+            } else if ( assignment.getRightHandSide().equals( name ) )
             {
-                assignment.setRightHandSide( fieldAccess );
+                assignment.setRightHandSide( generatedFieldAccess );
             }
-        } else if ( simpleName.getParent().getNodeType() == ASTNode.RETURN_STATEMENT )
+        } else if ( nameParentNodeType == ASTNode.RETURN_STATEMENT )
         {
-            ReturnStatement returnStatement = ( ReturnStatement ) simpleName.getParent();
-            returnStatement.setExpression( fieldAccess );
-        } else if ( simpleName.getParent().getNodeType() == ASTNode.INFIX_EXPRESSION )
+            ReturnStatement returnStatement = ( ReturnStatement ) name.getParent();
+            returnStatement.setExpression( generatedFieldAccess );
+        } else if ( nameParentNodeType == ASTNode.INFIX_EXPRESSION )
         {
-            InfixExpression infixExpression = ( InfixExpression ) simpleName.getParent();
-            if ( infixExpression.getLeftOperand().equals( simpleName ) )
+            InfixExpression infixExpression = ( InfixExpression ) name.getParent();
+            if ( infixExpression.getLeftOperand().equals( name ) )
             {
-                infixExpression.setLeftOperand( fieldAccess );
-            } else if ( infixExpression.getRightOperand().equals( simpleName ) )
+                infixExpression.setLeftOperand( generatedFieldAccess );
+            } else if ( infixExpression.getRightOperand().equals( name ) )
             {
-                infixExpression.setRightOperand( fieldAccess );
-            } else if ( infixExpression.extendedOperands().contains( simpleName ) )
+                infixExpression.setRightOperand( generatedFieldAccess );
+            } else if ( infixExpression.extendedOperands().contains( name ) )
             {
-                throw new RuntimeException( "time to fix this." );
+                infixExpression.extendedOperands().set( infixExpression.extendedOperands().indexOf( name ), generatedFieldAccess );
             }
-        } else if ( simpleName.getParent().getNodeType() == ASTNode.ENHANCED_FOR_STATEMENT )
+        } else if ( nameParentNodeType == ASTNode.PREFIX_EXPRESSION )
         {
-            EnhancedForStatement enhancedForStatement = ( EnhancedForStatement ) simpleName.getParent();
-            enhancedForStatement.setExpression( fieldAccess );
+            PrefixExpression prefixExpression = ( PrefixExpression ) name.getParent();
+            prefixExpression.setOperand( generatedFieldAccess );
+        } else if ( nameParentNodeType == ASTNode.ENHANCED_FOR_STATEMENT )
+        {
+            EnhancedForStatement enhancedForStatement = ( EnhancedForStatement ) name.getParent();
+            enhancedForStatement.setExpression( generatedFieldAccess );
+        } else if ( nameParentNodeType == ASTNode.VARIABLE_DECLARATION_FRAGMENT )
+        {
+            VariableDeclarationFragment variableDeclarationFragment = ( VariableDeclarationFragment ) name.getParent();
+            variableDeclarationFragment.setInitializer( generatedFieldAccess );
         } else
         {
-            int debugLine = 1;
+            throw new RuntimeException( "Not mapped yet" );
         }
     }
 
-    //TODO : decouple this. combine into one function called thisifyName
-    @Deprecated
-    public static FieldAccess thisifyQualifiedName ( AST ast, QualifiedName qualifiedName )
+    public static FieldAccess convertNameToFieldAccess ( AST ast, Name name )
     {
-        SimpleName functionName = qualifiedName.getName();
-        //Creating 2 FieldAccess nodes to represent ThisExpression and nested calls
-        FieldAccess fieldAccess1 = ast.newFieldAccess();
-        fieldAccess1.setName( ast.newSimpleName( functionName.getIdentifier() ) ); //Outer call
+        FieldAccess generatedFieldAccess = ast.newFieldAccess();
+        if ( name.getNodeType() == ASTNode.SIMPLE_NAME )
+        {
+            SimpleName simpleName = ( SimpleName ) name;
+            generatedFieldAccess.setExpression( ast.newThisExpression() );
+            generatedFieldAccess.setName( ast.newSimpleName( simpleName.getIdentifier() ) );
 
-        FieldAccess fieldAccess2 = ast.newFieldAccess();
-        fieldAccess2.setExpression( ast.newThisExpression() );
-        fieldAccess2.setName( ast.newSimpleName( ( ( SimpleName ) qualifiedName.getQualifier() ).getIdentifier() ) );
+        } else if ( name.getNodeType() == ASTNode.QUALIFIED_NAME )
+        {
+            QualifiedName qualifiedName = ( QualifiedName ) name;
+            SimpleName functionName = qualifiedName.getName();
+            //Creating 2 FieldAccess nodes to represent ThisExpression and nested calls
+            generatedFieldAccess.setName( ast.newSimpleName( functionName.getIdentifier() ) ); //Outer call
 
-        fieldAccess1.setExpression( fieldAccess2 );
-        return fieldAccess1;
-    }
+            FieldAccess fieldAccess2 = ast.newFieldAccess();
+            fieldAccess2.setExpression( ast.newThisExpression() );
+            fieldAccess2.setName( ast.newSimpleName( ( ( SimpleName ) qualifiedName.getQualifier() ).getIdentifier() ) );
 
-    public static void thisifyName ( AST ast, Name name )
-    {
-        //if simple or qualified
+            generatedFieldAccess.setExpression( fieldAccess2 );
+        }
+        return generatedFieldAccess;
     }
 
 }

@@ -2,8 +2,6 @@ package obfuscations.layout.visitors;
 
 import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -16,8 +14,6 @@ public class MethodArgumentsVisitor
     private String obfuscatedVarName;
 
     private AST ast;
-
-    private final Logger logger = LoggerFactory.getLogger( MethodArgumentsVisitor.class );
 
     public MethodArgumentsVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
     {
@@ -39,7 +35,7 @@ public class MethodArgumentsVisitor
                     IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
                     if ( varBinding.isField() )
                     {
-                        ModifyAst.thisifySimpleName( this.ast, simpleName );
+                        ModifyAst.thisifyName( this.ast, simpleName );
                     }
                 }
             } else if ( arguments.get( i ) instanceof QualifiedName )
@@ -48,7 +44,7 @@ public class MethodArgumentsVisitor
                 //Check if obfuscated before thisifying
                 if ( qualifiedName.getQualifier().getFullyQualifiedName().equals( obfuscatedVarName ) )
                 {
-                    arguments.set( i, ModifyAst.thisifyQualifiedName( ast, qualifiedName ) );
+                    arguments.set( i, ModifyAst.convertNameToFieldAccess( ast, qualifiedName ) );
                 }
             } else if ( arguments.get( i ) instanceof InfixExpression )
             {
@@ -65,9 +61,14 @@ public class MethodArgumentsVisitor
                 CastExpression castExpression = ( CastExpression ) arguments.get( i );
                 ExpressionVisitor visitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
                 visitor.preVisit2( castExpression.getExpression() );
+            } else if ( arguments.get( i ) instanceof MethodInvocation )
+            {
+                MethodInvocation methodInvocation = ( MethodInvocation ) arguments.get( i );
+                MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+                methodInvocationVisitor.visit( methodInvocation );
             } else
             {
-                logger.warn( "Not mapped yet" );
+                throw new RuntimeException( "Not mapped yet" );
             }
         }
         return false;

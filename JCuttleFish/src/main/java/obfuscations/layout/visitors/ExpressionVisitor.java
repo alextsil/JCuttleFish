@@ -48,7 +48,7 @@ public class ExpressionVisitor extends ASTVisitor
                     && optionalIvb.map( i -> i.isField() ).orElse( false ) )
             {
                 ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
-                ModifyAst.thisifySimpleName( this.ast, simpleName );
+                ModifyAst.thisifyName( this.ast, simpleName );
             }
         } else if ( expressionNodeType == ASTNode.PARENTHESIZED_EXPRESSION )
         {

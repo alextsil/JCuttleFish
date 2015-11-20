@@ -1,16 +1,19 @@
 package test;
 
-import java.util.ArrayList;
-
-
 public class Text implements Comparable<Text>
 {
 
-    private ScaleValue scale = new ScaleValue();
+    private int aaa;
 
-    public void setScalePivot ( float x, float y )
+    private int bbb;
+
+    private Test ccc;
+
+    private int ddd;
+
+    public void setScalePivot ()
     {
-        final float sPivotX = position.getRelativeX((int) scale.getPivot().x, this, false);
+        canvas.drawText( aaa, bbb, -ccc.Ipsos, ddd );
     }
 
 }

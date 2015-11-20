@@ -36,7 +36,7 @@ public class VariableDeclarationStatementVisitor extends ASTVisitor
 
             if ( ( ( SimpleName ) qualifiedName.getQualifier() ).getIdentifier().equals( obfuscatedVarName ) )
             {
-                variableDeclarationFragment.setInitializer( ModifyAst.thisifyQualifiedName( this.ast, qualifiedName ) );
+                ModifyAst.thisifyName( this.ast, qualifiedName );
             }
         } else if ( variableDeclarationFragmentInitializerNodeType == ASTNode.METHOD_INVOCATION )
         {
