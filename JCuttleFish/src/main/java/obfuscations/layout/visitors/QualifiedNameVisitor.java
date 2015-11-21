@@ -1,31 +1,26 @@
 package obfuscations.layout.visitors;
 
-import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
+import pojo.ObfuscationInfo;
 
 
 public class QualifiedNameVisitor extends ASTVisitor
 {
 
-    private SimpleName originalVarSimpleName;
+    private ObfuscationInfo obfuscationInfo;
 
-    private String obfuscatedVarName;
-
-    private AST ast;
-
-    public QualifiedNameVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
+    public QualifiedNameVisitor ( ObfuscationInfo obfuscationInfo )
     {
-        this.originalVarSimpleName = originalVarSimpleName;
-        this.obfuscatedVarName = obfuscatedVarName;
-        this.ast = ast;
+        this.obfuscationInfo = obfuscationInfo;
     }
 
     @Override
     public boolean visit ( QualifiedName qualifiedName )
     {
-        SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
+        SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.obfuscationInfo.getOriginalVarSimpleName(),
+                this.obfuscationInfo.getObfuscatedVarName() );
         simpleNameVisitor.visit( ( SimpleName ) qualifiedName.getQualifier() );
         return false;
     }

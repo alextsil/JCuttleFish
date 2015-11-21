@@ -4,6 +4,7 @@ import obfuscations.layout.visitors.StatementVisitor;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pojo.ObfuscationInfo;
 import pojo.UnitSource;
 import providers.ObfuscatedNamesProvider;
 import util.ApplyChanges;
@@ -36,13 +37,14 @@ public class LayoutManager
                     VariableDeclarationFragment originalVdf = ( VariableDeclarationFragment ) fieldDeclaration.fragments().get( 0 );
                     SimpleName originalVarSimpleName = originalVdf.getName();
                     String obfuscatedVarName = obfuscatedVariableNames.pollFirst();
+                    ObfuscationInfo obfuscationInfo = new ObfuscationInfo( originalVarSimpleName, obfuscatedVarName, cu.getAST() );
 
                     for ( MethodDeclaration methodDeclaration : typeDecl.getMethods() )
                     {
                         List<Statement> statements = methodDeclaration.getBody().statements();
                         for ( Statement statement : statements )
                         {
-                            StatementVisitor visitor = new StatementVisitor( originalVarSimpleName, obfuscatedVarName, cu.getAST() );
+                            StatementVisitor visitor = new StatementVisitor( obfuscationInfo );
                             visitor.visit( statement );
                         }
                     }

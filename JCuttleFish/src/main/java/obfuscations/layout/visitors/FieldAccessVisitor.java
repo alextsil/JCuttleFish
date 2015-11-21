@@ -2,22 +2,17 @@ package obfuscations.layout.visitors;
 
 import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
+import pojo.ObfuscationInfo;
 
 
 public class FieldAccessVisitor extends ASTVisitor
 {
 
-    private SimpleName originalVarSimpleName;
+    private ObfuscationInfo obfuscationInfo;
 
-    private String obfuscatedVarName;
-
-    private AST ast;
-
-    public FieldAccessVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
+    public FieldAccessVisitor ( ObfuscationInfo obfuscationInfo )
     {
-        this.originalVarSimpleName = originalVarSimpleName;
-        this.obfuscatedVarName = obfuscatedVarName;
-        this.ast = ast;
+        this.obfuscationInfo = obfuscationInfo;
     }
 
     @Override
@@ -29,15 +24,17 @@ public class FieldAccessVisitor extends ASTVisitor
             if ( methodInvocation.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
             {
                 SimpleName simpleName = ( SimpleName ) methodInvocation.getExpression();
-                ModifyAst.renameSimpleName( ( SimpleName ) methodInvocation.getExpression(), this.originalVarSimpleName, this.obfuscatedVarName );
-                if ( simpleName.getIdentifier().equals( this.obfuscatedVarName ) )
+                ModifyAst.renameSimpleName( ( SimpleName ) methodInvocation.getExpression(), this.obfuscationInfo.getOriginalVarSimpleName(),
+                        this.obfuscationInfo.getObfuscatedVarName() );
+                if ( simpleName.getIdentifier().equals( this.obfuscationInfo.getObfuscatedVarName() ) )
                 {
-                    ModifyAst.thisifyName( this.ast, ( SimpleName ) methodInvocation.getExpression() );
+                    ModifyAst.thisifyName( this.obfuscationInfo.getAst(), ( SimpleName ) methodInvocation.getExpression() );
                 }
             }
         } else
         {
-            ModifyAst.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
+            ModifyAst.renameFieldAccessName( fieldAccess, this.obfuscationInfo.getOriginalVarSimpleName(),
+                    this.obfuscationInfo.getObfuscatedVarName() );
         }
         return true;
     }

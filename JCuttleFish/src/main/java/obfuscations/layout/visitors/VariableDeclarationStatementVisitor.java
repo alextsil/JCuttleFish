@@ -1,23 +1,21 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.ModifyAst;
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import pojo.ObfuscationInfo;
+import util.CastToAndVisit;
 
 
 public class VariableDeclarationStatementVisitor extends ASTVisitor
 {
 
-    private SimpleName originalVarSimpleName;
+    private ObfuscationInfo obfuscationInfo;
 
-    private String obfuscatedVarName;
-
-    private AST ast;
-
-    public VariableDeclarationStatementVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
+    public VariableDeclarationStatementVisitor ( ObfuscationInfo obfuscationInfo )
     {
-        this.originalVarSimpleName = originalVarSimpleName;
-        this.obfuscatedVarName = obfuscatedVarName;
-        this.ast = ast;
+        this.obfuscationInfo = obfuscationInfo;
     }
 
     @Override
@@ -28,19 +26,11 @@ public class VariableDeclarationStatementVisitor extends ASTVisitor
 
         if ( variableDeclarationFragmentInitializerNodeType == ASTNode.QUALIFIED_NAME )
         {
-            QualifiedName qualifiedName = ( QualifiedName ) variableDeclarationFragment.getInitializer();
-            QualifiedNameVisitor visitor = new QualifiedNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-            visitor.visit( qualifiedName );
+            CastToAndVisit.qualifiedName( variableDeclarationFragment.getInitializer(), this.obfuscationInfo );
 
-            if ( ( ( SimpleName ) qualifiedName.getQualifier() ).getIdentifier().equals( obfuscatedVarName ) )
-            {
-                ModifyAst.thisifyName( this.ast, qualifiedName );
-            }
         } else if ( variableDeclarationFragmentInitializerNodeType == ASTNode.METHOD_INVOCATION )
         {
-            MethodInvocation methodInvocation = ( MethodInvocation ) variableDeclarationFragment.getInitializer();
-            MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-            visitor.visit( methodInvocation );
+            CastToAndVisit.methodInvocation( variableDeclarationFragment.getInitializer(), this.obfuscationInfo );
         }
         return false;
     }

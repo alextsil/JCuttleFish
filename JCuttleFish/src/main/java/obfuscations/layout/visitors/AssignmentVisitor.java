@@ -2,6 +2,8 @@ package obfuscations.layout.visitors;
 
 import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
+import pojo.ObfuscationInfo;
+import util.CastToAndVisit;
 
 
 public class AssignmentVisitor extends ASTVisitor
@@ -14,17 +16,11 @@ public class AssignmentVisitor extends ASTVisitor
     }
 
 
-    private SimpleName originalVarSimpleName;
+    private ObfuscationInfo obfuscationInfo;
 
-    private String obfuscatedVarName;
-
-    private AST ast;
-
-    public AssignmentVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
+    public AssignmentVisitor ( ObfuscationInfo obfuscationInfo )
     {
-        this.originalVarSimpleName = originalVarSimpleName;
-        this.obfuscatedVarName = obfuscatedVarName;
-        this.ast = ast;
+        this.obfuscationInfo = obfuscationInfo;
     }
 
     @Override
@@ -41,50 +37,42 @@ public class AssignmentVisitor extends ASTVisitor
 
         if ( expressionNodeType == ASTNode.FIELD_ACCESS )
         {
-            FieldAccess fieldAccess = ( FieldAccess ) expression;
-            FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
-            fieldAccessVisitor.visit( fieldAccess );
+            CastToAndVisit.fieldAccess( expression, this.obfuscationInfo );
         } else if ( expressionNodeType == ASTNode.SIMPLE_NAME )
         {
             SimpleName simpleName = ( SimpleName ) expression;
             IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
             if ( varBinding.isField() )
             {
-                ModifyAst.renameSimpleName( simpleName, originalVarSimpleName, obfuscatedVarName );
-                ModifyAst.thisifyName( this.ast, simpleName );
+                ModifyAst.renameSimpleName( simpleName, this.obfuscationInfo.getOriginalVarSimpleName(),
+                        this.obfuscationInfo.getObfuscatedVarName() );
+                ModifyAst.thisifyName( this.obfuscationInfo.getAst(), simpleName );
             }
         } else if ( expressionNodeType == ASTNode.ARRAY_ACCESS )
         {
             ArrayAccess arrayAccess = ( ArrayAccess ) expression;
             FieldAccess fieldAccess = ( FieldAccess ) arrayAccess.getArray();
-            ModifyAst.renameFieldAccessName( fieldAccess, originalVarSimpleName, obfuscatedVarName );
+            ModifyAst.renameFieldAccessName( fieldAccess, this.obfuscationInfo.getOriginalVarSimpleName(),
+                    this.obfuscationInfo.getObfuscatedVarName() );
         } else if ( expressionNodeType == ASTNode.QUALIFIED_NAME )
         {
-            QualifiedName qualifiedName = ( QualifiedName ) expression;
-            QualifiedNameVisitor qualifiedNameVisitor = new QualifiedNameVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
-            qualifiedNameVisitor.visit( qualifiedName );
+            CastToAndVisit.qualifiedName( expression, this.obfuscationInfo );
 
-            if ( ( ( SimpleName ) qualifiedName.getQualifier() ).getIdentifier().equals( obfuscatedVarName ) )
-            {
-                ModifyAst.thisifyName( this.ast, qualifiedName );
-            }
         } else if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
         {
             MethodInvocation methodInvocation = ( MethodInvocation ) expression;
             SimpleName invocationExpression = ( SimpleName ) methodInvocation.getExpression();
-            ModifyAst.renameSimpleName( invocationExpression, originalVarSimpleName, obfuscatedVarName );
-            ModifyAst.renameMethodInvocationArguments( methodInvocation.arguments(), originalVarSimpleName, obfuscatedVarName );
+            ModifyAst.renameSimpleName( invocationExpression, this.obfuscationInfo.getOriginalVarSimpleName(),
+                    this.obfuscationInfo.getObfuscatedVarName() );
+            ModifyAst.renameMethodInvocationArguments( methodInvocation.arguments(), this.obfuscationInfo.getOriginalVarSimpleName(),
+                    this.obfuscationInfo.getObfuscatedVarName() );
 
         } else if ( expressionNodeType == ASTNode.INFIX_EXPRESSION )
         {
-            InfixExpression infixExpression = ( InfixExpression ) expression;
-            InfixExpressionVisitor visitor = new InfixExpressionVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
-            visitor.visit( infixExpression );
+            CastToAndVisit.infixExpression( expression, this.obfuscationInfo );
         } else if ( expressionNodeType == ASTNode.PREFIX_EXPRESSION )
         {
-            PrefixExpression prefixExpression = ( PrefixExpression ) expression;
-            PrefixExpressionVisitor visitor = new PrefixExpressionVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
-            visitor.visit( prefixExpression );
+            CastToAndVisit.prefixExpression( expression, this.obfuscationInfo );
         }
     }
 }

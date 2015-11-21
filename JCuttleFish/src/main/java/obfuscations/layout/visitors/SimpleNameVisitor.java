@@ -12,7 +12,9 @@ public class SimpleNameVisitor extends ASTVisitor
 {
 
     private SimpleName originalVarSimpleName;
+
     private String obfuscatedVarName;
+
     private final Logger logger = LoggerFactory.getLogger( SimpleNameVisitor.class );
 
     public SimpleNameVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName )

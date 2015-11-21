@@ -1,10 +1,9 @@
 package obfuscations.layout.visitors;
 
 import obfuscations.layout.ModifyAst;
-import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.SimpleName;
+import pojo.ObfuscationInfo;
 
 import java.util.List;
 
@@ -12,17 +11,11 @@ import java.util.List;
 public class MethodInvocationVisitor extends ASTVisitor
 {
 
-    private SimpleName originalVarSimpleName;
+    private ObfuscationInfo obfuscationInfo;
 
-    private String obfuscatedVarName;
-
-    private AST ast;
-
-    public MethodInvocationVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
+    public MethodInvocationVisitor ( ObfuscationInfo obfuscationInfo )
     {
-        this.originalVarSimpleName = originalVarSimpleName;
-        this.obfuscatedVarName = obfuscatedVarName;
-        this.ast = ast;
+        this.obfuscationInfo = obfuscationInfo;
     }
 
     @Override
@@ -30,14 +23,15 @@ public class MethodInvocationVisitor extends ASTVisitor
     {
         if ( methodInvocation.getExpression() != null )
         {
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.obfuscationInfo );
             expressionVisitor.preVisit2( methodInvocation.getExpression() );
         }
 
         //Rename and thisify arguments
         List<Object> arguments = methodInvocation.arguments();
-        ModifyAst.renameMethodInvocationArguments( arguments, this.originalVarSimpleName, this.obfuscatedVarName );
-        MethodArgumentsVisitor methodArgumentsVisitor = new MethodArgumentsVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+        ModifyAst.renameMethodInvocationArguments( arguments, this.obfuscationInfo.getOriginalVarSimpleName(),
+                this.obfuscationInfo.getObfuscatedVarName() );
+        MethodArgumentsVisitor methodArgumentsVisitor = new MethodArgumentsVisitor( this.obfuscationInfo );
         methodArgumentsVisitor.visit( arguments );
         return false;
     }

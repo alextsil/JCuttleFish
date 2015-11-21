@@ -2,22 +2,18 @@ package obfuscations.layout.visitors;
 
 import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
+import pojo.ObfuscationInfo;
+import util.CastToAndVisit;
 
 
 public class InfixExpressionVisitor extends ASTVisitor
 {
 
-    private SimpleName originalVarSimpleName;
+    private ObfuscationInfo obfuscationInfo;
 
-    private String obfuscatedVarName;
-
-    private AST ast;
-
-    public InfixExpressionVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
+    public InfixExpressionVisitor ( ObfuscationInfo obfuscationInfo )
     {
-        this.originalVarSimpleName = originalVarSimpleName;
-        this.obfuscatedVarName = obfuscatedVarName;
-        this.ast = ast;
+        this.obfuscationInfo = obfuscationInfo;
     }
 
     @Override
@@ -44,44 +40,33 @@ public class InfixExpressionVisitor extends ASTVisitor
             MethodInvocation infixMethodInvocation = ( MethodInvocation ) operand;
             if ( infixMethodInvocation.getExpression() != null )
             {
-                MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-                visitor.visit( infixMethodInvocation );
+                CastToAndVisit.methodInvocation( infixMethodInvocation, this.obfuscationInfo );
             }
         } else if ( operandNodeType == ASTNode.PARENTHESIZED_EXPRESSION )
         {
             ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression ) operand;
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.obfuscationInfo );
             expressionVisitor.preVisit2( parenthesizedExpression.getExpression() );
         } else if ( operandNodeType == ASTNode.SIMPLE_NAME )
         {
             SimpleName simpleName = ( SimpleName ) operand;
-            SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName );
+            SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.obfuscationInfo.getOriginalVarSimpleName(),
+                    this.obfuscationInfo.getObfuscatedVarName() );
             simpleNameVisitor.visit( simpleName );
 
-            if ( simpleName.getIdentifier().equals( obfuscatedVarName ) )
+            if ( simpleName.getIdentifier().equals( this.obfuscationInfo.getObfuscatedVarName() ) )
             {
-                ModifyAst.thisifyName( this.ast, simpleName );
+                ModifyAst.thisifyName( this.obfuscationInfo.getAst(), simpleName );
             }
         } else if ( operandNodeType == ASTNode.FIELD_ACCESS )
         {
-            FieldAccess fieldAccess = ( FieldAccess ) operand;
-            FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-            fieldAccessVisitor.visit( fieldAccess );
+            CastToAndVisit.fieldAccess( operand, this.obfuscationInfo );
         } else if ( operandNodeType == ASTNode.PREFIX_EXPRESSION )
         {
-            PrefixExpression prefixExpression = ( PrefixExpression ) operand;
-            PrefixExpressionVisitor visitor = new PrefixExpressionVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-            visitor.visit( prefixExpression );
+            CastToAndVisit.prefixExpression( operand, this.obfuscationInfo );
         } else if ( operandNodeType == ASTNode.QUALIFIED_NAME )
         {
-            QualifiedName qualifiedName = ( QualifiedName ) operand;
-            QualifiedNameVisitor visitor = new QualifiedNameVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-            visitor.visit( qualifiedName );
-
-            if ( qualifiedName.getQualifier().getFullyQualifiedName().equals( obfuscatedVarName ) )
-            {
-                ModifyAst.thisifyName( this.ast, qualifiedName );
-            }
+            CastToAndVisit.qualifiedName( operand, this.obfuscationInfo );
         }
         return true;
     }

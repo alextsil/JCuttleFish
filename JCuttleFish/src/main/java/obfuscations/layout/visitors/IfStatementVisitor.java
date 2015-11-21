@@ -1,49 +1,43 @@
 package obfuscations.layout.visitors;
 
 import org.eclipse.jdt.core.dom.*;
+import pojo.ObfuscationInfo;
+import util.CastToAndVisit;
 
 
 public class IfStatementVisitor extends ASTVisitor
 {
 
-    private SimpleName originalVarSimpleName;
+    private ObfuscationInfo obfuscationInfo;
 
-    private String obfuscatedVarName;
-
-    private AST ast;
-
-    public IfStatementVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
+    public IfStatementVisitor ( ObfuscationInfo obfuscationInfo )
     {
-        this.originalVarSimpleName = originalVarSimpleName;
-        this.obfuscatedVarName = obfuscatedVarName;
-        this.ast = ast;
+        this.obfuscationInfo = obfuscationInfo;
     }
 
     @Override
-    public boolean visit ( IfStatement node )
+    public boolean visit ( IfStatement ifStatement )
     {
-        if ( node.getExpression().getNodeType() == ASTNode.METHOD_INVOCATION )
+        if ( ifStatement.getExpression().getNodeType() == ASTNode.METHOD_INVOCATION )
         {
-            MethodInvocation methodInvocation = ( MethodInvocation ) node.getExpression();
-            MethodInvocationVisitor visitor = new MethodInvocationVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-            visitor.visit( methodInvocation );
+            CastToAndVisit.methodInvocation( ifStatement.getExpression(), this.obfuscationInfo );
         }
 
         //Visit ThenStatement
-        Block thenStatements = ( Block ) node.getThenStatement();
+        Block thenStatements = ( Block ) ifStatement.getThenStatement();
         for ( Object statement : thenStatements.statements() )
         {
-            StatementVisitor visitor = new StatementVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+            StatementVisitor visitor = new StatementVisitor( this.obfuscationInfo );
             visitor.visit( ( Statement ) statement );
         }
 
         //Visit ElseStatement
-        Block elseStatements = ( Block ) node.getElseStatement();
+        Block elseStatements = ( Block ) ifStatement.getElseStatement();
         if ( elseStatements != null )
         {
             for ( Object statement : elseStatements.statements() )
             {
-                StatementVisitor visitor = new StatementVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
+                StatementVisitor visitor = new StatementVisitor( this.obfuscationInfo );
                 visitor.visit( ( Statement ) statement );
             }
         }

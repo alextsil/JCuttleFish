@@ -3,24 +3,20 @@ package obfuscations.layout.visitors;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pojo.ObfuscationInfo;
+import util.CastToAndVisit;
 
 
 public class StatementVisitor
 {
 
-    private SimpleName originalVarSimpleName;
-
-    private String obfuscatedVarName;
-
-    private AST ast;
+    private ObfuscationInfo obfuscationInfo;
 
     private final Logger logger = LoggerFactory.getLogger( StatementVisitor.class );
 
-    public StatementVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
+    public StatementVisitor ( ObfuscationInfo obfuscationInfo )
     {
-        this.originalVarSimpleName = originalVarSimpleName;
-        this.obfuscatedVarName = obfuscatedVarName;
-        this.ast = ast;
+        this.obfuscationInfo = obfuscationInfo;
     }
 
     public boolean visit ( Statement statement )
@@ -34,37 +30,27 @@ public class StatementVisitor
             int expressionNodeType = expression.getNodeType();
             if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
             {
-                MethodInvocation methodInvocation = ( MethodInvocation ) expression;
-                MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
-                methodInvocationVisitor.visit( methodInvocation );
+                CastToAndVisit.methodInvocation( expression, this.obfuscationInfo );
             }
 
             if ( expressionNodeType == ASTNode.ASSIGNMENT )
             {
-                Assignment assignment = ( Assignment ) expression;
-                AssignmentVisitor assignmentVisitor = new AssignmentVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-                assignmentVisitor.visit( assignment );
+                CastToAndVisit.assignment( expression, this.obfuscationInfo );
             }
         } else if ( statementNodeType == ASTNode.RETURN_STATEMENT )
         {
             expression = ( ( ReturnStatement ) statement ).getExpression();
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
+            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.obfuscationInfo );
             expressionVisitor.preVisit2( expression );
         } else if ( statementNodeType == ASTNode.VARIABLE_DECLARATION_STATEMENT )
         {
-            VariableDeclarationStatement vds = ( VariableDeclarationStatement ) statement;
-            VariableDeclarationStatementVisitor visitor = new VariableDeclarationStatementVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
-            visitor.visit( vds );
+            CastToAndVisit.variableDeclarationStatement( statement, this.obfuscationInfo );
         } else if ( statementNodeType == ASTNode.IF_STATEMENT )
         {
-            IfStatement ifStatement = ( IfStatement ) statement;
-            IfStatementVisitor visitor = new IfStatementVisitor( originalVarSimpleName, obfuscatedVarName, this.ast );
-            visitor.visit( ifStatement );
+            CastToAndVisit.ifStatement( statement, this.obfuscationInfo );
         } else if ( statementNodeType == ASTNode.ENHANCED_FOR_STATEMENT )
         {
-            EnhancedForStatement enhancedForStatement = ( EnhancedForStatement ) statement;
-            EnhancedForStatementVisitor visitor = new EnhancedForStatementVisitor( this.originalVarSimpleName, this.obfuscatedVarName, this.ast );
-            visitor.visit( enhancedForStatement );
+            CastToAndVisit.enhancedForStatement( statement, this.obfuscationInfo );
         } else
         {
             logger.debug( "Not mapped yet" );
