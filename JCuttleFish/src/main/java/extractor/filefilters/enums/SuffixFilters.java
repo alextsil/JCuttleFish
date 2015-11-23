@@ -8,15 +8,16 @@ public enum SuffixFilters
     FORM( ".form" ),
     JSON( ".json" ),
     TXT( ".txt" );
-
     private String suffix;
 
-    private SuffixFilters ( String suffix ) {
+    private SuffixFilters ( String suffix )
+    {
         this.suffix = suffix;
     }
 
     @Override
-    public String toString () {
+    public String toString ()
+    {
         return suffix;
     }
 }

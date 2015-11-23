@@ -11,7 +11,6 @@ public class StatementVisitor
 {
 
     private ObfuscationInfo obfuscationInfo;
-
     private final Logger logger = LoggerFactory.getLogger( StatementVisitor.class );
 
     public StatementVisitor ( ObfuscationInfo obfuscationInfo )
@@ -26,7 +25,7 @@ public class StatementVisitor
 
         if ( statementNodeType == ASTNode.EXPRESSION_STATEMENT )
         {
-            expression = ( ( ExpressionStatement ) statement ).getExpression();
+            expression = ( ( ExpressionStatement )statement ).getExpression();
             int expressionNodeType = expression.getNodeType();
             if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
             {
@@ -39,15 +38,17 @@ public class StatementVisitor
             }
         } else if ( statementNodeType == ASTNode.RETURN_STATEMENT )
         {
-            expression = ( ( ReturnStatement ) statement ).getExpression();
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.obfuscationInfo );
-            expressionVisitor.preVisit2( expression );
+            expression = ( ( ReturnStatement )statement ).getExpression();
+            new ExpressionVisitor( this.obfuscationInfo ).preVisit2( expression );
         } else if ( statementNodeType == ASTNode.VARIABLE_DECLARATION_STATEMENT )
         {
             CastToAndVisit.variableDeclarationStatement( statement, this.obfuscationInfo );
         } else if ( statementNodeType == ASTNode.IF_STATEMENT )
         {
             CastToAndVisit.ifStatement( statement, this.obfuscationInfo );
+        } else if ( statementNodeType == ASTNode.BLOCK )
+        {
+            CastToAndVisit.block( statement, this.obfuscationInfo );
         } else if ( statementNodeType == ASTNode.ENHANCED_FOR_STATEMENT )
         {
             CastToAndVisit.enhancedForStatement( statement, this.obfuscationInfo );

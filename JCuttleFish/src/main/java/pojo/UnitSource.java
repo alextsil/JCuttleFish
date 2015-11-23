@@ -8,7 +8,6 @@ public class UnitSource
 {
 
     private CompilationUnit compilationUnit;
-
     //Hosts the source code as text
     private Document document;
 

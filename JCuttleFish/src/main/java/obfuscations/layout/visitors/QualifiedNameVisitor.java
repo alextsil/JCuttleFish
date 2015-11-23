@@ -19,9 +19,8 @@ public class QualifiedNameVisitor extends ASTVisitor
     @Override
     public boolean visit ( QualifiedName qualifiedName )
     {
-        SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.obfuscationInfo.getOriginalVarSimpleName(),
-                this.obfuscationInfo.getObfuscatedVarName() );
-        simpleNameVisitor.visit( ( SimpleName ) qualifiedName.getQualifier() );
+        new SimpleNameVisitor( this.obfuscationInfo.getOriginalVarSimpleName(),
+                this.obfuscationInfo.getObfuscatedVarName() ).visit( ( SimpleName )qualifiedName.getQualifier() );
         return false;
     }
 }

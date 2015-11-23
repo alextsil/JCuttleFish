@@ -20,7 +20,6 @@ public class ExpressionVisitor extends ASTVisitor
     }
 
     @Override
-    //mono gia return_expression
     public boolean preVisit2 ( ASTNode expression )
     {
         int expressionNodeType = expression.getNodeType();
@@ -32,10 +31,9 @@ public class ExpressionVisitor extends ASTVisitor
             CastToAndVisit.fieldAccess( expression, this.obfuscationInfo );
         } else if ( expressionNodeType == ASTNode.SIMPLE_NAME )
         {
-            SimpleName simpleName = ( SimpleName ) expression;
-            SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.obfuscationInfo.getOriginalVarSimpleName(),
-                    this.obfuscationInfo.getObfuscatedVarName() );
-            simpleNameVisitor.visit( simpleName );
+            SimpleName simpleName = ( SimpleName )expression;
+            new SimpleNameVisitor( this.obfuscationInfo.getOriginalVarSimpleName(), this.obfuscationInfo.getObfuscatedVarName() )
+                    .visit( simpleName );
             Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
             if ( simpleName.getIdentifier().equals( this.obfuscationInfo.getObfuscatedVarName() )
                     && optionalIvb.map( i -> i.isField() ).orElse( false ) )
@@ -46,15 +44,14 @@ public class ExpressionVisitor extends ASTVisitor
             }
         } else if ( expressionNodeType == ASTNode.PARENTHESIZED_EXPRESSION )
         {
-            ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression ) expression;
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.obfuscationInfo );
-            expressionVisitor.preVisit2( parenthesizedExpression.getExpression() );
+            ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression )expression;
+            new ExpressionVisitor( this.obfuscationInfo ).preVisit2( parenthesizedExpression.getExpression() );
         } else if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
         {
             CastToAndVisit.methodInvocation( expression, this.obfuscationInfo );
         } else if ( expressionNodeType == ASTNode.CLASS_INSTANCE_CREATION )
         {
-            ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation ) expression;
+            ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation )expression;
             ModifyAst.renameMethodInvocationArguments( classInstanceCreation.arguments(), this.obfuscationInfo.getOriginalVarSimpleName(),
                     this.obfuscationInfo.getObfuscatedVarName() );
         }

@@ -24,7 +24,7 @@ public class InfixExpressionVisitor extends ASTVisitor
 
         for ( int i = 0; i < infixExpression.extendedOperands().size(); i++ )
         {
-            Expression expression = ( Expression ) infixExpression.extendedOperands().get( i );
+            Expression expression = ( Expression )infixExpression.extendedOperands().get( i );
             this.visitOperand( expression );
         }
         return false;
@@ -37,22 +37,20 @@ public class InfixExpressionVisitor extends ASTVisitor
         int operandNodeType = operand.getNodeType();
         if ( operandNodeType == ASTNode.METHOD_INVOCATION )
         {
-            MethodInvocation infixMethodInvocation = ( MethodInvocation ) operand;
+            MethodInvocation infixMethodInvocation = ( MethodInvocation )operand;
             if ( infixMethodInvocation.getExpression() != null )
             {
                 CastToAndVisit.methodInvocation( infixMethodInvocation, this.obfuscationInfo );
             }
         } else if ( operandNodeType == ASTNode.PARENTHESIZED_EXPRESSION )
         {
-            ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression ) operand;
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.obfuscationInfo );
-            expressionVisitor.preVisit2( parenthesizedExpression.getExpression() );
+            ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression )operand;
+            new ExpressionVisitor( this.obfuscationInfo ).preVisit2( parenthesizedExpression.getExpression() );
         } else if ( operandNodeType == ASTNode.SIMPLE_NAME )
         {
-            SimpleName simpleName = ( SimpleName ) operand;
-            SimpleNameVisitor simpleNameVisitor = new SimpleNameVisitor( this.obfuscationInfo.getOriginalVarSimpleName(),
-                    this.obfuscationInfo.getObfuscatedVarName() );
-            simpleNameVisitor.visit( simpleName );
+            SimpleName simpleName = ( SimpleName )operand;
+            new SimpleNameVisitor( this.obfuscationInfo.getOriginalVarSimpleName(), this.obfuscationInfo.getObfuscatedVarName() )
+                    .visit( simpleName );
 
             if ( simpleName.getIdentifier().equals( this.obfuscationInfo.getObfuscatedVarName() ) )
             {
@@ -67,6 +65,9 @@ public class InfixExpressionVisitor extends ASTVisitor
         } else if ( operandNodeType == ASTNode.QUALIFIED_NAME )
         {
             CastToAndVisit.qualifiedName( operand, this.obfuscationInfo );
+        } else if ( operandNodeType == ASTNode.INFIX_EXPRESSION )
+        {
+            CastToAndVisit.infixExpression( operand, this.obfuscationInfo );
         }
         return true;
     }

@@ -9,25 +9,22 @@ import pojo.ObfuscationInfo;
 public class CastToAndVisit
 {
 
-    static public <V extends ASTNode> void methodInvocation ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void methodInvocation ( V node, ObfuscationInfo obfuscationInfo )
     {
-        MethodInvocation methodInvocation = ( MethodInvocation ) node;
-        MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor( obfuscationInfo );
-        methodInvocationVisitor.visit( methodInvocation );
+        MethodInvocation methodInvocation = ( MethodInvocation )node;
+        new MethodInvocationVisitor( obfuscationInfo ).visit( methodInvocation );
     }
 
-    static public <V extends ASTNode> void fieldAccess ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void fieldAccess ( V node, ObfuscationInfo obfuscationInfo )
     {
-        FieldAccess fieldAccess = ( FieldAccess ) node;
-        FieldAccessVisitor fieldAccessVisitor = new FieldAccessVisitor( obfuscationInfo );
-        fieldAccessVisitor.visit( fieldAccess );
+        FieldAccess fieldAccess = ( FieldAccess )node;
+        new FieldAccessVisitor( obfuscationInfo ).visit( fieldAccess );
     }
 
-    static public <V extends ASTNode> void qualifiedName ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void qualifiedName ( V node, ObfuscationInfo obfuscationInfo )
     {
-        QualifiedName qualifiedName = ( QualifiedName ) node;
-        QualifiedNameVisitor qualifiedNameVisitor = new QualifiedNameVisitor( obfuscationInfo );
-        qualifiedNameVisitor.visit( qualifiedName );
+        QualifiedName qualifiedName = ( QualifiedName )node;
+        new QualifiedNameVisitor( obfuscationInfo ).visit( qualifiedName );
 
         if ( qualifiedName.getQualifier().getFullyQualifiedName().equals( obfuscationInfo.getObfuscatedVarName() ) )
         {
@@ -35,46 +32,46 @@ public class CastToAndVisit
         }
     }
 
-    static public <V extends ASTNode> void variableDeclarationStatement ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void variableDeclarationStatement ( V node, ObfuscationInfo obfuscationInfo )
     {
-        VariableDeclarationStatement vds = ( VariableDeclarationStatement ) node;
-        VariableDeclarationStatementVisitor visitor = new VariableDeclarationStatementVisitor( obfuscationInfo );
-        visitor.visit( vds );
+        VariableDeclarationStatement vds = ( VariableDeclarationStatement )node;
+        new VariableDeclarationStatementVisitor( obfuscationInfo ).visit( vds );
     }
 
-    static public <V extends ASTNode> void enhancedForStatement ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void enhancedForStatement ( V node, ObfuscationInfo obfuscationInfo )
     {
-        EnhancedForStatement enhancedForStatement = ( EnhancedForStatement ) node;
-        EnhancedForStatementVisitor visitor = new EnhancedForStatementVisitor( obfuscationInfo );
-        visitor.visit( enhancedForStatement );
+        EnhancedForStatement enhancedForStatement = ( EnhancedForStatement )node;
+        new EnhancedForStatementVisitor( obfuscationInfo ).visit( enhancedForStatement );
     }
 
-    static public <V extends ASTNode> void ifStatement ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void ifStatement ( V node, ObfuscationInfo obfuscationInfo )
     {
-        IfStatement ifStatement = ( IfStatement ) node;
-        IfStatementVisitor visitor = new IfStatementVisitor( obfuscationInfo );
-        visitor.visit( ifStatement );
+        IfStatement ifStatement = ( IfStatement )node;
+        new IfStatementVisitor( obfuscationInfo ).visit( ifStatement );
     }
 
-    static public <V extends ASTNode> void assignment ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void assignment ( V node, ObfuscationInfo obfuscationInfo )
     {
-        Assignment assignment = ( Assignment ) node;
-        AssignmentVisitor assignmentVisitor = new AssignmentVisitor( obfuscationInfo );
-        assignmentVisitor.visit( assignment );
+        Assignment assignment = ( Assignment )node;
+        new AssignmentVisitor( obfuscationInfo ).visit( assignment );
     }
 
-    static public <V extends ASTNode> void infixExpression ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void infixExpression ( V node, ObfuscationInfo obfuscationInfo )
     {
-        InfixExpression infixExpression = ( InfixExpression ) node;
-        InfixExpressionVisitor visitor = new InfixExpressionVisitor( obfuscationInfo );
-        visitor.visit( infixExpression );
+        InfixExpression infixExpression = ( InfixExpression )node;
+        new InfixExpressionVisitor( obfuscationInfo ).visit( infixExpression );
     }
 
-    static public <V extends ASTNode> void prefixExpression ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void prefixExpression ( V node, ObfuscationInfo obfuscationInfo )
     {
-        PrefixExpression prefixExpression = ( PrefixExpression ) node;
-        PrefixExpressionVisitor visitor = new PrefixExpressionVisitor( obfuscationInfo );
-        visitor.visit( prefixExpression );
+        PrefixExpression prefixExpression = ( PrefixExpression )node;
+        new PrefixExpressionVisitor( obfuscationInfo ).visit( prefixExpression );
+    }
+
+    public static <V extends ASTNode> void block ( V node, ObfuscationInfo obfuscationInfo )
+    {
+        Block block = ( Block )node;
+        new BlockVisitor( obfuscationInfo ).visit( block );
     }
 
 }

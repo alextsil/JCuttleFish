@@ -5,9 +5,7 @@ public class ObfuscationEnvironment
 {
 
     private String relativeSourcePath;
-
     private String[] absoluteSourcePath = new String[ 1 ];
-
     private String[] classpath = new String[ 1 ];
 
     public ObfuscationEnvironment ()

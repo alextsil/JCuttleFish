@@ -23,16 +23,14 @@ public class MethodInvocationVisitor extends ASTVisitor
     {
         if ( methodInvocation.getExpression() != null )
         {
-            ExpressionVisitor expressionVisitor = new ExpressionVisitor( this.obfuscationInfo );
-            expressionVisitor.preVisit2( methodInvocation.getExpression() );
+            new ExpressionVisitor( this.obfuscationInfo ).preVisit2( methodInvocation.getExpression() );
         }
 
         //Rename and thisify arguments
         List<Object> arguments = methodInvocation.arguments();
         ModifyAst.renameMethodInvocationArguments( arguments, this.obfuscationInfo.getOriginalVarSimpleName(),
                 this.obfuscationInfo.getObfuscatedVarName() );
-        MethodArgumentsVisitor methodArgumentsVisitor = new MethodArgumentsVisitor( this.obfuscationInfo );
-        methodArgumentsVisitor.visit( arguments );
+        new MethodArgumentsVisitor( this.obfuscationInfo ).visit( arguments );
         return false;
     }
 }

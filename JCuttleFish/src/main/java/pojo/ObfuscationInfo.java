@@ -8,9 +8,7 @@ public class ObfuscationInfo
 {
 
     private SimpleName originalVarSimpleName;
-
     private String obfuscatedVarName;
-
     private AST ast;
 
     public ObfuscationInfo ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )

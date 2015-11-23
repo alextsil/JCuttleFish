@@ -40,8 +40,8 @@ public class AssignmentVisitor extends ASTVisitor
             CastToAndVisit.fieldAccess( expression, this.obfuscationInfo );
         } else if ( expressionNodeType == ASTNode.SIMPLE_NAME )
         {
-            SimpleName simpleName = ( SimpleName ) expression;
-            IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
+            SimpleName simpleName = ( SimpleName )expression;
+            IVariableBinding varBinding = ( IVariableBinding )simpleName.resolveBinding();
             if ( varBinding.isField() )
             {
                 ModifyAst.renameSimpleName( simpleName, this.obfuscationInfo.getOriginalVarSimpleName(),
@@ -50,8 +50,8 @@ public class AssignmentVisitor extends ASTVisitor
             }
         } else if ( expressionNodeType == ASTNode.ARRAY_ACCESS )
         {
-            ArrayAccess arrayAccess = ( ArrayAccess ) expression;
-            FieldAccess fieldAccess = ( FieldAccess ) arrayAccess.getArray();
+            ArrayAccess arrayAccess = ( ArrayAccess )expression;
+            FieldAccess fieldAccess = ( FieldAccess )arrayAccess.getArray();
             ModifyAst.renameFieldAccessName( fieldAccess, this.obfuscationInfo.getOriginalVarSimpleName(),
                     this.obfuscationInfo.getObfuscatedVarName() );
         } else if ( expressionNodeType == ASTNode.QUALIFIED_NAME )
@@ -60,8 +60,8 @@ public class AssignmentVisitor extends ASTVisitor
 
         } else if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
         {
-            MethodInvocation methodInvocation = ( MethodInvocation ) expression;
-            SimpleName invocationExpression = ( SimpleName ) methodInvocation.getExpression();
+            MethodInvocation methodInvocation = ( MethodInvocation )expression;
+            SimpleName invocationExpression = ( SimpleName )methodInvocation.getExpression();
             ModifyAst.renameSimpleName( invocationExpression, this.obfuscationInfo.getOriginalVarSimpleName(),
                     this.obfuscationInfo.getObfuscatedVarName() );
             ModifyAst.renameMethodInvocationArguments( methodInvocation.arguments(), this.obfuscationInfo.getOriginalVarSimpleName(),

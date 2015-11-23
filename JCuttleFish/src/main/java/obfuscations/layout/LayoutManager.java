@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import pojo.ObfuscationInfo;
 import pojo.UnitSource;
 import providers.ObfuscatedNamesProvider;
-import util.ApplyChanges;
 import util.ConvenienceWrappers;
+import util.SourceUtil;
 import util.enums.ObfuscatedNamesVariations;
 
 import java.util.Deque;
@@ -29,12 +29,12 @@ public class LayoutManager
 
         if ( !cu.types().isEmpty() )
         {
-            TypeDeclaration typeDecl = ( TypeDeclaration ) cu.types().get( 0 );
+            TypeDeclaration typeDecl = ( TypeDeclaration )cu.types().get( 0 );
             if ( typeDecl.resolveBinding().isClass() )
             {
                 for ( FieldDeclaration fieldDeclaration : ConvenienceWrappers.getPrivateFieldDeclarations( typeDecl ) )
                 {
-                    VariableDeclarationFragment originalVdf = ( VariableDeclarationFragment ) fieldDeclaration.fragments().get( 0 );
+                    VariableDeclarationFragment originalVdf = ( VariableDeclarationFragment )fieldDeclaration.fragments().get( 0 );
                     SimpleName originalVarSimpleName = originalVdf.getName();
                     String obfuscatedVarName = obfuscatedVariableNames.pollFirst();
                     ObfuscationInfo obfuscationInfo = new ObfuscationInfo( originalVarSimpleName, obfuscatedVarName, cu.getAST() );
@@ -42,11 +42,7 @@ public class LayoutManager
                     for ( MethodDeclaration methodDeclaration : typeDecl.getMethods() )
                     {
                         List<Statement> statements = methodDeclaration.getBody().statements();
-                        for ( Statement statement : statements )
-                        {
-                            StatementVisitor visitor = new StatementVisitor( obfuscationInfo );
-                            visitor.visit( statement );
-                        }
+                        statements.stream().forEach( s -> new StatementVisitor( obfuscationInfo ).visit( s ) );
                     }
                     //Change declaration name after modifying all usages.
                     originalVdf.getName().setIdentifier( obfuscatedVarName );
@@ -56,7 +52,7 @@ public class LayoutManager
                 throw new RuntimeException( "Bad input. isClass returned false." );
             }
         }
-        //TODO: Move "apply" to ObfuscationCoordinator
-        return ApplyChanges.apply( unitSource );
+        //TODO: Move "replace" to ObfuscationCoordinator
+        return SourceUtil.replace( unitSource );
     }
 }

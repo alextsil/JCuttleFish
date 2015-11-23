@@ -12,9 +12,7 @@ public class SimpleNameVisitor extends ASTVisitor
 {
 
     private SimpleName originalVarSimpleName;
-
     private String obfuscatedVarName;
-
     private final Logger logger = LoggerFactory.getLogger( SimpleNameVisitor.class );
 
     public SimpleNameVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName )
@@ -26,7 +24,7 @@ public class SimpleNameVisitor extends ASTVisitor
     @Override
     public boolean visit ( SimpleName simpleName )
     {
-        IVariableBinding varBinding = ( IVariableBinding ) simpleName.resolveBinding();
+        IVariableBinding varBinding = ( IVariableBinding )simpleName.resolveBinding();
         if ( varBinding == null )
         {
             logger.info( "Variable binding is null. Returning." );

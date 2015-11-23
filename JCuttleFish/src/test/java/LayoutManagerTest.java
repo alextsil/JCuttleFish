@@ -14,11 +14,8 @@ public class LayoutManagerTest
 {
 
     LayoutManager layoutManager = new LayoutManager();
-
     UnitSourceInitiator initiator = new UnitSourceInitiator();
-
     FileSourceCodeProvider sourceCodeProvider = new FileSourceCodeProvider();
-
     private final Logger logger = LoggerFactory.getLogger( LayoutManagerTest.class );
 
     @Test
@@ -161,8 +158,22 @@ public class LayoutManagerTest
                         .getDocument().get() );
     }
 
-    //A "scratchpad" test
+    /* Testing :
+    - #44 If statement visitor
+    */
     @Test
+    public void testObfuscate_IfTree ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/IfTreeOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/IfTreeObfuscated.java" );
+
+        assertEquals( sourceCodeProvider.get( obfuscatedFile ),
+                layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
+    //A "scratchpad" test
+    //@Test
     public void onthefly ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/ontheflyOriginal.java" );

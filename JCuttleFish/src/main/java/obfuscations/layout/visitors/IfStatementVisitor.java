@@ -1,8 +1,12 @@
 package obfuscations.layout.visitors;
 
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.Statement;
 import pojo.ObfuscationInfo;
-import util.CastToAndVisit;
+
+import java.util.List;
 
 
 public class IfStatementVisitor extends ASTVisitor
@@ -18,28 +22,18 @@ public class IfStatementVisitor extends ASTVisitor
     @Override
     public boolean visit ( IfStatement ifStatement )
     {
-        if ( ifStatement.getExpression().getNodeType() == ASTNode.METHOD_INVOCATION )
-        {
-            CastToAndVisit.methodInvocation( ifStatement.getExpression(), this.obfuscationInfo );
-        }
+        new ExpressionVisitor( this.obfuscationInfo ).preVisit2( ifStatement.getExpression() );
 
         //Visit ThenStatement
-        Block thenStatements = ( Block ) ifStatement.getThenStatement();
-        for ( Object statement : thenStatements.statements() )
-        {
-            StatementVisitor visitor = new StatementVisitor( this.obfuscationInfo );
-            visitor.visit( ( Statement ) statement );
-        }
+        Block thenStatementsBlock = ( Block )ifStatement.getThenStatement();
+        List<Statement> statements = thenStatementsBlock.statements();
+        statements.stream().forEach( s -> new StatementVisitor( this.obfuscationInfo ).visit( s ) );
 
         //Visit ElseStatement
-        Block elseStatements = ( Block ) ifStatement.getElseStatement();
-        if ( elseStatements != null )
+        Statement elseStatement = ifStatement.getElseStatement();
+        if ( elseStatement != null )
         {
-            for ( Object statement : elseStatements.statements() )
-            {
-                StatementVisitor visitor = new StatementVisitor( this.obfuscationInfo );
-                visitor.visit( ( Statement ) statement );
-            }
+            new StatementVisitor( this.obfuscationInfo ).visit( elseStatement );
         }
         return false;
     }

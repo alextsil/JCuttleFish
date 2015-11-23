@@ -14,7 +14,6 @@ public class PrefixExpressionVisitor extends ASTVisitor
 {
 
     private ObfuscationInfo obfuscationInfo;
-
     private final Logger logger = LoggerFactory.getLogger( PrefixExpressionVisitor.class );
 
     public PrefixExpressionVisitor ( ObfuscationInfo obfuscationInfo )
@@ -28,7 +27,7 @@ public class PrefixExpressionVisitor extends ASTVisitor
         int prefixExpressionOperandNodeType = prefixExpression.getOperand().getNodeType();
         if ( prefixExpressionOperandNodeType == ASTNode.METHOD_INVOCATION )
         {
-            MethodInvocation methodInvocation = ( MethodInvocation ) prefixExpression.getOperand();
+            MethodInvocation methodInvocation = ( MethodInvocation )prefixExpression.getOperand();
             if ( methodInvocation.getExpression() != null )
             {
                 CastToAndVisit.methodInvocation( methodInvocation, this.obfuscationInfo );

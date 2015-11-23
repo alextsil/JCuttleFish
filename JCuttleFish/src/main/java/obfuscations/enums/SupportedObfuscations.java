@@ -1,6 +1,7 @@
 package obfuscations.enums;
 
-public enum SupportedObfuscations {
+public enum SupportedObfuscations
+{
     ACCESS_MODIFICATION,
     FLATTEN_PACKAGE_HIERARCHY,
     FUNCTION_OVERLOADING,

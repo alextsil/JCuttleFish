@@ -5,10 +5,10 @@ import org.eclipse.text.edits.TextEdit;
 import pojo.UnitSource;
 
 
-public class ApplyChanges
+public class SourceUtil
 {
 
-    static public UnitSource apply ( UnitSource unitSource )
+    static public UnitSource replace ( UnitSource unitSource )
     {
         //TODO: only write if there are changes.
         TextEdit edits = unitSource.getCompilationUnit().rewrite( unitSource.getDocument(), null );

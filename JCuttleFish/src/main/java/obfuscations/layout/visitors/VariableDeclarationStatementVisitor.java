@@ -21,7 +21,7 @@ public class VariableDeclarationStatementVisitor extends ASTVisitor
     @Override
     public boolean visit ( VariableDeclarationStatement variableDeclarationStatement )
     {
-        VariableDeclarationFragment variableDeclarationFragment = ( VariableDeclarationFragment ) variableDeclarationStatement.fragments().get( 0 );
+        VariableDeclarationFragment variableDeclarationFragment = ( VariableDeclarationFragment )variableDeclarationStatement.fragments().get( 0 );
         int variableDeclarationFragmentInitializerNodeType = variableDeclarationFragment.getInitializer().getNodeType();
 
         if ( variableDeclarationFragmentInitializerNodeType == ASTNode.QUALIFIED_NAME )

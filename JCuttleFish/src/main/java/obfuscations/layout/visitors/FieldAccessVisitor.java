@@ -20,15 +20,15 @@ public class FieldAccessVisitor extends ASTVisitor
     {
         if ( fieldAccess.getExpression().getNodeType() == ASTNode.METHOD_INVOCATION )
         {
-            MethodInvocation methodInvocation = ( MethodInvocation ) fieldAccess.getExpression();
+            MethodInvocation methodInvocation = ( MethodInvocation )fieldAccess.getExpression();
             if ( methodInvocation.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
             {
-                SimpleName simpleName = ( SimpleName ) methodInvocation.getExpression();
-                ModifyAst.renameSimpleName( ( SimpleName ) methodInvocation.getExpression(), this.obfuscationInfo.getOriginalVarSimpleName(),
+                SimpleName simpleName = ( SimpleName )methodInvocation.getExpression();
+                ModifyAst.renameSimpleName( ( SimpleName )methodInvocation.getExpression(), this.obfuscationInfo.getOriginalVarSimpleName(),
                         this.obfuscationInfo.getObfuscatedVarName() );
                 if ( simpleName.getIdentifier().equals( this.obfuscationInfo.getObfuscatedVarName() ) )
                 {
-                    ModifyAst.thisifyName( this.obfuscationInfo.getAst(), ( SimpleName ) methodInvocation.getExpression() );
+                    ModifyAst.thisifyName( this.obfuscationInfo.getAst(), ( SimpleName )methodInvocation.getExpression() );
                 }
             }
         } else

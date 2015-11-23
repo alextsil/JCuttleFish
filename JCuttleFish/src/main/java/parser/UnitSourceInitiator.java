@@ -13,7 +13,6 @@ public class UnitSourceInitiator
 {
 
     private final Logger logger = LoggerFactory.getLogger( UnitSourceInitiator.class );
-
     private String sourceCode = null;
 
     public UnitSourceInitiator ()
@@ -37,7 +36,7 @@ public class UnitSourceInitiator
 
         parser.setResolveBindings( true );
 
-        CompilationUnit cu = ( CompilationUnit ) parser.createAST( null );
+        CompilationUnit cu = ( CompilationUnit )parser.createAST( null );
         UnitSource unitSource = new UnitSource( cu, this.sourceCode );
         return unitSource;
     }
@@ -87,9 +86,9 @@ public class UnitSourceInitiator
 //
 //        TextEdit edits = rewriter.rewriteAST( document, null );
 //        try {
-//            edits.apply( document );
+//            edits.replace( document );
 //        } catch ( BadLocationException e ) {
-//            logger.error( "Failed to apply edits" );
+//            logger.error( "Failed to replace edits" );
 //            e.printStackTrace();
 //        }
 //        try {

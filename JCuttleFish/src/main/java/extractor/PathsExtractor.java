@@ -9,58 +9,69 @@ import java.util.List;
 //and saves the File instances of all FILES in a List.
 
 
-public class PathsExtractor {
+public class PathsExtractor
+{
 
     // The list that contains all the File instances from the extracted paths
     private List<File> targetFilesInstances;
-
     // User given path name
     private String pathName;
 
-    public PathsExtractor ( String pathName ) {
+    public PathsExtractor ( String pathName )
+    {
         this.pathName = pathName;
         targetFilesInstances = new ArrayList<>();
     }
 
-    public List<File> getFilesInstances () {
+    public List<File> getFilesInstances ()
+    {
         extractPathsRaw( pathName );
         return this.targetFilesInstances;
     }
 
-    public List<File> getFilesInstances ( FileFilter filter ) {
+    public List<File> getFilesInstances ( FileFilter filter )
+    {
         extractPathsFiltered( pathName, filter );
         return this.targetFilesInstances;
     }
 
     // temp copy - workaround
-    private void extractPathsRaw ( String pathName ) {
+    private void extractPathsRaw ( String pathName )
+    {
         File initialFilePath = new File( pathName );
         assert initialFilePath.isDirectory();
 
         File[] fileInstances = initialFilePath.listFiles();
 
-        for ( File fileInstance : fileInstances ) {
-            if ( fileInstance.isDirectory() ) {
+        for ( File fileInstance : fileInstances )
+        {
+            if ( fileInstance.isDirectory() )
+            {
                 // recursive call - contained folder path
                 extractPathsRaw( fileInstance.getAbsolutePath() );
-            } else {
+            } else
+            {
                 targetFilesInstances.add( fileInstance );
             }
         }
     }
 
     // temp copy - workaround
-    private void extractPathsFiltered ( String pathName, FileFilter filter ) {
+    private void extractPathsFiltered ( String pathName, FileFilter filter )
+    {
         File initialFilePath = new File( pathName );
         assert initialFilePath.isDirectory();
 
         File[] fileInstances = initialFilePath.listFiles( filter );
 
-        for ( File fileInstance : fileInstances ) {
-            if ( fileInstance.isDirectory() ) {
+        for ( File fileInstance : fileInstances )
+        {
+            if ( fileInstance.isDirectory() )
+            {
                 // recursive call - contained folder path
                 extractPathsFiltered( fileInstance.getAbsolutePath(), filter );
-            } else {
+            } else
+            {
                 targetFilesInstances.add( fileInstance );
             }
         }

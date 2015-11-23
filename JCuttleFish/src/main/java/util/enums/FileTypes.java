@@ -2,7 +2,8 @@ package util.enums;
 //An enumeration of the supported file types
 
 
-public enum FileTypes {
+public enum FileTypes
+{
     INTERFACE,
     ABSTRACT_CLASS,
     BASE_CLASS,

@@ -15,8 +15,8 @@ public class OptionalUtils
     {
         if ( node.getNodeType() == ASTNode.SIMPLE_NAME )
         {
-            SimpleName sn = ( SimpleName ) node;
-            IVariableBinding ivb = ( IVariableBinding ) sn.resolveBinding();
+            SimpleName sn = ( SimpleName )node;
+            IVariableBinding ivb = ( IVariableBinding )sn.resolveBinding();
             if ( ivb != null )
             {
                 return Optional.of( ivb );
@@ -24,7 +24,7 @@ public class OptionalUtils
         }
         if ( node.getNodeType() == ASTNode.FIELD_ACCESS )
         {
-            FieldAccess fa = ( FieldAccess ) node;
+            FieldAccess fa = ( FieldAccess )node;
             IVariableBinding ivb = fa.resolveFieldBinding();
             if ( ivb != null )
             {
