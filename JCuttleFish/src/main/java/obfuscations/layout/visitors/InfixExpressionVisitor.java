@@ -9,7 +9,7 @@ import util.CastToAndVisit;
 public class InfixExpressionVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private final ObfuscationInfo obfuscationInfo;
 
     public InfixExpressionVisitor ( ObfuscationInfo obfuscationInfo )
     {
@@ -32,7 +32,7 @@ public class InfixExpressionVisitor extends ASTVisitor
 
     //Inserting InfixExpression, operand type and position(only for extended operands) as a workaround to the thisifier
     //not being able to set the operand to the InfixExpression otherwise.HACK
-    public boolean visitOperand ( Expression operand )
+    private boolean visitOperand ( Expression operand )
     {
         int operandNodeType = operand.getNodeType();
         if ( operandNodeType == ASTNode.METHOD_INVOCATION )

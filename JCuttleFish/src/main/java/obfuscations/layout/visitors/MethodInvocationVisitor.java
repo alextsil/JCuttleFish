@@ -11,7 +11,7 @@ import java.util.List;
 public class MethodInvocationVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private final ObfuscationInfo obfuscationInfo;
 
     public MethodInvocationVisitor ( ObfuscationInfo obfuscationInfo )
     {

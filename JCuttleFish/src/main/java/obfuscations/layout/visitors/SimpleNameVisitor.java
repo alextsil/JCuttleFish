@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 public class SimpleNameVisitor extends ASTVisitor
 {
 
-    private SimpleName originalVarSimpleName;
-    private String obfuscatedVarName;
+    private final SimpleName originalVarSimpleName;
+    private final String obfuscatedVarName;
     private final Logger logger = LoggerFactory.getLogger( SimpleNameVisitor.class );
 
     public SimpleNameVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName )
@@ -27,7 +27,7 @@ public class SimpleNameVisitor extends ASTVisitor
         IVariableBinding varBinding = ( IVariableBinding )simpleName.resolveBinding();
         if ( varBinding == null )
         {
-            logger.info( "Variable binding is null. Returning." );
+            this.logger.info( "Variable binding is null. Returning." );
             return false;
         }
         if ( varBinding.isField() )

@@ -13,7 +13,7 @@ import util.CastToAndVisit;
 public class PrefixExpressionVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private final ObfuscationInfo obfuscationInfo;
     private final Logger logger = LoggerFactory.getLogger( PrefixExpressionVisitor.class );
 
     public PrefixExpressionVisitor ( ObfuscationInfo obfuscationInfo )

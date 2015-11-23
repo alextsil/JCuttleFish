@@ -7,9 +7,9 @@ import org.eclipse.jface.text.Document;
 public class UnitSource
 {
 
-    private CompilationUnit compilationUnit;
+    private final CompilationUnit compilationUnit;
     //Hosts the source code as text
-    private Document document;
+    private final Document document;
 
     public UnitSource ( CompilationUnit compilationUnit, String sourceCode )
     {
@@ -19,12 +19,12 @@ public class UnitSource
 
     public CompilationUnit getCompilationUnit ()
     {
-        return compilationUnit;
+        return this.compilationUnit;
     }
 
     public Document getDocument ()
     {
-        return document;
+        return this.document;
     }
 
 }

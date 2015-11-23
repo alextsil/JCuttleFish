@@ -21,13 +21,13 @@ public class ConvenienceWrappers
     {
         List<FieldDeclaration> privateFieldDeclarations = new ArrayList<>();
         FieldDeclaration[] fieldDeclarations = typeDeclaration.getFields();
-        for ( int i = 0; i < fieldDeclarations.length; i++ )
+        for ( FieldDeclaration fieldDeclaration : fieldDeclarations )
         {
             //Get list of field modifiers to check if it's a private variable or not.
-            List<Modifier> modifiers = fieldDeclarations[ i ].modifiers();
+            List<Modifier> modifiers = fieldDeclaration.modifiers();
             if ( modifiers.stream().anyMatch( m -> m.isPrivate() ) )
             {
-                privateFieldDeclarations.add( fieldDeclarations[ i ] );
+                privateFieldDeclarations.add( fieldDeclaration );
             }
         }
         return privateFieldDeclarations;

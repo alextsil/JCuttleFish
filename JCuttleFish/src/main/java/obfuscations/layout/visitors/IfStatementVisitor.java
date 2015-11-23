@@ -12,7 +12,7 @@ import java.util.List;
 public class IfStatementVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private final ObfuscationInfo obfuscationInfo;
 
     public IfStatementVisitor ( ObfuscationInfo obfuscationInfo )
     {

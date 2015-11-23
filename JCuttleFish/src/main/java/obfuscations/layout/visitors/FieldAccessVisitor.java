@@ -8,7 +8,7 @@ import pojo.ObfuscationInfo;
 public class FieldAccessVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private final ObfuscationInfo obfuscationInfo;
 
     public FieldAccessVisitor ( ObfuscationInfo obfuscationInfo )
     {

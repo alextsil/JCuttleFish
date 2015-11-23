@@ -12,7 +12,7 @@ import java.util.Optional;
 public class ExpressionVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private final ObfuscationInfo obfuscationInfo;
 
     public ExpressionVisitor ( ObfuscationInfo obfuscationInfo )
     {
@@ -36,7 +36,7 @@ public class ExpressionVisitor extends ASTVisitor
                     .visit( simpleName );
             Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
             if ( simpleName.getIdentifier().equals( this.obfuscationInfo.getObfuscatedVarName() )
-                    && optionalIvb.map( i -> i.isField() ).orElse( false ) )
+                    && optionalIvb.map( IVariableBinding::isField ).orElse( false ) )
             {
                 ModifyAst.renameSimpleName( simpleName, this.obfuscationInfo.getOriginalVarSimpleName(),
                         this.obfuscationInfo.getObfuscatedVarName() );

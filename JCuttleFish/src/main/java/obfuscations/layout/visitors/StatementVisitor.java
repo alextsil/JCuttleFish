@@ -10,7 +10,7 @@ import util.CastToAndVisit;
 public class StatementVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private final ObfuscationInfo obfuscationInfo;
     private final Logger logger = LoggerFactory.getLogger( StatementVisitor.class );
 
     public StatementVisitor ( ObfuscationInfo obfuscationInfo )
@@ -54,7 +54,7 @@ public class StatementVisitor
             CastToAndVisit.enhancedForStatement( statement, this.obfuscationInfo );
         } else
         {
-            logger.debug( "Not mapped yet" );
+            this.logger.debug( "Not mapped yet" );
         }
         return false;
     }

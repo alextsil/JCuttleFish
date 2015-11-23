@@ -10,7 +10,7 @@ import java.util.List;
 public class EnhancedForStatementVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private final ObfuscationInfo obfuscationInfo;
 
     public EnhancedForStatementVisitor ( ObfuscationInfo obfuscationInfo )
     {

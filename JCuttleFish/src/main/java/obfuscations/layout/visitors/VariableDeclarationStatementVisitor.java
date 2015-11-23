@@ -11,7 +11,7 @@ import util.CastToAndVisit;
 public class VariableDeclarationStatementVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private final ObfuscationInfo obfuscationInfo;
 
     public VariableDeclarationStatementVisitor ( ObfuscationInfo obfuscationInfo )
     {

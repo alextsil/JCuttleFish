@@ -13,7 +13,7 @@ import java.util.List;
 public class MethodArgumentsVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private final ObfuscationInfo obfuscationInfo;
     private final Logger logger = LoggerFactory.getLogger( MethodArgumentsVisitor.class );
 
     public MethodArgumentsVisitor ( ObfuscationInfo obfuscationInfo )
@@ -61,7 +61,7 @@ public class MethodArgumentsVisitor
                 CastToAndVisit.methodInvocation( methodInvocation, this.obfuscationInfo );
             } else
             {
-                logger.warn( "Not mapped yet" );
+                this.logger.warn( "Not mapped yet" );
             }
         }
         return false;

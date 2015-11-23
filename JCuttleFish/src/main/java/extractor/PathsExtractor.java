@@ -13,25 +13,25 @@ public class PathsExtractor
 {
 
     // The list that contains all the File instances from the extracted paths
-    private List<File> targetFilesInstances;
+    private final List<File> targetFilesInstances;
     // User given path name
-    private String pathName;
+    private final String pathName;
 
     public PathsExtractor ( String pathName )
     {
         this.pathName = pathName;
-        targetFilesInstances = new ArrayList<>();
+        this.targetFilesInstances = new ArrayList<>();
     }
 
     public List<File> getFilesInstances ()
     {
-        extractPathsRaw( pathName );
+        this.extractPathsRaw( this.pathName );
         return this.targetFilesInstances;
     }
 
     public List<File> getFilesInstances ( FileFilter filter )
     {
-        extractPathsFiltered( pathName, filter );
+        this.extractPathsFiltered( this.pathName, filter );
         return this.targetFilesInstances;
     }
 
@@ -48,10 +48,10 @@ public class PathsExtractor
             if ( fileInstance.isDirectory() )
             {
                 // recursive call - contained folder path
-                extractPathsRaw( fileInstance.getAbsolutePath() );
+                this.extractPathsRaw( fileInstance.getAbsolutePath() );
             } else
             {
-                targetFilesInstances.add( fileInstance );
+                this.targetFilesInstances.add( fileInstance );
             }
         }
     }
@@ -69,10 +69,10 @@ public class PathsExtractor
             if ( fileInstance.isDirectory() )
             {
                 // recursive call - contained folder path
-                extractPathsFiltered( fileInstance.getAbsolutePath(), filter );
+                this.extractPathsFiltered( fileInstance.getAbsolutePath(), filter );
             } else
             {
-                targetFilesInstances.add( fileInstance );
+                this.targetFilesInstances.add( fileInstance );
             }
         }
     }

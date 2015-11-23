@@ -17,17 +17,17 @@ public class ObfuscationEnvironment
 
     public String getRelativeSourcePath ()
     {
-        return relativeSourcePath;
+        return this.relativeSourcePath;
     }
 
     public String[] getAbsoluteSourcePath ()
     {
-        return absoluteSourcePath;
+        return this.absoluteSourcePath;
     }
 
     public String[] getClasspath ()
     {
-        return classpath;
+        return this.classpath;
     }
 
     public void setRelativeSourcePath ( String relativeSourcePath )

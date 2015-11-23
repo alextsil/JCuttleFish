@@ -37,8 +37,7 @@ public class UnitSourceInitiator
         parser.setResolveBindings( true );
 
         CompilationUnit cu = ( CompilationUnit )parser.createAST( null );
-        UnitSource unitSource = new UnitSource( cu, this.sourceCode );
-        return unitSource;
+        return new UnitSource( cu, this.sourceCode );
     }
 
     //obso. retain for example.

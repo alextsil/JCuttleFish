@@ -16,7 +16,7 @@ public class AssignmentVisitor extends ASTVisitor
     }
 
 
-    private ObfuscationInfo obfuscationInfo;
+    private final ObfuscationInfo obfuscationInfo;
 
     public AssignmentVisitor ( ObfuscationInfo obfuscationInfo )
     {
@@ -31,7 +31,7 @@ public class AssignmentVisitor extends ASTVisitor
         return false;
     }
 
-    public void visitAssignmentSideExpression ( Assignment assignment, Expression expression, Side expressionSide )
+    private void visitAssignmentSideExpression ( Assignment assignment, Expression expression, Side expressionSide )
     {
         int expressionNodeType = expression.getNodeType();
 

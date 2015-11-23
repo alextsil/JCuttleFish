@@ -11,7 +11,7 @@ import java.io.FileFilter;
 public class SuffixFolderFilter implements FileFilter
 {
 
-    private String fileSuffix;
+    private final String fileSuffix;
 
     public SuffixFolderFilter ( SuffixFilters suffixFilter )
     {

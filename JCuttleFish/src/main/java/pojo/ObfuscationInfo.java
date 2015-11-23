@@ -7,9 +7,9 @@ import org.eclipse.jdt.core.dom.SimpleName;
 public class ObfuscationInfo
 {
 
-    private SimpleName originalVarSimpleName;
-    private String obfuscatedVarName;
-    private AST ast;
+    private final SimpleName originalVarSimpleName;
+    private final String obfuscatedVarName;
+    private final AST ast;
 
     public ObfuscationInfo ( SimpleName originalVarSimpleName, String obfuscatedVarName, AST ast )
     {
@@ -20,16 +20,16 @@ public class ObfuscationInfo
 
     public SimpleName getOriginalVarSimpleName ()
     {
-        return originalVarSimpleName;
+        return this.originalVarSimpleName;
     }
 
     public String getObfuscatedVarName ()
     {
-        return obfuscatedVarName;
+        return this.obfuscatedVarName;
     }
 
     public AST getAst ()
     {
-        return ast;
+        return this.ast;
     }
 }

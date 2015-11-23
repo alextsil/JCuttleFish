@@ -26,7 +26,7 @@ public class ModifyAst
                 SimpleName simpleName = ( SimpleName )argument;
                 Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
                 if ( simpleName.getIdentifier().equals( originalName.getIdentifier() )
-                        && optionalIvb.map( i -> i.isField() ).orElse( false ) )
+                        && optionalIvb.map( IVariableBinding::isField ).orElse( false ) )
                 {
                     simpleName.setIdentifier( obfuscatedName );
                 }
@@ -46,7 +46,7 @@ public class ModifyAst
                 SimpleName simpleName = ( SimpleName )qualifiedName.getQualifier();
                 Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
                 if ( simpleName.getIdentifier().equals( originalName.getIdentifier() )
-                        && optionalIvb.map( i -> i.isField() ).orElse( false ) )
+                        && optionalIvb.map( IVariableBinding::isField ).orElse( false ) )
                 {
                     simpleName.setIdentifier( obfuscatedName );
                 }

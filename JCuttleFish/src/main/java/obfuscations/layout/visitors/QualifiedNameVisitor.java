@@ -9,7 +9,7 @@ import pojo.ObfuscationInfo;
 public class QualifiedNameVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private final ObfuscationInfo obfuscationInfo;
 
     public QualifiedNameVisitor ( ObfuscationInfo obfuscationInfo )
     {

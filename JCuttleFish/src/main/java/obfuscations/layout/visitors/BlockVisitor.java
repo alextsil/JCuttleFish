@@ -11,7 +11,7 @@ import java.util.List;
 public class BlockVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private final ObfuscationInfo obfuscationInfo;
 
     public BlockVisitor ( ObfuscationInfo obfuscationInfo )
     {
