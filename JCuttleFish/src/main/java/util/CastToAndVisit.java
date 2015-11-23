@@ -79,5 +79,9 @@ public class CastToAndVisit
         PostfixExpression postfixExpression = ( PostfixExpression ) node;
         new PostfixExpressionVisitor( obfuscationInfo ).visit( postfixExpression );
     }
-
+    public static <V extends ASTNode> void whileStatement ( V node, ObfuscationInfo obfuscationInfo )
+    {
+        WhileStatement whileStatement = ( WhileStatement ) node;
+        new WhileStatementVisitor( obfuscationInfo ).visit( whileStatement );
+    }
 }

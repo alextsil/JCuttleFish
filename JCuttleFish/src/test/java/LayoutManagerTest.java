@@ -182,6 +182,18 @@ public class LayoutManagerTest
                 layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
                         .getDocument().get() );
     }
+
+    @Test
+    public void testObfuscate_WhileStatements ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/WhileStatementOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/WhileStatementObfuscated.java" );
+
+        assertEquals( sourceCodeProvider.get( obfuscatedFile ),
+                layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
     //A "scratchpad" test
     @Test
     public void onthefly ()
