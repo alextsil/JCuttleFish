@@ -84,4 +84,10 @@ public class CastToAndVisit
         WhileStatement whileStatement = ( WhileStatement ) node;
         new WhileStatementVisitor( obfuscationInfo ).visit( whileStatement );
     }
+
+    public static <V extends ASTNode> void doWhileStatement ( V node, ObfuscationInfo obfuscationInfo )
+    {
+        DoStatement doStatement = ( DoStatement ) node;
+        new DoStatementVisitor( obfuscationInfo ).visit( doStatement );
+    }
 }
