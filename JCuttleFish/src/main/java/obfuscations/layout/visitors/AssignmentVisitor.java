@@ -9,13 +9,6 @@ import util.CastToAndVisit;
 public class AssignmentVisitor extends ASTVisitor
 {
 
-    private enum Side
-    {
-        LEFT,
-        RIGHT
-    }
-
-
     private ObfuscationInfo obfuscationInfo;
 
     public AssignmentVisitor ( ObfuscationInfo obfuscationInfo )
@@ -26,12 +19,12 @@ public class AssignmentVisitor extends ASTVisitor
     @Override
     public boolean visit ( Assignment assignment )
     {
-        this.visitAssignmentSideExpression( assignment, assignment.getLeftHandSide(), Side.LEFT );
-        this.visitAssignmentSideExpression( assignment, assignment.getRightHandSide(), Side.RIGHT );
+        this.visitAssignmentSideExpression( assignment.getLeftHandSide() );
+        this.visitAssignmentSideExpression( assignment.getRightHandSide());
         return false;
     }
 
-    public void visitAssignmentSideExpression ( Assignment assignment, Expression expression, Side expressionSide )
+    public void visitAssignmentSideExpression ( Expression expression )
     {
         int expressionNodeType = expression.getNodeType();
 

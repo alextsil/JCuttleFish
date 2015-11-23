@@ -122,13 +122,17 @@ public class ModifyAst
         {
             PrefixExpression prefixExpression = ( PrefixExpression )name.getParent();
             prefixExpression.setOperand( generatedFieldAccess );
+        } else if ( nameParentNodeType == ASTNode.POSTFIX_EXPRESSION )
+        {
+            PostfixExpression postfixExpression = ( PostfixExpression ) name.getParent();
+            postfixExpression.setOperand( generatedFieldAccess );
         } else if ( nameParentNodeType == ASTNode.ENHANCED_FOR_STATEMENT )
         {
-            EnhancedForStatement enhancedForStatement = ( EnhancedForStatement )name.getParent();
+            EnhancedForStatement enhancedForStatement = ( EnhancedForStatement ) name.getParent();
             enhancedForStatement.setExpression( generatedFieldAccess );
         } else if ( nameParentNodeType == ASTNode.VARIABLE_DECLARATION_FRAGMENT )
         {
-            VariableDeclarationFragment variableDeclarationFragment = ( VariableDeclarationFragment )name.getParent();
+            VariableDeclarationFragment variableDeclarationFragment = ( VariableDeclarationFragment ) name.getParent();
             variableDeclarationFragment.setInitializer( generatedFieldAccess );
         } else
         {
