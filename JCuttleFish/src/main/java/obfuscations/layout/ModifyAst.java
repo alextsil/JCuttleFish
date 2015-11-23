@@ -134,6 +134,10 @@ public class ModifyAst
         {
             VariableDeclarationFragment variableDeclarationFragment = ( VariableDeclarationFragment ) name.getParent();
             variableDeclarationFragment.setInitializer( generatedFieldAccess );
+        } else if ( nameParentNodeType == ASTNode.SWITCH_STATEMENT )
+        {
+            SwitchStatement switchStatement = ( SwitchStatement ) name.getParent();
+            switchStatement.setExpression( generatedFieldAccess );
         } else
         {
             throw new RuntimeException( "Not mapped yet" );

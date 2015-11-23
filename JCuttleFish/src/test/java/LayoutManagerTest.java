@@ -186,8 +186,30 @@ public class LayoutManagerTest
     @Test
     public void testObfuscate_WhileStatements ()
     {
-        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/WhileStatementOriginal.java" );
-        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/WhileStatementObfuscated.java" );
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/WhileStatementsOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/WhileStatementsObfuscated.java" );
+
+        assertEquals( sourceCodeProvider.get( obfuscatedFile ),
+                layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
+    @Test
+    public void testObfuscate_DoStatements ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/DoStatementsOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/DoStatementsObfuscated.java" );
+
+        assertEquals( sourceCodeProvider.get( obfuscatedFile ),
+                layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
+    @Test
+    public void testObfuscate_SwitchStatements ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/SwitchStatementsOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/SwitchStatementsObfuscated.java" );
 
         assertEquals( sourceCodeProvider.get( obfuscatedFile ),
                 layoutManager.obfuscate( initiator.fetchUnitSource( sourceCodeProvider.get( originalFile ) ) )

@@ -59,6 +59,9 @@ public class StatementVisitor
         } else if ( statementNodeType == ASTNode.DO_STATEMENT )
         {
             CastToAndVisit.doWhileStatement( statement, this.obfuscationInfo );
+        } else if ( statementNodeType == ASTNode.SWITCH_STATEMENT )
+        {
+            CastToAndVisit.switchStatement( statement, this.obfuscationInfo );
         } else
         {
             logger.debug( "Not mapped yet" );

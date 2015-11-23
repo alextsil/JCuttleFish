@@ -90,4 +90,11 @@ public class CastToAndVisit
         DoStatement doStatement = ( DoStatement ) node;
         new DoStatementVisitor( obfuscationInfo ).visit( doStatement );
     }
+
+    public static <V extends ASTNode> void switchStatement ( V node, ObfuscationInfo obfuscationInfo )
+    {
+        SwitchStatement switchStatement = ( SwitchStatement ) node;
+        new SwitchStatementVisitor( obfuscationInfo ).visit( switchStatement );
+    }
+
 }
