@@ -1,49 +1,37 @@
 package test;
 
-public class ifTrees
+public class KeybIntReader
 {
 
-    private int age;
-    private int count = 0;
+    private String s1;
+    private String s2;
+    private int num = 0;
 
-    public void ifTree ()
+    public void read ()
     {
-        if ( age < 10 )
+        BufferedReader br = new BufferedReader( new InputStreamReader(
+                System.in ) );
+
+        boolean cont = true;
+
+        while ( cont )
         {
-            count = count + 1;
-            if ( age < 5 )
+            System.out.print( "Enter an integer:" );
+            s1 = br.readLine();
+            StringTokenizer st = new StringTokenizer( s1 );
+            s2 = "";
+
+            while ( cont && st.hasMoreTokens() )
             {
-                count = count + 1;
-                if ( age < 3 && count <= 0 )
+                try
                 {
-                    count = count + 1;
-                } else if ( age < 2 && count == 0 )
+                    s2 = st.nextToken();
+                    num = Integer.parseInt( s2 );
+                    cont = false;
+                } catch ( NumberFormatException n )
                 {
-                    count = count + 1;
-                } else
-                {
-                    count = count + 1;
+                    System.out.println( "The value in \"" + s2 + "\" is not an integer" );
                 }
-            }
-        } else if ( age < 20 )
-        {
-            count += 1;
-            if ( age < 15 )
-            {
-                count = count - 1;
-            } else if ( age >= 15 )
-            {
-                count = count + 1;
-            }
-        } else
-        {
-            count += 1;
-            if ( age < 25 )
-            {
-                count = count - 1;
-            } else if ( age >= 25 )
-            {
-                count = count + 1;
             }
         }
     }

@@ -34,7 +34,6 @@ public class ModifyAst
             if ( argument instanceof FieldAccess )
             {
                 FieldAccess fieldAccess = ( FieldAccess )argument;
-                //Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( fieldAccess );
                 if ( fieldAccess.getName().getIdentifier().equals( originalName.getIdentifier() ) )
                 {
                     fieldAccess.getName().setIdentifier( obfuscatedName );
@@ -91,6 +90,13 @@ public class ModifyAst
             {
                 methodInvocation.arguments().set( methodInvocation.arguments().indexOf( name ), generatedFieldAccess );
             }
+        } else if ( nameParentNodeType == ASTNode.CLASS_INSTANCE_CREATION )
+        {
+            ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation )name.getParent();
+            if ( classInstanceCreation.arguments().contains( name ) )
+            {
+                classInstanceCreation.arguments().set( classInstanceCreation.arguments().indexOf( name ), generatedFieldAccess );
+            }
         } else if ( nameParentNodeType == ASTNode.ASSIGNMENT )
         {
             Assignment assignment = ( Assignment )name.getParent();
@@ -124,19 +130,19 @@ public class ModifyAst
             prefixExpression.setOperand( generatedFieldAccess );
         } else if ( nameParentNodeType == ASTNode.POSTFIX_EXPRESSION )
         {
-            PostfixExpression postfixExpression = ( PostfixExpression ) name.getParent();
+            PostfixExpression postfixExpression = ( PostfixExpression )name.getParent();
             postfixExpression.setOperand( generatedFieldAccess );
         } else if ( nameParentNodeType == ASTNode.ENHANCED_FOR_STATEMENT )
         {
-            EnhancedForStatement enhancedForStatement = ( EnhancedForStatement ) name.getParent();
+            EnhancedForStatement enhancedForStatement = ( EnhancedForStatement )name.getParent();
             enhancedForStatement.setExpression( generatedFieldAccess );
         } else if ( nameParentNodeType == ASTNode.VARIABLE_DECLARATION_FRAGMENT )
         {
-            VariableDeclarationFragment variableDeclarationFragment = ( VariableDeclarationFragment ) name.getParent();
+            VariableDeclarationFragment variableDeclarationFragment = ( VariableDeclarationFragment )name.getParent();
             variableDeclarationFragment.setInitializer( generatedFieldAccess );
         } else if ( nameParentNodeType == ASTNode.SWITCH_STATEMENT )
         {
-            SwitchStatement switchStatement = ( SwitchStatement ) name.getParent();
+            SwitchStatement switchStatement = ( SwitchStatement )name.getParent();
             switchStatement.setExpression( generatedFieldAccess );
         } else
         {

@@ -29,9 +29,12 @@ public class ExpressionVisitor extends ASTVisitor
         } else if ( expressionNodeType == ASTNode.FIELD_ACCESS )
         {
             CastToAndVisit.fieldAccess( expression, this.obfuscationInfo );
+        } else if ( expressionNodeType == ASTNode.QUALIFIED_NAME )
+        {
+            CastToAndVisit.qualifiedName( expression, this.obfuscationInfo );
         } else if ( expressionNodeType == ASTNode.SIMPLE_NAME )
         {
-            SimpleName simpleName = ( SimpleName ) expression;
+            SimpleName simpleName = ( SimpleName )expression;
             new SimpleNameVisitor( this.obfuscationInfo.getOriginalVarSimpleName(), this.obfuscationInfo.getObfuscatedVarName() )
                     .visit( simpleName );
             Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
@@ -44,16 +47,14 @@ public class ExpressionVisitor extends ASTVisitor
             }
         } else if ( expressionNodeType == ASTNode.PARENTHESIZED_EXPRESSION )
         {
-            ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression ) expression;
+            ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression )expression;
             new ExpressionVisitor( this.obfuscationInfo ).preVisit2( parenthesizedExpression.getExpression() );
         } else if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
         {
             CastToAndVisit.methodInvocation( expression, this.obfuscationInfo );
         } else if ( expressionNodeType == ASTNode.CLASS_INSTANCE_CREATION )
         {
-            ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation ) expression;
-            ModifyAst.renameMethodInvocationArguments( classInstanceCreation.arguments(), this.obfuscationInfo.getOriginalVarSimpleName(),
-                    this.obfuscationInfo.getObfuscatedVarName() );
+            CastToAndVisit.classInstanceCreation( expression, this.obfuscationInfo );
         }
         return false;
     }

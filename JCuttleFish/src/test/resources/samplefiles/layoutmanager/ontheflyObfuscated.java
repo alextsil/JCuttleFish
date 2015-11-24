@@ -1,49 +1,37 @@
 package test;
 
-public class ifTrees
+public class KeybIntReader
 {
 
-    private int a;
-    private int b = 0;
+    private String a;
+    private String b;
+    private int c = 0;
 
-    public void ifTree ()
+    public void read ()
     {
-        if ( this.a < 10 )
+        BufferedReader br = new BufferedReader( new InputStreamReader(
+                System.in ) );
+
+        boolean cont = true;
+
+        while ( cont )
         {
-            this.b = this.b + 1;
-            if ( this.a < 5 )
+            System.out.print( "Enter an integer:" );
+            this.a = br.readLine();
+            StringTokenizer st = new StringTokenizer( this.a );
+            this.b = "";
+
+            while ( cont && st.hasMoreTokens() )
             {
-                this.b = this.b + 1;
-                if ( this.a < 3 && this.b <= 0 )
+                try
                 {
-                    this.b = this.b + 1;
-                } else if ( this.a < 2 && this.b == 0 )
+                    this.b = st.nextToken();
+                    this.c = Integer.parseInt( this.b );
+                    cont = false;
+                } catch ( NumberFormatException n )
                 {
-                    this.b = this.b + 1;
-                } else
-                {
-                    this.b = this.b + 1;
+                    System.out.println( "The value in \"" + this.b + "\" is not an integer" );
                 }
-            }
-        } else if ( this.a < 20 )
-        {
-            this.b += 1;
-            if ( this.a < 15 )
-            {
-                this.b = this.b - 1;
-            } else if ( this.a >= 15 )
-            {
-                this.b = this.b + 1;
-            }
-        } else
-        {
-            this.b += 1;
-            if ( this.a < 25 )
-            {
-                this.b = this.b - 1;
-            } else if ( this.a >= 25 )
-            {
-                this.b = this.b + 1;
             }
         }
     }
