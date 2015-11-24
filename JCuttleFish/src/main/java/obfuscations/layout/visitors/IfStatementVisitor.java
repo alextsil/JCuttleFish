@@ -6,8 +6,6 @@ import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.Statement;
 import pojo.ObfuscationInfo;
 
-import java.util.List;
-
 
 public class IfStatementVisitor extends ASTVisitor
 {
@@ -26,8 +24,7 @@ public class IfStatementVisitor extends ASTVisitor
 
         //Visit ThenStatement
         Block thenStatementsBlock = ( Block )ifStatement.getThenStatement();
-        List<Statement> statements = thenStatementsBlock.statements();
-        statements.stream().forEach( s -> new StatementVisitor( this.obfuscationInfo ).visit( s ) );
+        new BlockVisitor( this.obfuscationInfo ).visit( thenStatementsBlock );
 
         //Visit ElseStatement
         Statement elseStatement = ifStatement.getElseStatement();

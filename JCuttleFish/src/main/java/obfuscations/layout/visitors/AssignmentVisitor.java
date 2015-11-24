@@ -20,7 +20,7 @@ public class AssignmentVisitor extends ASTVisitor
     public boolean visit ( Assignment assignment )
     {
         this.visitAssignmentSideExpression( assignment.getLeftHandSide() );
-        this.visitAssignmentSideExpression( assignment.getRightHandSide());
+        this.visitAssignmentSideExpression( assignment.getRightHandSide() );
         return false;
     }
 
@@ -53,13 +53,7 @@ public class AssignmentVisitor extends ASTVisitor
 
         } else if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
         {
-            MethodInvocation methodInvocation = ( MethodInvocation )expression;
-            SimpleName invocationExpression = ( SimpleName )methodInvocation.getExpression();
-            ModifyAst.renameSimpleName( invocationExpression, this.obfuscationInfo.getOriginalVarSimpleName(),
-                    this.obfuscationInfo.getObfuscatedVarName() );
-            ModifyAst.renameMethodInvocationArguments( methodInvocation.arguments(), this.obfuscationInfo.getOriginalVarSimpleName(),
-                    this.obfuscationInfo.getObfuscatedVarName() );
-
+            CastToAndVisit.methodInvocation( expression, this.obfuscationInfo );
         } else if ( expressionNodeType == ASTNode.INFIX_EXPRESSION )
         {
             CastToAndVisit.infixExpression( expression, this.obfuscationInfo );

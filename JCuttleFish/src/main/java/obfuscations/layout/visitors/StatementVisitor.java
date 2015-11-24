@@ -25,7 +25,7 @@ public class StatementVisitor
 
         if ( statementNodeType == ASTNode.EXPRESSION_STATEMENT )
         {
-            expression = ( ( ExpressionStatement ) statement ).getExpression();
+            expression = ( ( ExpressionStatement )statement ).getExpression();
             int expressionNodeType = expression.getNodeType();
             if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
             {
@@ -39,7 +39,7 @@ public class StatementVisitor
             }
         } else if ( statementNodeType == ASTNode.RETURN_STATEMENT )
         {
-            expression = ( ( ReturnStatement ) statement ).getExpression();
+            expression = ( ( ReturnStatement )statement ).getExpression();
             new ExpressionVisitor( this.obfuscationInfo ).preVisit2( expression );
         } else if ( statementNodeType == ASTNode.VARIABLE_DECLARATION_STATEMENT )
         {
@@ -62,6 +62,9 @@ public class StatementVisitor
         } else if ( statementNodeType == ASTNode.SWITCH_STATEMENT )
         {
             CastToAndVisit.switchStatement( statement, this.obfuscationInfo );
+        } else if ( statementNodeType == ASTNode.TRY_STATEMENT )
+        {
+            CastToAndVisit.tryStatement( statement, this.obfuscationInfo );
         } else
         {
             this.logger.debug( "Not mapped yet" );

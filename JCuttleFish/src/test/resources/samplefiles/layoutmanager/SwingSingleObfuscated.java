@@ -32,7 +32,7 @@ public class PanelChoixType extends JPanel
         this.i = ff;
         String[] types = new String[]{ "Musique", "Video", "Documents Texte", "Images", "Gestion", "Cours" };
         this.a = BorderFactory.createLineBorder( Color.black );
-        this.b = BorderFactory.createTitledBorder( a, "Gestion des types" );
+        this.b = BorderFactory.createTitledBorder( this.a, "Gestion des types" );
         this.c = new JComboBox( types );
         this.e = new JTextArea( 2, 8 );
         this.e.setBorder( this.a );

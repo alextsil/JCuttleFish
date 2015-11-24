@@ -104,4 +104,10 @@ public class CastToAndVisit
         new ClassInstanceCreationVisitor( obfuscationInfo ).visit( classInstanceCreation );
     }
 
+    public static <V extends ASTNode> void tryStatement ( V node, ObfuscationInfo obfuscationInfo )
+    {
+        TryStatement tryStatement = ( TryStatement )node;
+        new TryStatementVisitor( obfuscationInfo ).visit( tryStatement );
+    }
+
 }
