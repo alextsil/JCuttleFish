@@ -25,20 +25,21 @@ public class StatementVisitor
 
         if ( statementNodeType == ASTNode.EXPRESSION_STATEMENT )
         {
-            expression = ( ( ExpressionStatement )statement ).getExpression();
+            expression = ( ( ExpressionStatement ) statement ).getExpression();
             int expressionNodeType = expression.getNodeType();
             if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
             {
                 CastToAndVisit.methodInvocation( expression, this.obfuscationInfo );
-            }
-
-            if ( expressionNodeType == ASTNode.ASSIGNMENT )
+            } else if ( expressionNodeType == ASTNode.ASSIGNMENT )
             {
                 CastToAndVisit.assignment( expression, this.obfuscationInfo );
+            } else if ( expressionNodeType == ASTNode.POSTFIX_EXPRESSION )
+            {
+                CastToAndVisit.postfixExpression( expression, this.obfuscationInfo );
             }
         } else if ( statementNodeType == ASTNode.RETURN_STATEMENT )
         {
-            expression = ( ( ReturnStatement )statement ).getExpression();
+            expression = ( ( ReturnStatement ) statement ).getExpression();
             new ExpressionVisitor( this.obfuscationInfo ).preVisit2( expression );
         } else if ( statementNodeType == ASTNode.VARIABLE_DECLARATION_STATEMENT )
         {
@@ -52,6 +53,15 @@ public class StatementVisitor
         } else if ( statementNodeType == ASTNode.ENHANCED_FOR_STATEMENT )
         {
             CastToAndVisit.enhancedForStatement( statement, this.obfuscationInfo );
+        } else if ( statementNodeType == ASTNode.WHILE_STATEMENT )
+        {
+            CastToAndVisit.whileStatement( statement, this.obfuscationInfo );
+        } else if ( statementNodeType == ASTNode.DO_STATEMENT )
+        {
+            CastToAndVisit.doWhileStatement( statement, this.obfuscationInfo );
+        } else if ( statementNodeType == ASTNode.SWITCH_STATEMENT )
+        {
+            CastToAndVisit.switchStatement( statement, this.obfuscationInfo );
         } else
         {
             this.logger.debug( "Not mapped yet" );
