@@ -1,38 +1,23 @@
 package test;
 
-public class KeybIntReader
+public class Test
 {
 
-    private String s1;
-    private String s2;
-    private int num = 0;
+    private int alpha[] = new int[ 2 ];
 
-    public void read ()
+    public void go ()
     {
-        BufferedReader br = new BufferedReader( new InputStreamReader(
-                System.in ) );
-
-        boolean cont = true;
-
-        while ( cont )
+        try
         {
-            System.out.print( "Enter an integer:" );
-            s1 = br.readLine();
-            StringTokenizer st = new StringTokenizer( s1 );
-            s2 = "";
-
-            while ( cont && st.hasMoreTokens() )
-            {
-                try
-                {
-                    s2 = st.nextToken();
-                    num = Integer.parseInt( s2 );
-                    cont = false;
-                } catch ( NumberFormatException n )
-                {
-                    System.out.println( "The value in \"" + s2 + "\" is not an integer" );
-                }
-            }
+            System.out.println( "Access element three :" + alpha[ 3 ] );
+        } catch ( ArrayIndexOutOfBoundsException e )
+        {
+            System.out.println( "Exception thrown  :" + e );
+        } finally
+        {
+            alpha[ 0 ] = 6;
+            System.out.println( "First element value: " + alpha[ 0 ] );
+            System.out.println( "The finally statement is executed" );
         }
     }
 }

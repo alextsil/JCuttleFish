@@ -1,7 +1,9 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.ModifyAst;
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.Expression;
 import pojo.ObfuscationInfo;
 import util.CastToAndVisit;
 
@@ -33,20 +35,10 @@ public class AssignmentVisitor extends ASTVisitor
             CastToAndVisit.fieldAccess( expression, this.obfuscationInfo );
         } else if ( expressionNodeType == ASTNode.SIMPLE_NAME )
         {
-            SimpleName simpleName = ( SimpleName )expression;
-            IVariableBinding varBinding = ( IVariableBinding )simpleName.resolveBinding();
-            if ( varBinding.isField() )
-            {
-                ModifyAst.renameSimpleName( simpleName, this.obfuscationInfo.getOriginalVarSimpleName(),
-                        this.obfuscationInfo.getObfuscatedVarName() );
-                ModifyAst.thisifyName( this.obfuscationInfo.getAst(), simpleName );
-            }
+            CastToAndVisit.simpleName( expression, this.obfuscationInfo );
         } else if ( expressionNodeType == ASTNode.ARRAY_ACCESS )
         {
-            ArrayAccess arrayAccess = ( ArrayAccess )expression;
-            FieldAccess fieldAccess = ( FieldAccess )arrayAccess.getArray();
-            ModifyAst.renameFieldAccessName( fieldAccess, this.obfuscationInfo.getOriginalVarSimpleName(),
-                    this.obfuscationInfo.getObfuscatedVarName() );
+            CastToAndVisit.arrayAccess( expression, this.obfuscationInfo );
         } else if ( expressionNodeType == ASTNode.QUALIFIED_NAME )
         {
             CastToAndVisit.qualifiedName( expression, this.obfuscationInfo );

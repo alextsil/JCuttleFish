@@ -23,8 +23,7 @@ public class ClassInstanceCreationVisitor extends ASTVisitor
     {
         //Rename and thisify arguments
         List<Object> arguments = classInstanceCreation.arguments();
-        ModifyAst.renameMethodInvocationArguments( arguments, this.obfuscationInfo.getOriginalVarSimpleName(),
-                this.obfuscationInfo.getObfuscatedVarName() );
+        ModifyAst.renameMethodInvocationArguments( arguments, this.obfuscationInfo );
         new MethodArgumentsVisitor( this.obfuscationInfo ).visit( arguments );
         return false;
     }

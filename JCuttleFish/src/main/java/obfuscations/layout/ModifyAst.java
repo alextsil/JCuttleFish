@@ -1,10 +1,10 @@
 package obfuscations.layout;
 
 import org.eclipse.jdt.core.dom.*;
-import util.OptionalUtils;
+import pojo.ObfuscationInfo;
+import util.CastToAndVisit;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public class ModifyAst
@@ -13,42 +13,29 @@ public class ModifyAst
     /**
      * Compares the given (method's) arguments to the given SimpleName and replaces the match found with obfuscatedName parameter.
      *
-     * @param arguments      The list of arguments to search into
-     * @param originalName   The SimpleName to search for
-     * @param obfuscatedName The String to replace a match
+     * @param arguments       The list of arguments to search into
+     * @param obfuscationInfo
      */
-    public static void renameMethodInvocationArguments ( List<Object> arguments, SimpleName originalName, String obfuscatedName )
+    public static void renameMethodInvocationArguments ( List<Object> arguments, ObfuscationInfo obfuscationInfo )
     {
         for ( Object argument : arguments )
         {
             if ( argument instanceof SimpleName )
             {
                 SimpleName simpleName = ( SimpleName )argument;
-                Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
-                if ( simpleName.getIdentifier().equals( originalName.getIdentifier() )
-                        && optionalIvb.map( IVariableBinding::isField ).orElse( false ) )
-                {
-                    simpleName.setIdentifier( obfuscatedName );
-                }
-            }
-            if ( argument instanceof FieldAccess )
+                CastToAndVisit.simpleName( simpleName, obfuscationInfo );
+            } else if ( argument instanceof FieldAccess )
             {
                 FieldAccess fieldAccess = ( FieldAccess )argument;
-                if ( fieldAccess.getName().getIdentifier().equals( originalName.getIdentifier() ) )
-                {
-                    fieldAccess.getName().setIdentifier( obfuscatedName );
-                }
-            }
-            if ( argument instanceof QualifiedName )
+                CastToAndVisit.fieldAccess( fieldAccess, obfuscationInfo );
+            } else if ( argument instanceof QualifiedName )
             {
                 QualifiedName qualifiedName = ( QualifiedName )argument;
-                SimpleName simpleName = ( SimpleName )qualifiedName.getQualifier();
-                Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
-                if ( simpleName.getIdentifier().equals( originalName.getIdentifier() )
-                        && optionalIvb.map( IVariableBinding::isField ).orElse( false ) )
-                {
-                    simpleName.setIdentifier( obfuscatedName );
-                }
+                CastToAndVisit.qualifiedName( qualifiedName, obfuscationInfo );
+            } else if ( argument instanceof InfixExpression )
+            {
+                InfixExpression infixExpression = ( InfixExpression )argument;
+                CastToAndVisit.infixExpression( infixExpression, obfuscationInfo );
             }
         }
     }
@@ -144,6 +131,10 @@ public class ModifyAst
         {
             SwitchStatement switchStatement = ( SwitchStatement )name.getParent();
             switchStatement.setExpression( generatedFieldAccess );
+        } else if ( nameParentNodeType == ASTNode.ARRAY_ACCESS )
+        {
+            ArrayAccess arrayAccess = ( ArrayAccess )name.getParent();
+            arrayAccess.setArray( generatedFieldAccess );
         } else
         {
             throw new RuntimeException( "Not mapped yet" );

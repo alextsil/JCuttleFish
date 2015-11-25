@@ -5,6 +5,8 @@ import obfuscations.layout.visitors.*;
 import org.eclipse.jdt.core.dom.*;
 import pojo.ObfuscationInfo;
 
+import java.util.Optional;
+
 
 public class CastToAndVisit
 {
@@ -108,6 +110,25 @@ public class CastToAndVisit
     {
         TryStatement tryStatement = ( TryStatement )node;
         new TryStatementVisitor( obfuscationInfo ).visit( tryStatement );
+    }
+
+    public static <V extends ASTNode> void arrayAccess ( V node, ObfuscationInfo obfuscationInfo )
+    {
+        ArrayAccess arrayAccess = ( ArrayAccess )node;
+        new ArrayAccessVisitor( obfuscationInfo ).visit( arrayAccess );
+    }
+
+    public static <V extends ASTNode> void simpleName ( V node, ObfuscationInfo obfuscationInfo )
+    {
+        SimpleName simpleName = ( SimpleName )node;
+        new SimpleNameVisitor( obfuscationInfo.getOriginalVarSimpleName(), obfuscationInfo.getObfuscatedVarName() )
+                .visit( simpleName );
+        Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
+        if ( simpleName.getIdentifier().equals( obfuscationInfo.getObfuscatedVarName() )
+                && optionalIvb.map( IVariableBinding::isField ).orElse( false ) )
+        {
+            ModifyAst.thisifyName( obfuscationInfo.getAst(), simpleName );
+        }
     }
 
 }
