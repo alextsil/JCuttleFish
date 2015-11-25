@@ -29,19 +29,4 @@ public class ObfuscationEnvironment
     {
         return this.classpath;
     }
-
-    public void setRelativeSourcePath ( String relativeSourcePath )
-    {
-        this.relativeSourcePath = relativeSourcePath;
-    }
-
-    public void setAbsoluteSourcePath ( String[] absoluteSourcePath )
-    {
-        this.absoluteSourcePath = absoluteSourcePath;
-    }
-
-    public void setClasspath ( String[] classpath )
-    {
-        this.classpath = classpath;
-    }
 }

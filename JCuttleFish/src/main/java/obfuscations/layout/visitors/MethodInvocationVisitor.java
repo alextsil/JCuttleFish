@@ -23,7 +23,7 @@ public class MethodInvocationVisitor extends ASTVisitor
     {
         if ( methodInvocation.getExpression() != null )
         {
-            new ExpressionVisitor( this.obfuscationInfo ).preVisit2( methodInvocation.getExpression() );
+            new ExpressionVisitor( this.obfuscationInfo ).visit( methodInvocation.getExpression() );
         }
 
         //Rename and thisify arguments

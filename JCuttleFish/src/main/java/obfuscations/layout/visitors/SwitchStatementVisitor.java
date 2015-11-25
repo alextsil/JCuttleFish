@@ -21,7 +21,7 @@ public class SwitchStatementVisitor extends ASTVisitor
     @Override
     public boolean visit ( SwitchStatement node )
     {
-        new ExpressionVisitor( this.obfuscationInfo ).preVisit2( node.getExpression() );
+        new ExpressionVisitor( this.obfuscationInfo ).visit( node.getExpression() );
 
         List<Statement> statements = node.statements();
         statements.stream().forEach( s -> new StatementVisitor( this.obfuscationInfo ).visit( s ) );

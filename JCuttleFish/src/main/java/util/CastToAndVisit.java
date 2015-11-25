@@ -118,6 +118,13 @@ public class CastToAndVisit
         new ArrayAccessVisitor( obfuscationInfo ).visit( arrayAccess );
     }
 
+    public static <V extends ASTNode> void constructorInvocation ( V node, ObfuscationInfo obfuscationInfo )
+    {
+        ConstructorInvocation constructorInvocation = ( ConstructorInvocation )node;
+        new ConstructorInvocationVisitor( obfuscationInfo ).visit( constructorInvocation );
+    }
+
+
     public static <V extends ASTNode> void simpleName ( V node, ObfuscationInfo obfuscationInfo )
     {
         SimpleName simpleName = ( SimpleName )node;

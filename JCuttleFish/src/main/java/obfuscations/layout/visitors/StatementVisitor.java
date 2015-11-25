@@ -40,7 +40,7 @@ public class StatementVisitor
         } else if ( statementNodeType == ASTNode.RETURN_STATEMENT )
         {
             expression = ( ( ReturnStatement )statement ).getExpression();
-            new ExpressionVisitor( this.obfuscationInfo ).preVisit2( expression );
+            new ExpressionVisitor( this.obfuscationInfo ).visit( expression );
         } else if ( statementNodeType == ASTNode.VARIABLE_DECLARATION_STATEMENT )
         {
             CastToAndVisit.variableDeclarationStatement( statement, this.obfuscationInfo );
@@ -65,6 +65,9 @@ public class StatementVisitor
         } else if ( statementNodeType == ASTNode.TRY_STATEMENT )
         {
             CastToAndVisit.tryStatement( statement, this.obfuscationInfo );
+        } else if ( statementNodeType == ASTNode.CONSTRUCTOR_INVOCATION )
+        {
+            CastToAndVisit.constructorInvocation( statement, this.obfuscationInfo );
         } else
         {
             this.logger.debug( "Not mapped yet" );

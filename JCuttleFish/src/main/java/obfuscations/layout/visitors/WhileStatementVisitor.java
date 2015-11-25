@@ -18,7 +18,7 @@ public class WhileStatementVisitor extends ASTVisitor
     @Override
     public boolean visit ( WhileStatement node )
     {
-        new ExpressionVisitor( this.obfuscationInfo ).preVisit2( node.getExpression() );
+        new ExpressionVisitor( this.obfuscationInfo ).visit( node.getExpression() );
         new StatementVisitor( this.obfuscationInfo ).visit( node.getBody() );
 
         return false;

@@ -20,7 +20,7 @@ public class VariableDeclarationStatementVisitor extends ASTVisitor
     public boolean visit ( VariableDeclarationStatement variableDeclarationStatement )
     {
         VariableDeclarationFragment variableDeclarationFragment = ( VariableDeclarationFragment )variableDeclarationStatement.fragments().get( 0 );
-        new ExpressionVisitor( this.obfuscationInfo ).preVisit2( variableDeclarationFragment.getInitializer() );
+        new ExpressionVisitor( this.obfuscationInfo ).visit( variableDeclarationFragment.getInitializer() );
 
         return false;
     }

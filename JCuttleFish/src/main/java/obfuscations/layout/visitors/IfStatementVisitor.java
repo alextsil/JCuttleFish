@@ -1,7 +1,6 @@
 package obfuscations.layout.visitors;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.Statement;
 import pojo.ObfuscationInfo;
@@ -20,13 +19,10 @@ public class IfStatementVisitor extends ASTVisitor
     @Override
     public boolean visit ( IfStatement ifStatement )
     {
-        new ExpressionVisitor( this.obfuscationInfo ).preVisit2( ifStatement.getExpression() );
+        new ExpressionVisitor( this.obfuscationInfo ).visit( ifStatement.getExpression() );
 
-        //Visit ThenStatement
-        Block thenStatementsBlock = ( Block )ifStatement.getThenStatement();
-        new BlockVisitor( this.obfuscationInfo ).visit( thenStatementsBlock );
+        new StatementVisitor( this.obfuscationInfo ).visit( ifStatement.getThenStatement() );
 
-        //Visit ElseStatement
         Statement elseStatement = ifStatement.getElseStatement();
         if ( elseStatement != null )
         {

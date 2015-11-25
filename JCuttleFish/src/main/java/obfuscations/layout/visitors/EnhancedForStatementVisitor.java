@@ -20,7 +20,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor
     @Override
     public boolean visit ( EnhancedForStatement enhancedForStatement )
     {
-        new ExpressionVisitor( this.obfuscationInfo ).preVisit2( enhancedForStatement.getExpression() );
+        new ExpressionVisitor( this.obfuscationInfo ).visit( enhancedForStatement.getExpression() );
 
         if ( enhancedForStatement.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
         {

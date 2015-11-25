@@ -54,7 +54,7 @@ public class MethodArgumentsVisitor
             } else if ( arguments.get( i ) instanceof CastExpression )
             {
                 CastExpression castExpression = ( CastExpression )arguments.get( i );
-                new ExpressionVisitor( this.obfuscationInfo ).preVisit2( castExpression.getExpression() );
+                new ExpressionVisitor( this.obfuscationInfo ).visit( castExpression.getExpression() );
             } else if ( arguments.get( i ) instanceof MethodInvocation )
             {
                 MethodInvocation methodInvocation = ( MethodInvocation )arguments.get( i );

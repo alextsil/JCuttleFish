@@ -135,6 +135,13 @@ public class ModifyAst
         {
             ArrayAccess arrayAccess = ( ArrayAccess )name.getParent();
             arrayAccess.setArray( generatedFieldAccess );
+        } else if ( nameParentNodeType == ASTNode.CONSTRUCTOR_INVOCATION )
+        {
+            ConstructorInvocation constructorInvocation = ( ConstructorInvocation )name.getParent();
+            if ( constructorInvocation.arguments().contains( name ) )
+            {
+                constructorInvocation.arguments().set( constructorInvocation.arguments().indexOf( name ), generatedFieldAccess );
+            }
         } else
         {
             throw new RuntimeException( "Not mapped yet" );

@@ -213,6 +213,17 @@ public class LayoutManagerTest
                         .getDocument().get() );
     }
 
+    @Test
+    public void testObfuscate_ArrayAccess ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/ArrayAccessOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/ArrayAccessObfuscated.java" );
+
+        assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
     //A "scratchpad" test
     @Test
     public void onthefly ()

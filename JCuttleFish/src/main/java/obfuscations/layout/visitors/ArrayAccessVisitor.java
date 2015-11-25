@@ -18,7 +18,7 @@ public class ArrayAccessVisitor extends ASTVisitor
     @Override
     public boolean visit ( ArrayAccess arrayAccess )
     {
-        new ExpressionVisitor( this.obfuscationInfo ).preVisit2( arrayAccess.getArray() );
+        new ExpressionVisitor( this.obfuscationInfo ).visit( arrayAccess.getArray() );
         return false;
     }
 }

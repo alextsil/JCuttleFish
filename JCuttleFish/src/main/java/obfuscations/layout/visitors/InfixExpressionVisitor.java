@@ -21,11 +21,11 @@ public class InfixExpressionVisitor extends ASTVisitor
     @Override
     public boolean visit ( InfixExpression infixExpression )
     {
-        new ExpressionVisitor( this.obfuscationInfo ).preVisit2( infixExpression.getLeftOperand() );
-        new ExpressionVisitor( this.obfuscationInfo ).preVisit2( infixExpression.getRightOperand() );
+        new ExpressionVisitor( this.obfuscationInfo ).visit( infixExpression.getLeftOperand() );
+        new ExpressionVisitor( this.obfuscationInfo ).visit( infixExpression.getRightOperand() );
 
         List<Expression> extendExpressions = infixExpression.extendedOperands();
-        extendExpressions.stream().forEach( e -> new ExpressionVisitor( this.obfuscationInfo ).preVisit2( e ) );
+        extendExpressions.stream().forEach( e -> new ExpressionVisitor( this.obfuscationInfo ).visit( e ) );
 
         return false;
     }

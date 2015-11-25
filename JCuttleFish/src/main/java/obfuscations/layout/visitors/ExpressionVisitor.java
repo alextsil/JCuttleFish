@@ -17,8 +17,7 @@ public class ExpressionVisitor extends ASTVisitor
         this.obfuscationInfo = obfuscationInfo;
     }
 
-    @Override
-    public boolean preVisit2 ( ASTNode expression )
+    public boolean visit ( ASTNode expression )
     {
         int expressionNodeType = expression.getNodeType();
         if ( expressionNodeType == ASTNode.INFIX_EXPRESSION )
@@ -40,7 +39,7 @@ public class ExpressionVisitor extends ASTVisitor
         } else if ( expressionNodeType == ASTNode.PARENTHESIZED_EXPRESSION )
         {
             ParenthesizedExpression parenthesizedExpression = ( ParenthesizedExpression )expression;
-            new ExpressionVisitor( this.obfuscationInfo ).preVisit2( parenthesizedExpression.getExpression() );
+            new ExpressionVisitor( this.obfuscationInfo ).visit( parenthesizedExpression.getExpression() );
         } else if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
         {
             CastToAndVisit.methodInvocation( expression, this.obfuscationInfo );

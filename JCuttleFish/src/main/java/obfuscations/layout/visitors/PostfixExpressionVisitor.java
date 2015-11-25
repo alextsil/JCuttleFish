@@ -18,7 +18,7 @@ public class PostfixExpressionVisitor extends ASTVisitor
     @Override
     public boolean visit ( PostfixExpression node )
     {
-        new ExpressionVisitor( this.obfuscationInfo ).preVisit2( node.getOperand() );
+        new ExpressionVisitor( this.obfuscationInfo ).visit( node.getOperand() );
         return false;
     }
 }
