@@ -1,5 +1,6 @@
 package obfuscations.layout;
 
+import obfuscations.layout.visitors.MethodDeclarationVisitor;
 import obfuscations.layout.visitors.StatementVisitor;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
@@ -43,6 +44,8 @@ public class LayoutManager
                     {
                         List<Statement> statements = methodDeclaration.getBody().statements();
                         statements.stream().forEach( s -> new StatementVisitor( obfuscationInfo ).visit( s ) );
+
+                        new MethodDeclarationVisitor( obfuscationInfo ).visit( methodDeclaration );
                     }
                     //Change declaration name after modifying all usages.
                     originalVdf.getName().setIdentifier( obfuscatedVarName );

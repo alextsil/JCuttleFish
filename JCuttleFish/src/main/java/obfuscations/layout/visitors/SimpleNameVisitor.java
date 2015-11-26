@@ -6,19 +6,18 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pojo.ObfuscationInfo;
 
 
 public class SimpleNameVisitor extends ASTVisitor
 {
 
-    private final SimpleName originalVarSimpleName;
-    private final String obfuscatedVarName;
+    private final ObfuscationInfo obfuscationInfo;
     private final Logger logger = LoggerFactory.getLogger( SimpleNameVisitor.class );
 
-    public SimpleNameVisitor ( SimpleName originalVarSimpleName, String obfuscatedVarName )
+    public SimpleNameVisitor ( ObfuscationInfo obfuscationInfo )
     {
-        this.originalVarSimpleName = originalVarSimpleName;
-        this.obfuscatedVarName = obfuscatedVarName;
+        this.obfuscationInfo = obfuscationInfo;
     }
 
     @Override
@@ -32,7 +31,8 @@ public class SimpleNameVisitor extends ASTVisitor
         }
         if ( varBinding.isField() )
         {
-            ModifyAst.renameSimpleName( simpleName, this.originalVarSimpleName, this.obfuscatedVarName );
+            ModifyAst.renameSimpleName( simpleName, this.obfuscationInfo.getOriginalVarSimpleName(),
+                    this.obfuscationInfo.getObfuscatedVarName() );
         }
         return false;
     }

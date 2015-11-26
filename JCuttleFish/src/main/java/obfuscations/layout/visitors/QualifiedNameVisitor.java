@@ -1,9 +1,10 @@
 package obfuscations.layout.visitors;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.QualifiedName;
-import org.eclipse.jdt.core.dom.SimpleName;
 import pojo.ObfuscationInfo;
+import util.CastToAndVisit;
 
 
 public class QualifiedNameVisitor extends ASTVisitor
@@ -19,8 +20,15 @@ public class QualifiedNameVisitor extends ASTVisitor
     @Override
     public boolean visit ( QualifiedName qualifiedName )
     {
-        new SimpleNameVisitor( this.obfuscationInfo.getOriginalVarSimpleName(),
-                this.obfuscationInfo.getObfuscatedVarName() ).visit( ( SimpleName )qualifiedName.getQualifier() );
+        //visit qualifier
+        Name qualifier = qualifiedName.getQualifier();
+        if ( qualifier.isSimpleName() )
+        {
+            CastToAndVisit.simpleName( qualifier, this.obfuscationInfo );
+        } else if ( qualifier.isQualifiedName() )
+        {
+            CastToAndVisit.qualifiedName( qualifier, this.obfuscationInfo );
+        }
         return false;
     }
 }

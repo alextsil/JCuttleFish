@@ -124,11 +124,10 @@ public class CastToAndVisit
         new ConstructorInvocationVisitor( obfuscationInfo ).visit( constructorInvocation );
     }
 
-
     public static <V extends ASTNode> void simpleName ( V node, ObfuscationInfo obfuscationInfo )
     {
         SimpleName simpleName = ( SimpleName )node;
-        new SimpleNameVisitor( obfuscationInfo.getOriginalVarSimpleName(), obfuscationInfo.getObfuscatedVarName() )
+        new SimpleNameVisitor( obfuscationInfo )
                 .visit( simpleName );
         Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
         if ( simpleName.getIdentifier().equals( obfuscationInfo.getObfuscatedVarName() )

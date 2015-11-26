@@ -142,9 +142,10 @@ public class ModifyAst
             {
                 constructorInvocation.arguments().set( constructorInvocation.arguments().indexOf( name ), generatedFieldAccess );
             }
+            //TODO : qualified name
         } else
         {
-            throw new RuntimeException( "Not mapped yet" );
+            //throw new RuntimeException( "Not mapped yet" );
         }
     }
 
