@@ -1,20 +1,22 @@
 package obfuscations.layout.visitors;
 
+import obfuscations.layout.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.QualifiedName;
-import pojo.ObfuscationInfo;
 import util.CastToAndVisit;
+
+import java.util.Collection;
 
 
 public class QualifiedNameVisitor extends ASTVisitor
 {
 
-    private final ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
 
-    public QualifiedNameVisitor ( ObfuscationInfo obfuscationInfo )
+    public QualifiedNameVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
@@ -24,10 +26,10 @@ public class QualifiedNameVisitor extends ASTVisitor
         Name qualifier = qualifiedName.getQualifier();
         if ( qualifier.isSimpleName() )
         {
-            CastToAndVisit.simpleName( qualifier, this.obfuscationInfo );
+            CastToAndVisit.simpleName( qualifier, this.callbacks );
         } else if ( qualifier.isQualifiedName() )
         {
-            CastToAndVisit.qualifiedName( qualifier, this.obfuscationInfo );
+            CastToAndVisit.qualifiedName( qualifier, this.callbacks );
         }
         return false;
     }

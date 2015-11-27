@@ -1,39 +1,37 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.ModifyAst;
+import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.SimpleNameNodeFoundCallBack;
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.ObfuscationInfo;
+
+import java.util.Collection;
+import java.util.Optional;
 
 
 public class SimpleNameVisitor extends ASTVisitor
 {
 
-    private final ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
     private final Logger logger = LoggerFactory.getLogger( SimpleNameVisitor.class );
 
-    public SimpleNameVisitor ( ObfuscationInfo obfuscationInfo )
+    public SimpleNameVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
     public boolean visit ( SimpleName simpleName )
     {
-        IVariableBinding varBinding = ( IVariableBinding )simpleName.resolveBinding();
-        if ( varBinding == null )
-        {
-            this.logger.info( "Variable binding is null. Returning." );
-            return false;
-        }
-        if ( varBinding.isField() )
-        {
-            ModifyAst.renameSimpleName( simpleName, this.obfuscationInfo.getOriginalVarSimpleName(),
-                    this.obfuscationInfo.getObfuscatedVarName() );
-        }
+        Optional<SimpleNameNodeFoundCallBack> callBackOptional =
+                this.callbacks.stream()
+                        .filter( c -> c instanceof SimpleNameNodeFoundCallBack )
+                        .map( c -> ( SimpleNameNodeFoundCallBack )c ).findFirst();
+
+        SimpleNameNodeFoundCallBack callBack = callBackOptional.orElseThrow( RuntimeException::new );
+        callBack.addToCollection( simpleName );
         return false;
     }
 }

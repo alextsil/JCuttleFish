@@ -1,24 +1,26 @@
 package obfuscations.layout.visitors;
 
+import obfuscations.layout.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.ObfuscationInfo;
 import util.CastToAndVisit;
+
+import java.util.Collection;
 
 
 public class PrefixExpressionVisitor extends ASTVisitor
 {
 
-    private final ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
     private final Logger logger = LoggerFactory.getLogger( PrefixExpressionVisitor.class );
 
-    public PrefixExpressionVisitor ( ObfuscationInfo obfuscationInfo )
+    public PrefixExpressionVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
@@ -30,11 +32,11 @@ public class PrefixExpressionVisitor extends ASTVisitor
             MethodInvocation methodInvocation = ( MethodInvocation )prefixExpression.getOperand();
             if ( methodInvocation.getExpression() != null )
             {
-                CastToAndVisit.methodInvocation( methodInvocation, this.obfuscationInfo );
+                CastToAndVisit.methodInvocation( methodInvocation, this.callbacks );
             }
         } else if ( prefixExpressionOperandNodeType == ASTNode.QUALIFIED_NAME )
         {
-            CastToAndVisit.qualifiedName( prefixExpression.getOperand(), this.obfuscationInfo );
+            CastToAndVisit.qualifiedName( prefixExpression.getOperand(), this.callbacks );
         }
         return false;
     }

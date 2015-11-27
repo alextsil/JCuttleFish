@@ -1,26 +1,28 @@
 package obfuscations.layout.visitors;
 
+import obfuscations.layout.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
-import pojo.ObfuscationInfo;
+
+import java.util.Collection;
 
 
 public class VariableDeclarationStatementVisitor extends ASTVisitor
 {
 
-    private final ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
 
-    public VariableDeclarationStatementVisitor ( ObfuscationInfo obfuscationInfo )
+    public VariableDeclarationStatementVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
     public boolean visit ( VariableDeclarationStatement variableDeclarationStatement )
     {
         VariableDeclarationFragment variableDeclarationFragment = ( VariableDeclarationFragment )variableDeclarationStatement.fragments().get( 0 );
-        new ExpressionVisitor( this.obfuscationInfo ).visit( variableDeclarationFragment.getInitializer() );
+        new ExpressionVisitor( this.callbacks ).visit( variableDeclarationFragment.getInitializer() );
 
         return false;
     }

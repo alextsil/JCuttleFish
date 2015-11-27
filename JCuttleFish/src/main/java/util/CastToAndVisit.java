@@ -1,140 +1,134 @@
 package util;
 
-import obfuscations.layout.ModifyAst;
+import obfuscations.layout.AstNodeFoundCallback;
 import obfuscations.layout.visitors.*;
 import org.eclipse.jdt.core.dom.*;
-import pojo.ObfuscationInfo;
 
-import java.util.Optional;
+import java.util.Collection;
 
 
 public class CastToAndVisit
 {
 
-    public static <V extends ASTNode> void methodInvocation ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void methodInvocation ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         MethodInvocation methodInvocation = ( MethodInvocation )node;
-        new MethodInvocationVisitor( obfuscationInfo ).visit( methodInvocation );
+        new MethodInvocationVisitor( callbacks ).visit( methodInvocation );
     }
 
-    public static <V extends ASTNode> void fieldAccess ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void fieldAccess ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         FieldAccess fieldAccess = ( FieldAccess )node;
-        new FieldAccessVisitor( obfuscationInfo ).visit( fieldAccess );
+        new FieldAccessVisitor( callbacks ).visit( fieldAccess );
     }
 
-    public static <V extends ASTNode> void qualifiedName ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void qualifiedName ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         QualifiedName qualifiedName = ( QualifiedName )node;
-        new QualifiedNameVisitor( obfuscationInfo ).visit( qualifiedName );
-
-        if ( qualifiedName.getQualifier().getFullyQualifiedName().equals( obfuscationInfo.getObfuscatedVarName() ) )
-        {
-            ModifyAst.thisifyName( obfuscationInfo.getAst(), qualifiedName );
-        }
+        new QualifiedNameVisitor( callbacks ).visit( qualifiedName );
     }
 
-    public static <V extends ASTNode> void variableDeclarationStatement ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void variableDeclarationStatement ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         VariableDeclarationStatement vds = ( VariableDeclarationStatement )node;
-        new VariableDeclarationStatementVisitor( obfuscationInfo ).visit( vds );
+        new VariableDeclarationStatementVisitor( callbacks ).visit( vds );
     }
 
-    public static <V extends ASTNode> void enhancedForStatement ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void enhancedForStatement ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         EnhancedForStatement enhancedForStatement = ( EnhancedForStatement )node;
-        new EnhancedForStatementVisitor( obfuscationInfo ).visit( enhancedForStatement );
+        new EnhancedForStatementVisitor( callbacks ).visit( enhancedForStatement );
     }
 
-    public static <V extends ASTNode> void ifStatement ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void ifStatement ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         IfStatement ifStatement = ( IfStatement )node;
-        new IfStatementVisitor( obfuscationInfo ).visit( ifStatement );
+        new IfStatementVisitor( callbacks ).visit( ifStatement );
     }
 
-    public static <V extends ASTNode> void assignment ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void assignment ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         Assignment assignment = ( Assignment )node;
-        new AssignmentVisitor( obfuscationInfo ).visit( assignment );
+        new AssignmentVisitor( callbacks ).visit( assignment );
     }
 
-    public static <V extends ASTNode> void infixExpression ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void infixExpression ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         InfixExpression infixExpression = ( InfixExpression )node;
-        new InfixExpressionVisitor( obfuscationInfo ).visit( infixExpression );
+        new InfixExpressionVisitor( callbacks ).visit( infixExpression );
     }
 
-    public static <V extends ASTNode> void prefixExpression ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void prefixExpression ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         PrefixExpression prefixExpression = ( PrefixExpression )node;
-        new PrefixExpressionVisitor( obfuscationInfo ).visit( prefixExpression );
+        new PrefixExpressionVisitor( callbacks ).visit( prefixExpression );
     }
 
-    public static <V extends ASTNode> void block ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void block ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         Block block = ( Block )node;
-        new BlockVisitor( obfuscationInfo ).visit( block );
+        new BlockVisitor( callbacks ).visit( block );
     }
 
-    public static <V extends ASTNode> void postfixExpression ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void postfixExpression ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         PostfixExpression postfixExpression = ( PostfixExpression )node;
-        new PostfixExpressionVisitor( obfuscationInfo ).visit( postfixExpression );
+        new PostfixExpressionVisitor( callbacks ).visit( postfixExpression );
     }
 
-    public static <V extends ASTNode> void whileStatement ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void whileStatement ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         WhileStatement whileStatement = ( WhileStatement )node;
-        new WhileStatementVisitor( obfuscationInfo ).visit( whileStatement );
+        new WhileStatementVisitor( callbacks ).visit( whileStatement );
     }
 
-    public static <V extends ASTNode> void doWhileStatement ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void doWhileStatement ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         DoStatement doStatement = ( DoStatement )node;
-        new DoStatementVisitor( obfuscationInfo ).visit( doStatement );
+        new DoStatementVisitor( callbacks ).visit( doStatement );
     }
 
-    public static <V extends ASTNode> void switchStatement ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void switchStatement ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         SwitchStatement switchStatement = ( SwitchStatement )node;
-        new SwitchStatementVisitor( obfuscationInfo ).visit( switchStatement );
+        new SwitchStatementVisitor( callbacks ).visit( switchStatement );
     }
 
-    public static <V extends ASTNode> void classInstanceCreation ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void classInstanceCreation ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation )node;
-        new ClassInstanceCreationVisitor( obfuscationInfo ).visit( classInstanceCreation );
+        new ClassInstanceCreationVisitor( callbacks ).visit( classInstanceCreation );
     }
 
-    public static <V extends ASTNode> void tryStatement ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void tryStatement ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         TryStatement tryStatement = ( TryStatement )node;
-        new TryStatementVisitor( obfuscationInfo ).visit( tryStatement );
+        new TryStatementVisitor( callbacks ).visit( tryStatement );
     }
 
-    public static <V extends ASTNode> void arrayAccess ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void arrayAccess ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         ArrayAccess arrayAccess = ( ArrayAccess )node;
-        new ArrayAccessVisitor( obfuscationInfo ).visit( arrayAccess );
+        new ArrayAccessVisitor( callbacks ).visit( arrayAccess );
     }
 
-    public static <V extends ASTNode> void constructorInvocation ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void constructorInvocation ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         ConstructorInvocation constructorInvocation = ( ConstructorInvocation )node;
-        new ConstructorInvocationVisitor( obfuscationInfo ).visit( constructorInvocation );
+        new ConstructorInvocationVisitor( callbacks ).visit( constructorInvocation );
     }
 
-    public static <V extends ASTNode> void simpleName ( V node, ObfuscationInfo obfuscationInfo )
+    public static <V extends ASTNode> void simpleName ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         SimpleName simpleName = ( SimpleName )node;
-        new SimpleNameVisitor( obfuscationInfo )
+        new SimpleNameVisitor( callbacks )
                 .visit( simpleName );
-        Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
-        if ( simpleName.getIdentifier().equals( obfuscationInfo.getObfuscatedVarName() )
-                && optionalIvb.map( IVariableBinding::isField ).orElse( false ) )
-        {
-            ModifyAst.thisifyName( obfuscationInfo.getAst(), simpleName );
-        }
+//        Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
+//        if ( simpleName.getIdentifier().equals( callbacks.getObfuscatedVarName() )
+//                && optionalIvb.map( IVariableBinding::isField ).orElse( false ) )
+//        {
+//            ModifyAst.thisifyName( callbacks.getAst(), simpleName );
+//        }
     }
 
 }

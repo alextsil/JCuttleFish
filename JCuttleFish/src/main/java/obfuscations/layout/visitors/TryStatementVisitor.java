@@ -1,34 +1,35 @@
 package obfuscations.layout.visitors;
 
+import obfuscations.layout.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.TryStatement;
-import pojo.ObfuscationInfo;
 
+import java.util.Collection;
 import java.util.List;
 
 
 public class TryStatementVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
 
-    public TryStatementVisitor ( ObfuscationInfo obfuscationInfo )
+    public TryStatementVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
     public boolean visit ( TryStatement tryStatement )
     {
-        new BlockVisitor( this.obfuscationInfo ).visit( tryStatement.getBody() );
+        new BlockVisitor( this.callbacks ).visit( tryStatement.getBody() );
 
         List<CatchClause> catchClauses = tryStatement.catchClauses();
-        catchClauses.stream().forEach( c -> new BlockVisitor( this.obfuscationInfo ).visit( c.getBody() ) );
+        catchClauses.stream().forEach( c -> new BlockVisitor( this.callbacks ).visit( c.getBody() ) );
 
         if ( tryStatement.getFinally() != null )
         {
-            new BlockVisitor( this.obfuscationInfo ).visit( tryStatement.getFinally() );
+            new BlockVisitor( this.callbacks ).visit( tryStatement.getFinally() );
         }
 
         return false;

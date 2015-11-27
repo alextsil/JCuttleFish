@@ -1,32 +1,34 @@
 package obfuscations.layout.visitors;
 
+import obfuscations.layout.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.Statement;
-import pojo.ObfuscationInfo;
+
+import java.util.Collection;
 
 
 public class IfStatementVisitor extends ASTVisitor
 {
 
-    private final ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
 
-    public IfStatementVisitor ( ObfuscationInfo obfuscationInfo )
+    public IfStatementVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
     public boolean visit ( IfStatement ifStatement )
     {
-        new ExpressionVisitor( this.obfuscationInfo ).visit( ifStatement.getExpression() );
+        new ExpressionVisitor( this.callbacks ).visit( ifStatement.getExpression() );
 
-        new StatementVisitor( this.obfuscationInfo ).visit( ifStatement.getThenStatement() );
+        new StatementVisitor( this.callbacks ).visit( ifStatement.getThenStatement() );
 
         Statement elseStatement = ifStatement.getElseStatement();
         if ( elseStatement != null )
         {
-            new StatementVisitor( this.obfuscationInfo ).visit( elseStatement );
+            new StatementVisitor( this.callbacks ).visit( elseStatement );
         }
         return false;
     }

@@ -1,21 +1,23 @@
 package obfuscations.layout.visitors;
 
+import obfuscations.layout.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.ObfuscationInfo;
 import util.CastToAndVisit;
+
+import java.util.Collection;
 
 
 public class StatementVisitor
 {
 
-    private final ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
     private final Logger logger = LoggerFactory.getLogger( StatementVisitor.class );
 
-    public StatementVisitor ( ObfuscationInfo obfuscationInfo )
+    public StatementVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     public boolean visit ( Statement statement )
@@ -29,49 +31,49 @@ public class StatementVisitor
             int expressionNodeType = expression.getNodeType();
             if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
             {
-                CastToAndVisit.methodInvocation( expression, this.obfuscationInfo );
+                CastToAndVisit.methodInvocation( expression, this.callbacks );
             } else if ( expressionNodeType == ASTNode.ASSIGNMENT )
             {
-                CastToAndVisit.assignment( expression, this.obfuscationInfo );
+                CastToAndVisit.assignment( expression, this.callbacks );
             } else if ( expressionNodeType == ASTNode.POSTFIX_EXPRESSION )
             {
-                CastToAndVisit.postfixExpression( expression, this.obfuscationInfo );
+                CastToAndVisit.postfixExpression( expression, this.callbacks );
             }
         } else if ( statementNodeType == ASTNode.RETURN_STATEMENT )
         {
             expression = ( ( ReturnStatement )statement ).getExpression();
-            new ExpressionVisitor( this.obfuscationInfo ).visit( expression );
+            new ExpressionVisitor( this.callbacks ).visit( expression );
         } else if ( statementNodeType == ASTNode.VARIABLE_DECLARATION_STATEMENT )
         {
-            CastToAndVisit.variableDeclarationStatement( statement, this.obfuscationInfo );
+            CastToAndVisit.variableDeclarationStatement( statement, this.callbacks );
         } else if ( statementNodeType == ASTNode.IF_STATEMENT )
         {
-            CastToAndVisit.ifStatement( statement, this.obfuscationInfo );
+            CastToAndVisit.ifStatement( statement, this.callbacks );
         } else if ( statementNodeType == ASTNode.BLOCK )
         {
-            CastToAndVisit.block( statement, this.obfuscationInfo );
+            CastToAndVisit.block( statement, this.callbacks );
         } else if ( statementNodeType == ASTNode.ENHANCED_FOR_STATEMENT )
         {
-            CastToAndVisit.enhancedForStatement( statement, this.obfuscationInfo );
+            CastToAndVisit.enhancedForStatement( statement, this.callbacks );
         } else if ( statementNodeType == ASTNode.WHILE_STATEMENT )
         {
-            CastToAndVisit.whileStatement( statement, this.obfuscationInfo );
+            CastToAndVisit.whileStatement( statement, this.callbacks );
         } else if ( statementNodeType == ASTNode.DO_STATEMENT )
         {
-            CastToAndVisit.doWhileStatement( statement, this.obfuscationInfo );
+            CastToAndVisit.doWhileStatement( statement, this.callbacks );
         } else if ( statementNodeType == ASTNode.SWITCH_STATEMENT )
         {
-            CastToAndVisit.switchStatement( statement, this.obfuscationInfo );
+            CastToAndVisit.switchStatement( statement, this.callbacks );
         } else if ( statementNodeType == ASTNode.TRY_STATEMENT )
         {
-            CastToAndVisit.tryStatement( statement, this.obfuscationInfo );
+            CastToAndVisit.tryStatement( statement, this.callbacks );
         } else if ( statementNodeType == ASTNode.CONSTRUCTOR_INVOCATION )
         {
-            CastToAndVisit.constructorInvocation( statement, this.obfuscationInfo );
+            CastToAndVisit.constructorInvocation( statement, this.callbacks );
         } else
         {
             this.logger.debug( "Not mapped yet" );
         }
-        return false;
+        return true;
     }
 }

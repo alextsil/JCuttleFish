@@ -1,21 +1,22 @@
 package obfuscations.layout.visitors;
 
+import obfuscations.layout.AstNodeFoundCallback;
 import obfuscations.layout.ModifyAst;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
-import pojo.ObfuscationInfo;
 
+import java.util.Collection;
 import java.util.List;
 
 
 public class ClassInstanceCreationVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
 
-    public ClassInstanceCreationVisitor ( ObfuscationInfo obfuscationInfo )
+    public ClassInstanceCreationVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
@@ -23,8 +24,8 @@ public class ClassInstanceCreationVisitor extends ASTVisitor
     {
         //Rename and thisify arguments
         List<Object> arguments = classInstanceCreation.arguments();
-        ModifyAst.renameMethodInvocationArguments( arguments, this.obfuscationInfo );
-        new MethodArgumentsVisitor( this.obfuscationInfo ).visit( arguments );
+        ModifyAst.renameMethodInvocationArguments( arguments, this.callbacks );
+        new MethodArgumentsVisitor( this.callbacks ).visit( arguments );
         return false;
     }
 }

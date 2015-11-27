@@ -1,38 +1,34 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.ModifyAst;
+import obfuscations.layout.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.*;
-import pojo.ObfuscationInfo;
 
+import java.util.Collection;
 import java.util.List;
 
 
 public class EnhancedForStatementVisitor extends ASTVisitor
 {
 
-    private final ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
 
-    public EnhancedForStatementVisitor ( ObfuscationInfo obfuscationInfo )
+    public EnhancedForStatementVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
     public boolean visit ( EnhancedForStatement enhancedForStatement )
     {
-        new ExpressionVisitor( this.obfuscationInfo ).visit( enhancedForStatement.getExpression() );
+        new ExpressionVisitor( this.callbacks ).visit( enhancedForStatement.getExpression() );
 
         if ( enhancedForStatement.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
         {
             SimpleName simpleName = ( SimpleName )enhancedForStatement.getExpression();
-            if ( simpleName.getIdentifier().equals( this.obfuscationInfo.getObfuscatedVarName() ) )
-            {
-                ModifyAst.thisifyName( this.obfuscationInfo.getAst(), simpleName );
-            }
         }
 
         List<Statement> statements = ( ( Block )enhancedForStatement.getBody() ).statements();
-        statements.stream().forEach( s -> new StatementVisitor( this.obfuscationInfo ).visit( s ) );
+        statements.stream().forEach( s -> new StatementVisitor( this.callbacks ).visit( s ) );
         return false;
     }
 }

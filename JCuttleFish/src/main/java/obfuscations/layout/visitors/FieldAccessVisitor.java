@@ -1,18 +1,19 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.ModifyAst;
+import obfuscations.layout.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.*;
-import pojo.ObfuscationInfo;
+
+import java.util.Collection;
 
 
 public class FieldAccessVisitor extends ASTVisitor
 {
 
-    private final ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
 
-    public FieldAccessVisitor ( ObfuscationInfo obfuscationInfo )
+    public FieldAccessVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
@@ -24,17 +25,13 @@ public class FieldAccessVisitor extends ASTVisitor
             if ( methodInvocation.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )
             {
                 SimpleName simpleName = ( SimpleName )methodInvocation.getExpression();
-                ModifyAst.renameSimpleName( ( SimpleName )methodInvocation.getExpression(), this.obfuscationInfo.getOriginalVarSimpleName(),
-                        this.obfuscationInfo.getObfuscatedVarName() );
-                if ( simpleName.getIdentifier().equals( this.obfuscationInfo.getObfuscatedVarName() ) )
-                {
-                    ModifyAst.thisifyName( this.obfuscationInfo.getAst(), ( SimpleName )methodInvocation.getExpression() );
-                }
+                new SimpleNameVisitor( this.callbacks ).visit( simpleName );
             }
         } else
         {
-            ModifyAst.renameFieldAccessName( fieldAccess, this.obfuscationInfo.getOriginalVarSimpleName(),
-                    this.obfuscationInfo.getObfuscatedVarName() );
+//            ModifyAst.renameFieldAccessName( fieldAccess, this.obfuscationInfo.getOriginalVarSimpleName(),
+//                    this.obfuscationInfo.getObfuscatedVarName() );
+            //maybe register field access visitor for this case
         }
         return true;
     }

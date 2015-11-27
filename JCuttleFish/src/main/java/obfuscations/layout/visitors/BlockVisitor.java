@@ -1,28 +1,29 @@
 package obfuscations.layout.visitors;
 
+import obfuscations.layout.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.Statement;
-import pojo.ObfuscationInfo;
 
+import java.util.Collection;
 import java.util.List;
 
 
 public class BlockVisitor extends ASTVisitor
 {
 
-    private final ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
 
-    public BlockVisitor ( ObfuscationInfo obfuscationInfo )
+    public BlockVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
     public boolean visit ( Block block )
     {
         List<Statement> statements = block.statements();
-        statements.stream().forEach( s -> new StatementVisitor( this.obfuscationInfo ).visit( s ) );
+        statements.stream().forEach( s -> new StatementVisitor( this.callbacks ).visit( s ) );
 
         return false;
     }

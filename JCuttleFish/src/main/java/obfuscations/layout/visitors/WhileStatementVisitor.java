@@ -1,25 +1,27 @@
 package obfuscations.layout.visitors;
 
+import obfuscations.layout.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.WhileStatement;
-import pojo.ObfuscationInfo;
+
+import java.util.Collection;
 
 
 public class WhileStatementVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
 
-    public WhileStatementVisitor ( ObfuscationInfo obfuscationInfo )
+    public WhileStatementVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
     public boolean visit ( WhileStatement node )
     {
-        new ExpressionVisitor( this.obfuscationInfo ).visit( node.getExpression() );
-        new StatementVisitor( this.obfuscationInfo ).visit( node.getBody() );
+        new ExpressionVisitor( this.callbacks ).visit( node.getExpression() );
+        new StatementVisitor( this.callbacks ).visit( node.getBody() );
 
         return false;
     }

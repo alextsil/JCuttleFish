@@ -1,31 +1,32 @@
 package obfuscations.layout.visitors;
 
+import obfuscations.layout.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.InfixExpression;
-import pojo.ObfuscationInfo;
 
+import java.util.Collection;
 import java.util.List;
 
 
 public class InfixExpressionVisitor extends ASTVisitor
 {
 
-    private final ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
 
-    public InfixExpressionVisitor ( ObfuscationInfo obfuscationInfo )
+    public InfixExpressionVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
     public boolean visit ( InfixExpression infixExpression )
     {
-        new ExpressionVisitor( this.obfuscationInfo ).visit( infixExpression.getLeftOperand() );
-        new ExpressionVisitor( this.obfuscationInfo ).visit( infixExpression.getRightOperand() );
+        new ExpressionVisitor( this.callbacks ).visit( infixExpression.getLeftOperand() );
+        new ExpressionVisitor( this.callbacks ).visit( infixExpression.getRightOperand() );
 
         List<Expression> extendExpressions = infixExpression.extendedOperands();
-        extendExpressions.stream().forEach( e -> new ExpressionVisitor( this.obfuscationInfo ).visit( e ) );
+        extendExpressions.stream().forEach( e -> new ExpressionVisitor( this.callbacks ).visit( e ) );
 
         return false;
     }

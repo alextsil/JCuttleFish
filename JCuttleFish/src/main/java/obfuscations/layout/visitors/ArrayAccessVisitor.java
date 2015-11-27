@@ -1,24 +1,26 @@
 package obfuscations.layout.visitors;
 
+import obfuscations.layout.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ArrayAccess;
-import pojo.ObfuscationInfo;
+
+import java.util.Collection;
 
 
 public class ArrayAccessVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
 
-    public ArrayAccessVisitor ( ObfuscationInfo obfuscationInfo )
+    public ArrayAccessVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
     public boolean visit ( ArrayAccess arrayAccess )
     {
-        new ExpressionVisitor( this.obfuscationInfo ).visit( arrayAccess.getArray() );
+        new ExpressionVisitor( this.callbacks ).visit( arrayAccess.getArray() );
         return false;
     }
 }
