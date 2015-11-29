@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
@@ -21,6 +21,8 @@ public class MethodInvocationVisitor extends ASTVisitor
     @Override
     public boolean visit ( MethodInvocation methodInvocation )
     {
+        this.callbacks.stream().forEach( c -> c.notify( methodInvocation ) );
+
         if ( methodInvocation.getExpression() != null )
         {
             new ExpressionVisitor( this.callbacks ).visit( methodInvocation.getExpression() );

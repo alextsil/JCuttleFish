@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.DoStatement;
 
@@ -18,10 +18,12 @@ public class DoStatementVisitor extends ASTVisitor
     }
 
     @Override
-    public boolean visit ( DoStatement node )
+    public boolean visit ( DoStatement doStatement )
     {
-        new ExpressionVisitor( this.callbacks ).visit( node.getExpression() );
-        new StatementVisitor( this.callbacks ).visit( node.getBody() );
+        this.callbacks.stream().forEach( c -> c.notify( doStatement ) );
+
+        new ExpressionVisitor( this.callbacks ).visit( doStatement.getExpression() );
+        new StatementVisitor( this.callbacks ).visit( doStatement.getBody() );
 
         return false;
     }

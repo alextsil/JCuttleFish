@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.slf4j.Logger;

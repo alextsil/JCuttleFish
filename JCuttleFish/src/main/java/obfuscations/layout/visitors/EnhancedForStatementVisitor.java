@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.Collection;
@@ -20,6 +20,8 @@ public class EnhancedForStatementVisitor extends ASTVisitor
     @Override
     public boolean visit ( EnhancedForStatement enhancedForStatement )
     {
+        this.callbacks.stream().forEach( c -> c.notify( enhancedForStatement ) );
+
         new ExpressionVisitor( this.callbacks ).visit( enhancedForStatement.getExpression() );
 
         if ( enhancedForStatement.getExpression().getNodeType() == ASTNode.SIMPLE_NAME )

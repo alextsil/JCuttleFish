@@ -19,21 +19,22 @@ public class ObfuscationCoordinator
 
     public ObfuscationCoordinator ()
     {
-        File originalLocation = new File( "C:/target/main/java" );
-        File backupLocation = new File( "C:/Users/Alexei/Desktop" );
+        File originalLocation = new File( "C:/1backup/JCuttleFish/src" );
+        File backupLocation = new File( "C:/Users/Alexei/Desktop/backupcuttle" );
         this.backupFilesAtLocation( originalLocation, backupLocation );
 
         PathsExtractor pathsExtractor = new PathsExtractor( originalLocation.getAbsolutePath() );
         List<File> originalFiles = pathsExtractor.getFilesInstances( new SuffixFolderFilter( SuffixFilters.JAVA ) );
 
+        UnitSourceInitiator initiator = new UnitSourceInitiator();
+
         obfuscations.layout.LayoutManager layoutManager = new LayoutManager();
-
-        originalFiles.stream().forEach( f -> layoutManager.obfuscate( this.fetchUnitSourceFromTarget( f ) ) );
-    }
-
-    private UnitSource fetchUnitSourceFromTarget ( File originalFileLocation )
-    {
-        return new UnitSourceInitiator().fetchUnitSource( new FileSourceCodeProvider().get( originalFileLocation ) );
+        FileSourceCodeProvider fileSourceCodeProvider = new FileSourceCodeProvider();
+        for ( File file : originalFiles )
+        {
+            UnitSource unitSource = initiator.fetchUnitSource( fileSourceCodeProvider.get( file ) );
+            layoutManager.obfuscate( unitSource );
+        }
     }
 
     private void backupFilesAtLocation ( File originalLocation, File backupLocation )

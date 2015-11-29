@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +22,8 @@ public class StatementVisitor
 
     public boolean visit ( Statement statement )
     {
+        this.callbacks.stream().forEach( c -> c.notify( statement ) );
+
         Expression expression;
         int statementNodeType = statement.getNodeType();
 

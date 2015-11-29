@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.Statement;
@@ -22,6 +22,8 @@ public class BlockVisitor extends ASTVisitor
     @Override
     public boolean visit ( Block block )
     {
+        this.callbacks.stream().forEach( c -> c.notify( block ) );
+
         List<Statement> statements = block.statements();
         statements.stream().forEach( s -> new StatementVisitor( this.callbacks ).visit( s ) );
 

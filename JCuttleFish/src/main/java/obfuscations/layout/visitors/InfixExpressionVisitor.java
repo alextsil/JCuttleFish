@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.InfixExpression;
@@ -22,6 +22,8 @@ public class InfixExpressionVisitor extends ASTVisitor
     @Override
     public boolean visit ( InfixExpression infixExpression )
     {
+        this.callbacks.stream().forEach( c -> c.notify( infixExpression ) );
+
         new ExpressionVisitor( this.callbacks ).visit( infixExpression.getLeftOperand() );
         new ExpressionVisitor( this.callbacks ).visit( infixExpression.getRightOperand() );
 

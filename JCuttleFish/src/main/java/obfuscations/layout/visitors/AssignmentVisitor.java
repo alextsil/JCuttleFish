@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Assignment;
@@ -23,6 +23,8 @@ public class AssignmentVisitor extends ASTVisitor
     @Override
     public boolean visit ( Assignment assignment )
     {
+        this.callbacks.stream().forEach( c -> c.notify( assignment ) );
+
         this.visitAssignmentSideExpression( assignment.getLeftHandSide() );
         this.visitAssignmentSideExpression( assignment.getRightHandSide() );
         return super.visit( assignment );

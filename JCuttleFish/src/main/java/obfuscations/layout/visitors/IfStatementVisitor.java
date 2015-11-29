@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.Statement;
@@ -21,8 +21,9 @@ public class IfStatementVisitor extends ASTVisitor
     @Override
     public boolean visit ( IfStatement ifStatement )
     {
-        new ExpressionVisitor( this.callbacks ).visit( ifStatement.getExpression() );
+        this.callbacks.stream().forEach( c -> c.notify( ifStatement ) );
 
+        new ExpressionVisitor( this.callbacks ).visit( ifStatement.getExpression() );
         new StatementVisitor( this.callbacks ).visit( ifStatement.getThenStatement() );
 
         Statement elseStatement = ifStatement.getElseStatement();

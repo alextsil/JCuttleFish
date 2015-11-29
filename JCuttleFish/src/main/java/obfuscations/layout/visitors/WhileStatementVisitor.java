@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
@@ -18,10 +18,12 @@ public class WhileStatementVisitor extends ASTVisitor
     }
 
     @Override
-    public boolean visit ( WhileStatement node )
+    public boolean visit ( WhileStatement whileStatement )
     {
-        new ExpressionVisitor( this.callbacks ).visit( node.getExpression() );
-        new StatementVisitor( this.callbacks ).visit( node.getBody() );
+        this.callbacks.stream().forEach( c -> c.notify( whileStatement ) );
+
+        new ExpressionVisitor( this.callbacks ).visit( whileStatement.getExpression() );
+        new StatementVisitor( this.callbacks ).visit( whileStatement.getBody() );
 
         return false;
     }

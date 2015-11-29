@@ -10,9 +10,9 @@ public class ObfuscationEnvironment
 
     public ObfuscationEnvironment ()
     {
-        this.relativeSourcePath = "JCuttleFish" + System.lineSeparator() + "src";
-        this.absoluteSourcePath[ 0 ] = "C:/test/JCuttleFish/src";
-        this.classpath[ 0 ] = System.getenv( "JAVA_HOME" ) + System.lineSeparator() + "bin";
+        this.relativeSourcePath = "";//"JCuttleFish" + System.lineSeparator() + "src";
+        this.absoluteSourcePath[ 0 ] = "";// "C:/1backup/JCuttleFish/src";
+        this.classpath[ 0 ] = "";//System.getenv( "JAVA_HOME" ) + System.lineSeparator() + "bin";
     }
 
     public String getRelativeSourcePath ()

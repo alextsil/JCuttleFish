@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.Collection;
@@ -19,6 +19,8 @@ public class FieldAccessVisitor extends ASTVisitor
     @Override
     public boolean visit ( FieldAccess fieldAccess )
     {
+        this.callbacks.stream().forEach( c -> c.notify( fieldAccess ) );
+
         if ( fieldAccess.getExpression().getNodeType() == ASTNode.METHOD_INVOCATION )
         {
             MethodInvocation methodInvocation = ( MethodInvocation )fieldAccess.getExpression();

@@ -1,6 +1,7 @@
 package util;
 
 import extractor.PathsExtractor;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,17 +19,17 @@ public class BackupFilesHelper
         List<File> sourceFiles = pathsExtractor.getFilesInstances();
 
         //delete backup dir if exists
-//        try
-//        {
-//            if ( destDir.isDirectory() )
-//            {
-//                FileUtils.forceDelete( destDir );
-//            }
-//        } catch ( IOException ioex1 )
-//        {
-//            ioex1.printStackTrace();
-//            return false;
-//        }
+        try
+        {
+            if ( destDir.isDirectory() )
+            {
+                FileUtils.forceDelete( destDir );
+            }
+        } catch ( IOException ioex1 )
+        {
+            ioex1.printStackTrace();
+            return false;
+        }
         //loop all to replace root directory
         for ( File sourceFile : sourceFiles )
         {

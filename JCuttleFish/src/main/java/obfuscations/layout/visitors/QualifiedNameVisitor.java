@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.QualifiedName;
@@ -22,6 +22,8 @@ public class QualifiedNameVisitor extends ASTVisitor
     @Override
     public boolean visit ( QualifiedName qualifiedName )
     {
+        this.callbacks.stream().forEach( c -> c.notify( qualifiedName ) );
+
         //visit qualifier
         Name qualifier = qualifiedName.getQualifier();
         if ( qualifier.isSimpleName() )

@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 
@@ -18,9 +18,11 @@ public class PostfixExpressionVisitor extends ASTVisitor
     }
 
     @Override
-    public boolean visit ( PostfixExpression node )
+    public boolean visit ( PostfixExpression postfixExpression )
     {
-        new ExpressionVisitor( this.callbacks ).visit( node.getOperand() );
+        this.callbacks.stream().forEach( c -> c.notify( postfixExpression ) );
+
+        new ExpressionVisitor( this.callbacks ).visit( postfixExpression.getOperand() );
         return false;
     }
 }

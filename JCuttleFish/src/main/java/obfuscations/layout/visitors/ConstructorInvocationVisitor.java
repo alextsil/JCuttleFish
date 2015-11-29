@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
 import org.eclipse.jdt.core.dom.Expression;
@@ -22,6 +22,8 @@ public class ConstructorInvocationVisitor extends ASTVisitor
     @Override
     public boolean visit ( ConstructorInvocation constructorInvocation )
     {
+        this.callbacks.stream().forEach( c -> c.notify( constructorInvocation ) );
+
         List<Expression> arguments = constructorInvocation.arguments();
         arguments.stream().forEach( a -> new ExpressionVisitor( this.callbacks ).visit( a ) );
         return false;

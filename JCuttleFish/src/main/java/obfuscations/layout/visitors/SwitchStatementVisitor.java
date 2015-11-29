@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.SwitchStatement;
@@ -20,11 +20,13 @@ public class SwitchStatementVisitor extends ASTVisitor
     }
 
     @Override
-    public boolean visit ( SwitchStatement node )
+    public boolean visit ( SwitchStatement switchStatement )
     {
-        new ExpressionVisitor( this.callbacks ).visit( node.getExpression() );
+        this.callbacks.stream().forEach( c -> c.notify( switchStatement ) );
 
-        List<Statement> statements = node.statements();
+        new ExpressionVisitor( this.callbacks ).visit( switchStatement.getExpression() );
+
+        List<Statement> statements = switchStatement.statements();
         statements.stream().forEach( s -> new StatementVisitor( this.callbacks ).visit( s ) );
 
         return false;

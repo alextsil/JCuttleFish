@@ -1,7 +1,7 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
 import obfuscations.layout.ModifyAst;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 
@@ -22,6 +22,8 @@ public class ClassInstanceCreationVisitor extends ASTVisitor
     @Override
     public boolean visit ( ClassInstanceCreation classInstanceCreation )
     {
+        this.callbacks.stream().forEach( c -> c.notify( classInstanceCreation ) );
+
         //Rename and thisify arguments
         List<Object> arguments = classInstanceCreation.arguments();
         ModifyAst.renameMethodInvocationArguments( arguments, this.callbacks );

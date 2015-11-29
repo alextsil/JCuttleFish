@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ArrayAccess;
 
@@ -20,6 +20,8 @@ public class ArrayAccessVisitor extends ASTVisitor
     @Override
     public boolean visit ( ArrayAccess arrayAccess )
     {
+        this.callbacks.stream().forEach( c -> c.notify( arrayAccess ) );
+
         new ExpressionVisitor( this.callbacks ).visit( arrayAccess.getArray() );
         return false;
     }

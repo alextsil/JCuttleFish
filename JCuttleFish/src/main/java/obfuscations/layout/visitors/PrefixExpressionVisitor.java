@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.MethodInvocation;
@@ -26,6 +26,8 @@ public class PrefixExpressionVisitor extends ASTVisitor
     @Override
     public boolean visit ( PrefixExpression prefixExpression )
     {
+        this.callbacks.stream().forEach( c -> c.notify( prefixExpression ) );
+
         int prefixExpressionOperandNodeType = prefixExpression.getOperand().getNodeType();
         if ( prefixExpressionOperandNodeType == ASTNode.METHOD_INVOCATION )
         {

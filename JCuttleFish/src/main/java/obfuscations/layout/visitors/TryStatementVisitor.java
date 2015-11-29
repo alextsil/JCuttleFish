@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.TryStatement;
@@ -22,6 +22,8 @@ public class TryStatementVisitor extends ASTVisitor
     @Override
     public boolean visit ( TryStatement tryStatement )
     {
+        this.callbacks.stream().forEach( c -> c.notify( tryStatement ) );
+
         new BlockVisitor( this.callbacks ).visit( tryStatement.getBody() );
 
         List<CatchClause> catchClauses = tryStatement.catchClauses();

@@ -1,5 +1,6 @@
 package obfuscations.layout;
 
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.*;
 import util.CastToAndVisit;
 

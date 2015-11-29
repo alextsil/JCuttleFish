@@ -1,6 +1,6 @@
 package obfuscations.layout.visitors;
 
-import obfuscations.layout.AstNodeFoundCallback;
+import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ParenthesizedExpression;
@@ -21,6 +21,8 @@ public class ExpressionVisitor extends ASTVisitor
 
     public boolean visit ( ASTNode expression )
     {
+        this.callbacks.stream().forEach( c -> c.notify( expression ) );
+
         int expressionNodeType = expression.getNodeType();
         if ( expressionNodeType == ASTNode.INFIX_EXPRESSION )
         {
