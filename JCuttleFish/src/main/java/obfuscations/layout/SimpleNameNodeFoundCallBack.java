@@ -1,13 +1,18 @@
 package obfuscations.layout;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.SimpleName;
 
 
-public class SimpleNameNodeFoundCallBack extends BaseAstNodeFoundCallback
+public class SimpleNameNodeFoundCallBack extends AstNodeFoundCallback
 {
 
-    public void addToCollection ( SimpleName simpleName )
+    @Override
+    public <V extends ASTNode> void notify ( V v )
     {
-        super.addToCollection( simpleName );
+        if ( v instanceof SimpleName )
+        {
+            super.addToCollection( v );
+        }
     }
 }

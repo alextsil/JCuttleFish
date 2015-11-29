@@ -1,14 +1,12 @@
 package obfuscations.layout.visitors;
 
 import obfuscations.layout.AstNodeFoundCallback;
-import obfuscations.layout.SimpleNameNodeFoundCallBack;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
-import java.util.Optional;
 
 
 public class SimpleNameVisitor extends ASTVisitor
@@ -25,13 +23,8 @@ public class SimpleNameVisitor extends ASTVisitor
     @Override
     public boolean visit ( SimpleName simpleName )
     {
-        Optional<SimpleNameNodeFoundCallBack> callBackOptional =
-                this.callbacks.stream()
-                        .filter( c -> c instanceof SimpleNameNodeFoundCallBack )
-                        .map( c -> ( SimpleNameNodeFoundCallBack )c ).findFirst();
+        this.callbacks.stream().forEach( c -> c.notify( simpleName ) );
 
-        SimpleNameNodeFoundCallBack callBack = callBackOptional.orElseThrow( RuntimeException::new );
-        callBack.addToCollection( simpleName );
         return false;
     }
 }

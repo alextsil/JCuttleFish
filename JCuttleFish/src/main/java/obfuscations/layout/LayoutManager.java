@@ -1,13 +1,11 @@
 package obfuscations.layout;
 
 import obfuscations.layout.visitors.StatementVisitor;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.Statement;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.UnitSource;
+import util.ConvenienceWrappers;
 import util.SourceUtil;
 
 import java.util.Arrays;
@@ -32,6 +30,7 @@ public class LayoutManager
             TypeDeclaration typeDecl = ( TypeDeclaration )cu.types().get( 0 );
             if ( typeDecl.resolveBinding().isClass() )
             {
+                List<FieldDeclaration> classFields = ConvenienceWrappers.getPrivateFieldDeclarations( typeDecl );
                 Collection<AstNodeFoundCallback> callbacks = new HashSet<>();
                 callbacks.add( new SimpleNameNodeFoundCallBack() );
 
@@ -43,6 +42,12 @@ public class LayoutManager
                     statements.stream().forEach( s -> new StatementVisitor( callbacks ).visit( s ) );
                 }
 
+                SimpleNameNodeFoundCallBack callBack = ( SimpleNameNodeFoundCallBack )callbacks.toArray()[ 0 ];
+
+                //get a list of class vars
+                //https://github.com/alextsil/JCuttleFish/blob/884dc2f0651e7d94b41164a27fa5cdb268cace34/JCuttleFish/src/main/java/obfuscations/layout/LayoutManager.java
+                //sort found (callbacks) list based on the list of class vars
+                //rename (todo)
                 int debug = 1;
             }
         }
