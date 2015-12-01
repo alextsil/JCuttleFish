@@ -14,13 +14,13 @@ public class PrivateProtectedMatcher {
     private Matcher d;
 
     public PrivateProtectedMatcher () {
-        this.c = Pattern.compile( this.a );
+        c = Pattern.compile( a );
     }
 
     public String applyMatcher ( String targetLine ) {
         this.b = targetLine;
-        this.d = this.c.matcher( this.b );
-        this.b = this.d.replaceFirst( "public" );
+        d = c.matcher( this.b );
+        this.b = d.replaceFirst( "public" );
         return this.b;
     }
 }

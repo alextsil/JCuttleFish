@@ -17,20 +17,20 @@ public class KeybIntReader
         while ( cont )
         {
             System.out.print( "Enter an integer:" );
-            this.a = br.readLine();
-            StringTokenizer st = new StringTokenizer( this.a );
-            this.b = "";
+            a = br.readLine();
+            StringTokenizer st = new StringTokenizer( a );
+            b = "";
 
             while ( cont && st.hasMoreTokens() )
             {
                 try
                 {
-                    this.b = st.nextToken();
-                    this.c = Integer.parseInt( this.b );
+                    b = st.nextToken();
+                    c = Integer.parseInt( b );
                     cont = false;
                 } catch ( NumberFormatException n )
                 {
-                    System.out.println( "The value in \"" + this.b + "\" is not an integer" );
+                    System.out.println( "The value in \"" + b + "\" is not an integer" );
                 }
             }
         }

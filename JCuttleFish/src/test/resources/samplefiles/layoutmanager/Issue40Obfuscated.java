@@ -7,11 +7,11 @@ public class Text implements Comparable<Text>
 
     public Text ()
     {
-        this.a.set(
-                this.a.left,
-                this.a.top,
-                this.a.right,
-                this.a.bottom
+        a.set(
+                a.left,
+                a.top,
+                a.right,
+                a.bottom
         );
     }
 

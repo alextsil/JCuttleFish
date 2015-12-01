@@ -13,14 +13,14 @@ public class Switch
         {
             case 'A':
                 System.out.println( "Excellent!" );
-                this.a = 5;
-                switch ( this.a )
+                a = 5;
+                switch ( a )
                 {
                     case 5:
-                        this.a++;
+                        a++;
                         break;
                     default:
-                        System.out.println( "someValue : " + this.a );
+                        System.out.println( "someValue : " + a );
                 }
                 break;
             case 'B':

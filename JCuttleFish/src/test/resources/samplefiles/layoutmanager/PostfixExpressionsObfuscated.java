@@ -6,9 +6,9 @@ public class Postfix
     private int a;
     private int b = 0;
 
-    public void ifTree ()
+    public void postfix ()
     {
-        this.b++;
-        this.a--;
+        b++;
+        a--;
     }
 }

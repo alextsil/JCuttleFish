@@ -6,11 +6,13 @@ package test;
 
 import API.IContact;
 
+
 /**
  * @author Alexei
  */
-public class Contact implements IContact {
-    
+public class Contact implements IContact
+{
+
     private String a;
     private String b;
     private String c;
@@ -19,15 +21,16 @@ public class Contact implements IContact {
     private String f;
     private String g;
     private String h;
-    
+
     /**
      * Contact type objects constructor
      * that needs at least two parameters to allow
      * initialisation of it's objects
+     *
      * @param firstname
-     * @param telephone 
+     * @param telephone
      */
-    public Contact(String firstname, String telephone)
+    public Contact ( String firstname, String telephone )
     {
         this.b = firstname;
         this.e = telephone;
@@ -38,11 +41,11 @@ public class Contact implements IContact {
         this.g = "";
         this.h = "";
     }
-    
+
     /**
      * simple constructor
      */
-    public Contact()
+    public Contact ()
     {
         this.a = "";
         this.b = "";
@@ -55,81 +58,98 @@ public class Contact implements IContact {
     }
 
     @Override
-    public void setId(String id) {
+    public void setId ( String id )
+    {
         this.a = id;
-    }
-   
-    @Override
-    public String getId() {
-        return this.a;
-    }
-    @Override
-    public String getFirstname() {
-        return this.b;
     }
 
     @Override
-    public void setFirstname(String firstname) {
+    public String getId ()
+    {
+        return a;
+    }
+
+    @Override
+    public String getFirstname ()
+    {
+        return b;
+    }
+
+    @Override
+    public void setFirstname ( String firstname )
+    {
         this.b = firstname;
     }
 
     @Override
-    public String getLastname() {
-        return this.c;
+    public String getLastname ()
+    {
+        return c;
     }
 
     @Override
-    public void setLastname(String lastname) {
+    public void setLastname ( String lastname )
+    {
         this.c = lastname;
     }
 
     @Override
-    public String getEmail() {
-        return this.d;
+    public String getEmail ()
+    {
+        return d;
     }
 
     @Override
-    public void setEmail(String email) {
+    public void setEmail ( String email )
+    {
         this.d = email;
     }
 
     @Override
-    public String getTelephone() {
-        return this.e;
+    public String getTelephone ()
+    {
+        return e;
     }
 
     @Override
-    public void setTelephone(String telephone) {
+    public void setTelephone ( String telephone )
+    {
         this.e = telephone;
     }
 
     @Override
-    public String getMtelephone() {
-        return this.f;
+    public String getMtelephone ()
+    {
+        return f;
     }
 
     @Override
-    public void setMtelephone(String mtelephone) {
+    public void setMtelephone ( String mtelephone )
+    {
         this.f = mtelephone;
     }
 
     @Override
-    public String getAddress() {
-        return this.g;
+    public String getAddress ()
+    {
+        return g;
     }
 
     @Override
-    public void setAddress(String address) {
+    public void setAddress ( String address )
+    {
         this.g = address;
     }
 
     @Override
-    public String getCity() {
-        return this.h;
+    public String getCity ()
+    {
+        return h;
     }
 
     @Override
-    public void setCity(String city) {
+    public void setCity ( String city )
+    {
         this.h = city;
     }
 }

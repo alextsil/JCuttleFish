@@ -16,14 +16,14 @@ public class ObfuscationEnvironment {
     }
 
     public String getRelativeSourcePath () {
-        return this.a;
+        return a;
     }
 
     public String[] getAbsoluteSourcePath () {
-        return this.b;
+        return b;
     }
 
     public String[] getClasspath () {
-        return this.c;
+        return c;
     }
 }

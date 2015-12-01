@@ -33,6 +33,7 @@ public class QualifiedNameVisitor extends ASTVisitor
         {
             CastToAndVisit.qualifiedName( qualifier, this.callbacks );
         }
+
         return false;
     }
 }

@@ -31,22 +31,22 @@ public class PanelChoixType extends JPanel
     {
         this.i = ff;
         String[] types = new String[]{ "Musique", "Video", "Documents Texte", "Images", "Gestion", "Cours" };
-        this.a = BorderFactory.createLineBorder( Color.black );
-        this.b = BorderFactory.createTitledBorder( this.a, "Gestion des types" );
-        this.c = new JComboBox( types );
-        this.e = new JTextArea( 2, 8 );
-        this.e.setBorder( this.a );
-        this.f = new JButton( "Ajouter" );
-        this.g = new JButton( "Supprimer" );
+        a = BorderFactory.createLineBorder( Color.black );
+        b = BorderFactory.createTitledBorder( a, "Gestion des types" );
+        c = new JComboBox( types );
+        e = new JTextArea( 2, 8 );
+        e.setBorder( a );
+        f = new JButton( "Ajouter" );
+        g = new JButton( "Supprimer" );
         String[] ext = new String[]{ "mp3", "wav", "machin" };
-        this.h = new JList( ext );
+        h = new JList( ext );
         setLayout( new FlowLayout() );
 
-        add( this.c );
-        add( this.h );
-        add( this.g );
-        add( this.e );
-        add( this.f );
+        add( c );
+        add( h );
+        add( g );
+        add( e );
+        add( f );
     }
 
 }

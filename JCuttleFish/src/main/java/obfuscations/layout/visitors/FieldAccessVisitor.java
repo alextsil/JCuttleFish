@@ -31,9 +31,7 @@ public class FieldAccessVisitor extends ASTVisitor
             }
         } else
         {
-//            ModifyAst.renameFieldAccessName( fieldAccess, this.obfuscationInfo.getOriginalVarSimpleName(),
-//                    this.obfuscationInfo.getObfuscatedVarName() );
-            //maybe register field access visitor for this case
+//            throw new RuntimeException( "not mapped. instance is of type:" + fieldAccess.getExpression().getClass() );
         }
         return true;
     }

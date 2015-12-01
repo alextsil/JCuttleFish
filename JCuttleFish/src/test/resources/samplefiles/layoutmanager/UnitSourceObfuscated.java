@@ -14,10 +14,10 @@ public class UnitSource {
     }
 
     public CompilationUnit getCompilationUnit () {
-        return this.a;
+        return a;
     }
 
     public String getSourceCode () {
-        return this.b;
+        return b;
     }
 }

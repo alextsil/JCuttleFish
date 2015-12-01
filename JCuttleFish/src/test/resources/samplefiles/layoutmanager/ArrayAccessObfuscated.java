@@ -9,14 +9,14 @@ public class ArrayAccess
     {
         try
         {
-            System.out.println( "Access element three :" + this.a[ 3 ] );
+            System.out.println( "Access element three :" + a[ 3 ] );
         } catch ( ArrayIndexOutOfBoundsException e )
         {
             System.out.println( "Exception thrown  :" + e );
         } finally
         {
-            this.a[ 0 ] = 6;
-            System.out.println( "First element value: " + this.a[ 0 ] );
+            a[ 0 ] = 6;
+            System.out.println( "First element value: " + a[ 0 ] );
             System.out.println( "The finally statement is executed" );
         }
     }

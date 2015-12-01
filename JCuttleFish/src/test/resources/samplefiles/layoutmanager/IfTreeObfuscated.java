@@ -8,42 +8,42 @@ public class ifTrees
 
     public void ifTree ()
     {
-        if ( this.a < 10 )
+        if ( a < 10 )
         {
-            this.b = this.b + 1;
-            if ( this.a < 5 )
+            b = b + 1;
+            if ( a < 5 )
             {
-                this.b = this.b + 1;
-                if ( this.a < 3 && this.b <= 0 )
+                b = b + 1;
+                if ( a < 3 && b <= 0 )
                 {
-                    this.b = this.b + 1;
-                } else if ( this.a < 2 && this.b == 0 )
+                    b = b + 1;
+                } else if ( a < 2 && b == 0 )
                 {
-                    this.b = this.b + 1;
+                    b = b + 1;
                 } else
                 {
-                    this.b = this.b + 1;
+                    b = b + 1;
                 }
             }
-        } else if ( this.a < 20 )
+        } else if ( a < 20 )
         {
-            this.b += 1;
-            if ( this.a < 15 )
+            b += 1;
+            if ( a < 15 )
             {
-                this.b = this.b - 1;
-            } else if ( this.a >= 15 )
+                b = b - 1;
+            } else if ( a >= 15 )
             {
-                this.b = this.b + 1;
+                b = b + 1;
             }
         } else
         {
-            this.b += 1;
-            if ( this.a < 25 )
+            b += 1;
+            if ( a < 25 )
             {
-                this.b = this.b - 1;
-            } else if ( this.a >= 25 )
+                b = b - 1;
+            } else if ( a >= 25 )
             {
-                this.b = this.b + 1;
+                b = b + 1;
             }
         }
     }

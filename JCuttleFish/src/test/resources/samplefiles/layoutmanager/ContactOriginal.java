@@ -6,11 +6,13 @@ package test;
 
 import API.IContact;
 
+
 /**
  * @author Alexei
  */
-public class Contact implements IContact {
-    
+public class Contact implements IContact
+{
+
     private String id;
     private String firstname;
     private String lastname;
@@ -19,15 +21,16 @@ public class Contact implements IContact {
     private String mtelephone;
     private String address;
     private String city;
-    
+
     /**
      * Contact type objects constructor
      * that needs at least two parameters to allow
      * initialisation of it's objects
+     *
      * @param firstname
-     * @param telephone 
+     * @param telephone
      */
-    public Contact(String firstname, String telephone)
+    public Contact ( String firstname, String telephone )
     {
         this.firstname = firstname;
         this.telephone = telephone;
@@ -38,11 +41,11 @@ public class Contact implements IContact {
         this.address = "";
         this.city = "";
     }
-    
+
     /**
      * simple constructor
      */
-    public Contact()
+    public Contact ()
     {
         this.id = "";
         this.firstname = "";
@@ -55,81 +58,98 @@ public class Contact implements IContact {
     }
 
     @Override
-    public void setId(String id) {
+    public void setId ( String id )
+    {
         this.id = id;
     }
-   
+
     @Override
-    public String getId() {
+    public String getId ()
+    {
         return id;
     }
+
     @Override
-    public String getFirstname() {
+    public String getFirstname ()
+    {
         return firstname;
     }
 
     @Override
-    public void setFirstname(String firstname) {
+    public void setFirstname ( String firstname )
+    {
         this.firstname = firstname;
     }
 
     @Override
-    public String getLastname() {
+    public String getLastname ()
+    {
         return lastname;
     }
 
     @Override
-    public void setLastname(String lastname) {
+    public void setLastname ( String lastname )
+    {
         this.lastname = lastname;
     }
 
     @Override
-    public String getEmail() {
+    public String getEmail ()
+    {
         return email;
     }
 
     @Override
-    public void setEmail(String email) {
+    public void setEmail ( String email )
+    {
         this.email = email;
     }
 
     @Override
-    public String getTelephone() {
+    public String getTelephone ()
+    {
         return telephone;
     }
 
     @Override
-    public void setTelephone(String telephone) {
+    public void setTelephone ( String telephone )
+    {
         this.telephone = telephone;
     }
 
     @Override
-    public String getMtelephone() {
+    public String getMtelephone ()
+    {
         return mtelephone;
     }
 
     @Override
-    public void setMtelephone(String mtelephone) {
+    public void setMtelephone ( String mtelephone )
+    {
         this.mtelephone = mtelephone;
     }
 
     @Override
-    public String getAddress() {
+    public String getAddress ()
+    {
         return address;
     }
 
     @Override
-    public void setAddress(String address) {
+    public void setAddress ( String address )
+    {
         this.address = address;
     }
 
     @Override
-    public String getCity() {
+    public String getCity ()
+    {
         return city;
     }
 
     @Override
-    public void setCity(String city) {
+    public void setCity ( String city )
+    {
         this.city = city;
     }
 }

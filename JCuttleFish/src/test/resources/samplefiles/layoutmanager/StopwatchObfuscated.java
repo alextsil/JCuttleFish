@@ -11,17 +11,17 @@ public class Stopwatch
 
     public void start ()
     {
-        this.a = System.nanoTime();
+        a = System.nanoTime();
     }
 
     public void stop ()
     {
-        this.b = System.nanoTime();
+        b = System.nanoTime();
     }
 
     public double time ()
     {
-        return ( this.b - this.a ) / NANOS_PER_SEC;
+        return ( b - a ) / NANOS_PER_SEC;
     }
 
     public String toString ()
@@ -31,6 +31,6 @@ public class Stopwatch
 
     public long timeInNanoseconds ()
     {
-        return ( this.b - this.a );
+        return ( b - a );
     }
 }

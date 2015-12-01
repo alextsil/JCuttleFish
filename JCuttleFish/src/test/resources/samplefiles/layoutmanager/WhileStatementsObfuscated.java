@@ -12,10 +12,10 @@ public class While
 
         while ( loopVal < 5 )
         {
-            while ( this.a > 0 )
+            while ( a > 0 )
             {
-                this.a = Math.random();
-                this.b = Math.random();
+                a = Math.random();
+                b = Math.random();
                 loopVal++;
             }
             loopVal += 2;

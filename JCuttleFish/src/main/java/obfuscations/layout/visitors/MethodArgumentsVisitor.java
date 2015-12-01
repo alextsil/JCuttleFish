@@ -29,6 +29,10 @@ public class MethodArgumentsVisitor
             {
                 SimpleName simpleName = ( SimpleName )arguments.get( i );
                 new SimpleNameVisitor( this.callbacks ).visit( simpleName );
+            } else if ( arguments.get( i ) instanceof FieldAccess )
+            {
+                FieldAccess fieldAccess = ( FieldAccess )arguments.get( i );
+                new FieldAccessVisitor( this.callbacks ).visit( fieldAccess );
             } else if ( arguments.get( i ) instanceof QualifiedName )
             {
                 QualifiedName qualifiedName = ( QualifiedName )arguments.get( i );

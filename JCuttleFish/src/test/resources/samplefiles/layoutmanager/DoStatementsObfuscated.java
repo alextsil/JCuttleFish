@@ -14,10 +14,10 @@ public class DoWhile
         {
             do
             {
-                this.a = Math.random();
-                this.b = Math.random();
+                a = Math.random();
+                b = Math.random();
                 loopVal++;
-            } while ( this.a > 0 );
+            } while ( a > 0 );
             loopVal += 2;
         }
         while ( loopVal < 5 );
