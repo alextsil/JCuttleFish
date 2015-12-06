@@ -27,9 +27,9 @@ public class PanelChoixType extends JPanel
 
     private Fenetre i;
 
-    public PanelChoixType ( Fenetre ff )
+    public PanelChoixType ( Fenetre aa )
     {
-        this.i = ff;
+        this.i = aa;
         String[] types = new String[]{ "Musique", "Video", "Documents Texte", "Images", "Gestion", "Cours" };
         a = BorderFactory.createLineBorder( Color.black );
         b = BorderFactory.createTitledBorder( a, "Gestion des types" );

@@ -12,15 +12,15 @@ public class SuffixFolderFilterOriginal implements FileFilter {
 
     private String a;
 
-    public SuffixFolderFilterOriginal ( SuffixFilters suffixFilter ) {
-        this.a = suffixFilter.toString();
+    public SuffixFolderFilterOriginal ( SuffixFilters aa ) {
+        this.a = aa.toString();
     }
 
     // using commonsio filter implementations
     //The directory filter ensures that the filter will only replace on files. - do not remove.
-    public boolean accept ( File pathName ) {
-        return new SuffixFileFilter( this.a ).accept( pathName )
-                || DirectoryFileFilter.INSTANCE.accept( pathName );
+    public boolean accept ( File aa ) {
+        return new SuffixFileFilter( this.a ).accept( aa )
+                || DirectoryFileFilter.INSTANCE.accept( aa );
     }
 
 }

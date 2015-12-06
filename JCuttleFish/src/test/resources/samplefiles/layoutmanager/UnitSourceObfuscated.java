@@ -8,9 +8,9 @@ public class UnitSource {
 
     private String b;
 
-    public UnitSource ( CompilationUnit compilationUnit, String sourceCode ) {
-        this.a = compilationUnit;
-        this.b = sourceCode;
+    public UnitSource ( CompilationUnit aa, String bb ) {
+        this.a = aa;
+        this.b = bb;
     }
 
     public CompilationUnit getCompilationUnit () {

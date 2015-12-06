@@ -13,11 +13,11 @@ public class Onthefly
 
     private final static String d = "3";
 
-    public Onthefly ( String alpha, String beta, String id2 )
+    public Onthefly ( String aa, String bb, String cc )
     {
-        this.alpha = alpha;
-        this.a = beta;
-        this.c = id2;
+        this.alpha = aa;
+        this.a = bb;
+        this.c = cc;
     }
 
 }

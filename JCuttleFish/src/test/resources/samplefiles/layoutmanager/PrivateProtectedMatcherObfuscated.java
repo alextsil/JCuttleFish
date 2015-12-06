@@ -17,8 +17,8 @@ public class PrivateProtectedMatcher {
         c = Pattern.compile( a );
     }
 
-    public String applyMatcher ( String targetLine ) {
-        this.b = targetLine;
+    public String applyMatcher ( String aa ) {
+        this.b = aa;
         d = c.matcher( this.b );
         this.b = d.replaceFirst( "public" );
         return this.b;

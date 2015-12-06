@@ -27,8 +27,6 @@ public class Contact implements IContact
      * that needs at least two parameters to allow
      * initialisation of it's objects
      *
-     * @param firstname
-     * @param telephone
      */
     public Contact ( String firstname, String telephone )
     {

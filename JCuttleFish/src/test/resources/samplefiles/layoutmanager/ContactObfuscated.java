@@ -27,13 +27,11 @@ public class Contact implements IContact
      * that needs at least two parameters to allow
      * initialisation of it's objects
      *
-     * @param firstname
-     * @param telephone
      */
-    public Contact ( String firstname, String telephone )
+    public Contact ( String aa, String bb )
     {
-        this.b = firstname;
-        this.e = telephone;
+        this.b = aa;
+        this.e = bb;
         this.a = "";
         this.c = "";
         this.d = "";
@@ -58,9 +56,9 @@ public class Contact implements IContact
     }
 
     @Override
-    public void setId ( String id )
+    public void setId ( String aa )
     {
-        this.a = id;
+        this.a = aa;
     }
 
     @Override
@@ -76,9 +74,9 @@ public class Contact implements IContact
     }
 
     @Override
-    public void setFirstname ( String firstname )
+    public void setFirstname ( String aa )
     {
-        this.b = firstname;
+        this.b = aa;
     }
 
     @Override
@@ -88,9 +86,9 @@ public class Contact implements IContact
     }
 
     @Override
-    public void setLastname ( String lastname )
+    public void setLastname ( String aa )
     {
-        this.c = lastname;
+        this.c = aa;
     }
 
     @Override
@@ -100,9 +98,9 @@ public class Contact implements IContact
     }
 
     @Override
-    public void setEmail ( String email )
+    public void setEmail ( String aa )
     {
-        this.d = email;
+        this.d = aa;
     }
 
     @Override
@@ -112,9 +110,9 @@ public class Contact implements IContact
     }
 
     @Override
-    public void setTelephone ( String telephone )
+    public void setTelephone ( String aa )
     {
-        this.e = telephone;
+        this.e = aa;
     }
 
     @Override
@@ -124,9 +122,9 @@ public class Contact implements IContact
     }
 
     @Override
-    public void setMtelephone ( String mtelephone )
+    public void setMtelephone ( String aa )
     {
-        this.f = mtelephone;
+        this.f = aa;
     }
 
     @Override
@@ -136,9 +134,9 @@ public class Contact implements IContact
     }
 
     @Override
-    public void setAddress ( String address )
+    public void setAddress ( String aa )
     {
-        this.g = address;
+        this.g = aa;
     }
 
     @Override
@@ -148,8 +146,8 @@ public class Contact implements IContact
     }
 
     @Override
-    public void setCity ( String city )
+    public void setCity ( String aa )
     {
-        this.h = city;
+        this.h = aa;
     }
 }

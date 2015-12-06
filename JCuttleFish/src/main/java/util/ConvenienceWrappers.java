@@ -1,11 +1,12 @@
 package util;
 
-import org.eclipse.jdt.core.dom.FieldDeclaration;
-import org.eclipse.jdt.core.dom.Modifier;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class ConvenienceWrappers
@@ -17,7 +18,7 @@ public class ConvenienceWrappers
      * @param typeDeclaration - The target class
      * @return List of private FieldDeclaration. Empty list if none found.
      */
-    static public List<FieldDeclaration> getPrivateFieldDeclarations ( TypeDeclaration typeDeclaration )
+    public static List<FieldDeclaration> getPrivateFieldDeclarations ( TypeDeclaration typeDeclaration )
     {
         List<FieldDeclaration> privateFieldDeclarations = new ArrayList<>();
         FieldDeclaration[] fieldDeclarations = typeDeclaration.getFields();
@@ -31,6 +32,16 @@ public class ConvenienceWrappers
             }
         }
         return privateFieldDeclarations;
+    }
+
+    public static Collection<MethodDeclaration> returnMethodDeclarations ( TypeDeclaration typeDeclaration )
+    {
+        return Arrays.stream( typeDeclaration.getMethods() ).collect( Collectors.toList() );
+    }
+
+    public static boolean isValidCompilationUnit ( CompilationUnit cu )
+    {
+        return !cu.types().isEmpty();
     }
 
 }
