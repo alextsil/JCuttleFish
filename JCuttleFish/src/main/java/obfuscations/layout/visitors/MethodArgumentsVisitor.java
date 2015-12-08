@@ -51,6 +51,15 @@ public class MethodArgumentsVisitor
             {
                 MethodInvocation methodInvocation = ( MethodInvocation )arguments.get( i );
                 CastToAndVisit.methodInvocation( methodInvocation, this.callbacks );
+            } else if ( arguments.get( i ) instanceof ClassInstanceCreation )
+            {
+                ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation )arguments.get( i );
+                CastToAndVisit.classInstanceCreation( classInstanceCreation, this.callbacks );
+
+            } else if ( arguments.get( i ) instanceof ArrayAccess )
+            {
+                ArrayAccess arrayAccess = ( ArrayAccess )arguments.get( i );
+                CastToAndVisit.arrayAccess( arrayAccess, this.callbacks );
             } else
             {
                 this.logger.warn( "Not mapped yet. Type :  " + arguments.get( i ).getClass() );

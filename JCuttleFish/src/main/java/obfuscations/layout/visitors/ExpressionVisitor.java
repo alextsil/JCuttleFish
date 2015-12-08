@@ -47,12 +47,18 @@ public class ExpressionVisitor extends ASTVisitor
         } else if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
         {
             CastToAndVisit.methodInvocation( expression, this.callbacks );
+        } else if ( expressionNodeType == ASTNode.SUPER_METHOD_INVOCATION )
+        {
+            CastToAndVisit.superMethodInvocation( expression, this.callbacks );
         } else if ( expressionNodeType == ASTNode.CLASS_INSTANCE_CREATION )
         {
             CastToAndVisit.classInstanceCreation( expression, this.callbacks );
         } else if ( expressionNodeType == ASTNode.ARRAY_ACCESS )
         {
             CastToAndVisit.arrayAccess( expression, this.callbacks );
+        } else if ( expressionNodeType == ASTNode.ASSIGNMENT )
+        {
+            CastToAndVisit.assignment( expression, this.callbacks );
         } else
         {
             //throw new RuntimeException( "NOT" );

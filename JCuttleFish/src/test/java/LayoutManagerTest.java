@@ -224,6 +224,28 @@ public class LayoutManagerTest
                         .getDocument().get() );
     }
 
+    @Test
+    public void testObfuscate_MethodVars ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/MethodVarsOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/MethodVarsObfuscated.java" );
+
+        assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
+    @Test
+    public void testObfuscate_SuperInvocation ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/SuperInvocationOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/SuperInvocationObfuscated.java" );
+
+        assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                        .getDocument().get() );
+    }
+
     //A "scratchpad" test
     @Test
     public void onthefly ()

@@ -2,6 +2,7 @@ package obfuscations.layout.visitors;
 
 import obfuscations.layout.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
@@ -24,7 +25,11 @@ public class VariableDeclarationStatementVisitor extends ASTVisitor
         this.callbacks.stream().forEach( c -> c.notify( variableDeclarationStatement ) );
 
         VariableDeclarationFragment variableDeclarationFragment = ( VariableDeclarationFragment )variableDeclarationStatement.fragments().get( 0 );
-        new ExpressionVisitor( this.callbacks ).visit( variableDeclarationFragment.getInitializer() );
+        Expression expression = variableDeclarationFragment.getInitializer();
+        if ( expression != null )
+        {
+            new ExpressionVisitor( this.callbacks ).visit( variableDeclarationFragment.getInitializer() );
+        }
 
         return false;
     }

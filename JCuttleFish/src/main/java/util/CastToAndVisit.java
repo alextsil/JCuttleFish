@@ -16,6 +16,12 @@ public class CastToAndVisit
         new MethodInvocationVisitor( callbacks ).visit( methodInvocation );
     }
 
+    public static <V extends ASTNode> void superMethodInvocation ( V node, Collection<AstNodeFoundCallback> callbacks )
+    {
+        SuperMethodInvocation superMethodInvocation = ( SuperMethodInvocation )node;
+        new SuperMethodInvocationVisitor( callbacks ).visit( superMethodInvocation );
+    }
+
     public static <V extends ASTNode> void fieldAccess ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         FieldAccess fieldAccess = ( FieldAccess )node;

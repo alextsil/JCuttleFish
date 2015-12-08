@@ -1,6 +1,19 @@
 public class Test
 {
 
+    public FtpletResult onUploadStart ( final FtpSession aa, final FtpRequest bb ) throws FtpException, IOException
+    {
+        String aaa = bb.getArgument();
+
+        if ( !aaa.equals( "add" ) && !aaa.equals( "delete" ) )
+        {
+            aa.write( new DefaultFtpReply( FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "Wrong file name \"" + aaa + "\"" ) );
+            return FtpletResult.SKIP;
+        }
+
+        return super.onUploadStart( aa, bb );
+    }
+
     public FtpletResult onUploadEnd ( final FtpSession aa, final FtpRequest bb ) throws FtpException, IOException
     {
         EOEditingContext aaa = ERXEC.newEditingContext();

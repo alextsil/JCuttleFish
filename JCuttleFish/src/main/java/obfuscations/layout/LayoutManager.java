@@ -101,15 +101,15 @@ public class LayoutManager
                 {
                     VariableDeclarationFragment f = ( VariableDeclarationFragment )vds.fragments().get( 0 );
                     SimpleName sn = f.getName();
+                    IVariableBinding fragIvb = OptionalUtils.getIVariableBinding( sn ).get();
 
-                    this.collectedNodes.get( sn.getIdentifier() )
+                    this.collectedNodes.getOrDefault( sn.getIdentifier(), Collections.emptyList() )
                             .stream()
                             .filter( occurence -> occurence instanceof SimpleName )
                             .map( SimpleName.class::cast )
-                            .filter( fsn -> OptionalUtils.getIVariableBinding( sn ).isPresent() )
-                            .filter( fsn -> OptionalUtils.getIVariableBinding( sn ).get().getDeclaringMethod()
-                                    .isEqualTo( methodDeclaration.resolveBinding() ) )
-                            .forEach( fsn -> fsn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
+                            .filter( foundsn -> OptionalUtils.getIVariableBinding( foundsn ).isPresent() )
+                            .filter( foundsn -> OptionalUtils.getIVariableBinding( foundsn ).get().isEqualTo( fragIvb ) )
+                            .forEach( foundsn -> foundsn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
                     sn.setIdentifier( obfuscatedVariableNames.poll() );
                 } );
     }
@@ -122,7 +122,8 @@ public class LayoutManager
 
         parameters.stream().forEach( p -> {
             //find occurences and replace
-            this.collectedNodes.get( p.getName().getIdentifier() ).stream()
+            this.collectedNodes.getOrDefault( p.getName().getIdentifier(), Collections.emptyList() )
+                    .stream()
                     .filter( occurence -> occurence instanceof SimpleName )
                     .map( SimpleName.class::cast )
                     .filter( sn -> OptionalUtils.getIVariableBinding( sn ).isPresent() )
