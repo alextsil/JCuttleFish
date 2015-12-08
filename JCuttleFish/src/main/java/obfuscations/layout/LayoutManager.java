@@ -122,14 +122,15 @@ public class LayoutManager
 
         parameters.stream().forEach( p -> {
             //find occurences and replace
+            IVariableBinding paramIvb = OptionalUtils.getIVariableBinding( p ).get();
+
             this.collectedNodes.getOrDefault( p.getName().getIdentifier(), Collections.emptyList() )
                     .stream()
                     .filter( occurence -> occurence instanceof SimpleName )
                     .map( SimpleName.class::cast )
                     .filter( sn -> OptionalUtils.getIVariableBinding( sn ).isPresent() )
                     .filter( sn -> OptionalUtils.getIVariableBinding( sn ).get().isParameter() )
-                    .filter( sn -> OptionalUtils.getIVariableBinding( sn ).get().getDeclaringMethod()
-                            .isEqualTo( methodDeclaration.resolveBinding() ) )
+                    .filter( sn -> OptionalUtils.getIVariableBinding( sn ).get().isEqualTo( paramIvb ) )
                     .forEach( sn -> sn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
 
             //rename param on method declaration

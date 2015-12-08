@@ -37,6 +37,15 @@ public class OptionalUtils
                 return Optional.of( ivb );
             }
         }
+        if ( node.getNodeType() == ASTNode.SINGLE_VARIABLE_DECLARATION )
+        {
+            SingleVariableDeclaration svd = ( SingleVariableDeclaration )node;
+            IVariableBinding ivb = svd.resolveBinding();
+            if ( ivb != null )
+            {
+                return Optional.of( ivb );
+            }
+        }
         //Default
         return Optional.empty();
     }

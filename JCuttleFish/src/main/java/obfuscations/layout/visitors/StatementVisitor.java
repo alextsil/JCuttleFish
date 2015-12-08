@@ -57,6 +57,9 @@ public class StatementVisitor
         } else if ( statementNodeType == ASTNode.ENHANCED_FOR_STATEMENT )
         {
             CastToAndVisit.enhancedForStatement( statement, this.callbacks );
+        } else if ( statementNodeType == ASTNode.FOR_STATEMENT )
+        {
+            CastToAndVisit.forStatement( statement, this.callbacks );
         } else if ( statementNodeType == ASTNode.WHILE_STATEMENT )
         {
             CastToAndVisit.whileStatement( statement, this.callbacks );

@@ -46,6 +46,12 @@ public class CastToAndVisit
         new EnhancedForStatementVisitor( callbacks ).visit( enhancedForStatement );
     }
 
+    public static <V extends ASTNode> void forStatement ( V node, Collection<AstNodeFoundCallback> callbacks )
+    {
+        ForStatement forStatement = ( ForStatement )node;
+        new ForStatementVisitor( callbacks ).visit( forStatement );
+    }
+
     public static <V extends ASTNode> void ifStatement ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         IfStatement ifStatement = ( IfStatement )node;
