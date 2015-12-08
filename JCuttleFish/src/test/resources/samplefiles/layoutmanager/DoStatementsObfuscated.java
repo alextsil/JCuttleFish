@@ -8,7 +8,7 @@ public class DoWhile
 
     public void doWhileStuff ()
     {
-        int loopVal = 0;
+        int aaa = 0;
 
         do
         {
@@ -16,10 +16,10 @@ public class DoWhile
             {
                 a = Math.random();
                 b = Math.random();
-                loopVal++;
+                aaa++;
             } while ( a > 0 );
-            loopVal += 2;
+            aaa += 2;
         }
-        while ( loopVal < 5 );
+        while ( aaa < 5 );
     }
 }

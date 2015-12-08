@@ -34,6 +34,11 @@ public class ObfuscatedNamesProvider
             variableNamesStream = Stream.of( "aa", "bb", "cc", "dd", "ee", "ff", "gg", "hh", "ii", "jj", "kk",
                     "ll", "mm", "nn", "oo", "pp", "qq", "rr",
                     "ss", "tt", "uu", "vv", "ww", "xx", "yy", "zz" );
+        } else if ( variation == ObfuscatedNamesVariations.METHOD_LOCAL_VARS )
+        {
+            variableNamesStream = Stream.of( "aaa", "bbb", "ccc", "ddd", "eee", "fff", "ggg", "hhh", "iii", "jjj", "kkk",
+                    "lll", "mmm", "nnn", "ooo", "ppp", "qqq", "rrr",
+                    "sss", "ttt", "uuu", "vvv", "www", "xxx", "yyy", "zzz" );
         } else
         {
             throw new RuntimeException( "Variation not supported " );

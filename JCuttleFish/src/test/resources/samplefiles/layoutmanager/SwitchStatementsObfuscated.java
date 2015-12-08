@@ -7,9 +7,9 @@ public class Switch
 
     public void switchStatements ()
     {
-        char grade = 'C';
+        char aaa = 'C';
 
-        switch ( grade )
+        switch ( aaa )
         {
             case 'A':
                 System.out.println( "Excellent!" );

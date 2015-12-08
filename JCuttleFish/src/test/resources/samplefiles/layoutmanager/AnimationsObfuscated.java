@@ -50,25 +50,25 @@ public class Text implements Comparable<Text> {
     }
 
     private void initBounds(String aa) {
-        String trimmed = aa.trim();
-        if (trimmed.length() < aa.length()) {
+        String aaa = aa.trim();
+        if (aaa.length() < aa.length()) {
 
-            int length = aa.length();
-            int start = aa.lastIndexOf(trimmed);
-            int end = length - (start + trimmed.length());
+            int bbb = aa.length();
+            int ccc = aa.lastIndexOf(aaa);
+            int ddd = bbb - (ccc + aaa.length());
 
-            aa = Utils.genString(start) + aa + Utils.genString(end);
+            aa = Utils.genString(ccc) + aa + Utils.genString(ddd);
         }
 
-        Rect tmp = new Rect();
-        a.getTextBounds(aa, 0, aa.length(), tmp);
+        Rect eee = new Rect();
+        a.getTextBounds(aa, 0, aa.length(), eee);
 
         l = a.getFontMetrics().descent;
-        c = new RectF(tmp);
+        c = new RectF(eee);
         //a little workaround because getTextBounds returns smaller width than it is
-        k = a.measureText(aa) - tmp.width();
+        k = a.measureText(aa) - eee.width();
         c.left = 0;
-        c.right = tmp.width() + k;
+        c.right = eee.width() + k;
         c.top = -a.getFontSpacing();
         c.bottom = 0;
 

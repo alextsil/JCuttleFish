@@ -17,15 +17,15 @@ public class Text implements Comparable<Text> {
 
     private void initBounds(String aa) {
 
-        Rect tmp = new Rect();
-        a.getTextBounds(aa, 0, aa.length(), tmp);
+        Rect aaa = new Rect();
+        a.getTextBounds(aa, 0, aa.length(), aaa);
 
         c = a.getFontMetrics().descent;
-        b = new RectF(tmp);
+        b = new RectF(aaa);
         //a little workaround because getTextBounds returns smaller width than it is
-        d = a.measureText(aa) - tmp.width();
+        d = a.measureText(aa) - aaa.width();
         b.left = 0;
-        b.right = tmp.width() + d;
+        b.right = aaa.width() + d;
         b.top = -a.getFontSpacing();
         b.bottom = 0;
     }

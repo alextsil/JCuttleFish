@@ -5,6 +5,8 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Expression;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.CastToAndVisit;
 
 import java.util.Collection;
@@ -14,6 +16,7 @@ public class AssignmentVisitor extends ASTVisitor
 {
 
     private Collection<AstNodeFoundCallback> callbacks;
+    private final Logger logger = LoggerFactory.getLogger( AssignmentVisitor.class );
 
     public AssignmentVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
@@ -46,7 +49,6 @@ public class AssignmentVisitor extends ASTVisitor
         } else if ( expressionNodeType == ASTNode.QUALIFIED_NAME )
         {
             CastToAndVisit.qualifiedName( expression, this.callbacks );
-
         } else if ( expressionNodeType == ASTNode.METHOD_INVOCATION )
         {
             CastToAndVisit.methodInvocation( expression, this.callbacks );
@@ -56,6 +58,12 @@ public class AssignmentVisitor extends ASTVisitor
         } else if ( expressionNodeType == ASTNode.PREFIX_EXPRESSION )
         {
             CastToAndVisit.prefixExpression( expression, this.callbacks );
+        } else if ( expressionNodeType == ASTNode.CLASS_INSTANCE_CREATION )
+        {
+            CastToAndVisit.classInstanceCreation( expression, this.callbacks );
+        } else
+        {
+            this.logger.warn( "Not mapped yet. Type : " + expression.getClass() );
         }
     }
 }

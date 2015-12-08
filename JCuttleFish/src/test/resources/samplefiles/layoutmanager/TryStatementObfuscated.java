@@ -9,25 +9,25 @@ public class KeybIntReader
 
     public void read ()
     {
-        BufferedReader br = new BufferedReader( new InputStreamReader(
+        BufferedReader aaa = new BufferedReader( new InputStreamReader(
                 System.in ) );
 
-        boolean cont = true;
+        boolean bbb = true;
 
-        while ( cont )
+        while ( bbb )
         {
             System.out.print( "Enter an integer:" );
-            a = br.readLine();
-            StringTokenizer st = new StringTokenizer( a );
+            a = aaa.readLine();
+            StringTokenizer ccc = new StringTokenizer( a );
             b = "";
 
-            while ( cont && st.hasMoreTokens() )
+            while ( bbb && ccc.hasMoreTokens() )
             {
                 try
                 {
-                    b = st.nextToken();
+                    b = ccc.nextToken();
                     c = Integer.parseInt( b );
-                    cont = false;
+                    bbb = false;
                 } catch ( NumberFormatException n )
                 {
                     System.out.println( "The value in \"" + b + "\" is not an integer" );

@@ -1,9 +1,6 @@
 package obfuscations.layout;
 
-import obfuscations.layout.callbacks.AstNodeFoundCallback;
-import obfuscations.layout.callbacks.FieldAccessNodeFoundCallBack;
-import obfuscations.layout.callbacks.QualifiedNameNodeFoundCallBack;
-import obfuscations.layout.callbacks.SimpleNameNodeFoundCallBack;
+import obfuscations.layout.callbacks.*;
 import obfuscations.layout.visitors.StatementVisitor;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
@@ -16,7 +13,8 @@ import util.SourceUtil;
 import util.enums.ObfuscatedNamesVariations;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 
 public class LayoutManager
@@ -27,6 +25,7 @@ public class LayoutManager
         this.add( new SimpleNameNodeFoundCallBack() );
         this.add( new FieldAccessNodeFoundCallBack() );
         this.add( new QualifiedNameNodeFoundCallBack() );
+        this.add( new VariableDeclarationStatementNodeFoundCallBack() );
     }};
     private CompilationUnit cu;
     private HashMap<String, List<ASTNode>> collectedNodes = new HashMap<>();
@@ -49,7 +48,8 @@ public class LayoutManager
 
                 this.groupFoundNodesToCollection();
 
-                ConvenienceWrappers.returnMethodDeclarations( typeDeclaration ).stream().forEach( md -> this.obfuscateMethodParameters( md ) );
+                ConvenienceWrappers.returnMethodDeclarations( typeDeclaration ).stream().forEach( this::obfuscateMethodParameters );
+                ConvenienceWrappers.returnMethodDeclarations( typeDeclaration ).stream().forEach( this::obfuscateMethodDeclaredVariables );
 
                 this.obfuscateClassLocalVarsAndReferences();
             }
@@ -63,7 +63,42 @@ public class LayoutManager
     {
         this.classLocalFields = ConvenienceWrappers.getPrivateFieldDeclarations( typeDeclaration )
                 .stream().map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
-                .map( vdf -> vdf.getName() ).collect( Collectors.toList() );
+                .map( vdf -> vdf.getName() )
+                .collect( toList() );
+    }
+
+    private void obfuscateMethodDeclaredVariables ( MethodDeclaration methodDeclaration )
+    {
+        ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
+        Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.METHOD_LOCAL_VARS );
+
+        Comparator<VariableDeclarationStatement> byOccurence =
+                ( VariableDeclarationStatement o1, VariableDeclarationStatement o2 ) -> o1.getStartPosition() - o2.getStartPosition();
+
+        List<VariableDeclarationStatement> methodDeclaredVarDeclStatements = this.callbacks.stream()
+                .filter( c -> c instanceof VariableDeclarationStatementNodeFoundCallBack )
+                .findFirst().get().getFoundNodes().stream()
+                .map( VariableDeclarationStatement.class::cast )
+                .sorted( byOccurence )
+                .collect( toList() );
+
+        methodDeclaredVarDeclStatements.stream()
+                .forEach( vds ->
+                {
+                    VariableDeclarationFragment f = ( VariableDeclarationFragment )vds.fragments().get( 0 );
+                    SimpleName sn = f.getName();
+
+                    this.collectedNodes.get( sn.getIdentifier() )
+                            .stream()
+                            .filter( occurence -> occurence instanceof SimpleName )
+                            .map( SimpleName.class::cast )
+                            .filter( fsn -> OptionalUtils.getIVariableBinding( sn ).isPresent() )
+                            .filter( fsn -> OptionalUtils.getIVariableBinding( sn )
+                                    .get().getDeclaringMethod()
+                                    .isEqualTo( methodDeclaration.resolveBinding() ) )
+                            .forEach( fsn -> fsn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
+                    sn.setIdentifier( obfuscatedVariableNames.poll() );
+                } );
     }
 
     private void obfuscateMethodParameters ( MethodDeclaration methodDeclaration )

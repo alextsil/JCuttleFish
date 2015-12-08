@@ -30,16 +30,16 @@ public class PanelChoixType extends JPanel
     public PanelChoixType ( Fenetre aa )
     {
         this.i = aa;
-        String[] types = new String[]{ "Musique", "Video", "Documents Texte", "Images", "Gestion", "Cours" };
+        String[] aaa = new String[]{ "Musique", "Video", "Documents Texte", "Images", "Gestion", "Cours" };
         a = BorderFactory.createLineBorder( Color.black );
         b = BorderFactory.createTitledBorder( a, "Gestion des types" );
-        c = new JComboBox( types );
+        c = new JComboBox( aaa );
         e = new JTextArea( 2, 8 );
         e.setBorder( a );
         f = new JButton( "Ajouter" );
         g = new JButton( "Supprimer" );
-        String[] ext = new String[]{ "mp3", "wav", "machin" };
-        h = new JList( ext );
+        String[] bbb = new String[]{ "mp3", "wav", "machin" };
+        h = new JList( bbb );
         setLayout( new FlowLayout() );
 
         add( c );

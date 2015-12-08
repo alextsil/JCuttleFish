@@ -8,17 +8,17 @@ public class While
 
     public void whileStuff ()
     {
-        int loopVal = 0;
+        int aaa = 0;
 
-        while ( loopVal < 5 )
+        while ( aaa < 5 )
         {
             while ( a > 0 )
             {
                 a = Math.random();
                 b = Math.random();
-                loopVal++;
+                aaa++;
             }
-            loopVal += 2;
+            aaa += 2;
         }
     }
 }

@@ -53,7 +53,7 @@ public class MethodArgumentsVisitor
                 CastToAndVisit.methodInvocation( methodInvocation, this.callbacks );
             } else
             {
-                this.logger.warn( "Not mapped yet" );
+                this.logger.warn( "Not mapped yet. Type :  " + arguments.get( i ).getClass() );
             }
         }
         return false;

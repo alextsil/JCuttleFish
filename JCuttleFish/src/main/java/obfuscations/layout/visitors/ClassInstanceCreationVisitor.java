@@ -24,7 +24,7 @@ public class ClassInstanceCreationVisitor extends ASTVisitor
     {
         this.callbacks.stream().forEach( c -> c.notify( classInstanceCreation ) );
 
-        //Rename and thisify arguments
+        //Rename arguments
         List<Object> arguments = classInstanceCreation.arguments();
         ModifyAst.renameMethodInvocationArguments( arguments, this.callbacks );
         new MethodArgumentsVisitor( this.callbacks ).visit( arguments );
