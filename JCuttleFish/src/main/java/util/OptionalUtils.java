@@ -1,9 +1,6 @@
 package util;
 
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.FieldAccess;
-import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.*;
 
 import java.util.Optional;
 
@@ -26,6 +23,15 @@ public class OptionalUtils
         {
             FieldAccess fa = ( FieldAccess )node;
             IVariableBinding ivb = fa.resolveFieldBinding();
+            if ( ivb != null )
+            {
+                return Optional.of( ivb );
+            }
+        }
+        if ( node.getNodeType() == ASTNode.VARIABLE_DECLARATION_FRAGMENT )
+        {
+            VariableDeclarationFragment vdf = ( VariableDeclarationFragment )node;
+            IVariableBinding ivb = vdf.resolveBinding();
             if ( ivb != null )
             {
                 return Optional.of( ivb );

@@ -10,4 +10,9 @@ public class Test
         var3 = var2 + var1;
         var3 = null;
     }
+
+    public void test2 ( String var1, String var2 )
+    {
+        test( var1, var2 );
+    }
 }

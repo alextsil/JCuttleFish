@@ -102,15 +102,15 @@ public class Text implements Comparable<Text> {
         aa.save();
         aa.concat( i );
 
-        final float finalX = f.left;
+        final float aaa = f.left;
 
         if (j.isEmpty()) {
-            aa.drawText(b, finalX, -f.bottom - l, a);
+            aa.drawText(b, aaa, -f.bottom - l, a);
         } else {
             for (ITextEffect effect : j) {
                 aa.save();
-                effect.apply(aa, b, finalX, -f.bottom, a);
-                aa.drawText(b, finalX, -f.bottom, a);
+                effect.apply(aa, b, aaa, -f.bottom, a);
+                aa.drawText(b, aaa, -f.bottom, a);
                 aa.restore();
             }
 
@@ -133,16 +133,16 @@ public class Text implements Comparable<Text> {
 
         d.set(c.left, c.top, c.right, c.bottom);
 
-        final float sx = h.getScaleX();
-        final float sy = h.getScaleY();
-        final float sPivotX = e.getRelativeX((int) h.getPivot().x, this, false);
-        final float sPivotY = e.getRelativeY((int) h.getPivot().y, this, false);
-        final float x = e.getX(aa, getWidth() * sx);
-        final float y = e.getY(aa, getHeight() * sy);
+        final float aaa = h.getScaleX();
+        final float bbb = h.getScaleY();
+        final float ccc = e.getRelativeX((int) h.getPivot().x, this, false);
+        final float ddd = e.getRelativeY((int) h.getPivot().y, this, false);
+        final float eee = e.getX(aa, getWidth() * aaa);
+        final float fff = e.getY(aa, getHeight() * bbb);
 
         i.reset();
-        i.preTranslate(x, y);
-        i.preScale(sx, sy, sPivotX, sPivotY);
+        i.preTranslate(eee, fff);
+        i.preScale(aaa, bbb, ccc, ddd);
         i.mapRect(d);
     }
 

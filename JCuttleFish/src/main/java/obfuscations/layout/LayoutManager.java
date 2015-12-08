@@ -48,8 +48,11 @@ public class LayoutManager
 
                 this.groupFoundNodesToCollection();
 
-                ConvenienceWrappers.returnMethodDeclarations( typeDeclaration ).stream().forEach( this::obfuscateMethodParameters );
-                ConvenienceWrappers.returnMethodDeclarations( typeDeclaration ).stream().forEach( this::obfuscateMethodDeclaredVariables );
+                Collection<MethodDeclaration> methods = ConvenienceWrappers.returnMethodDeclarations( typeDeclaration );
+                methods.stream().forEach( m -> {
+                    this.obfuscateMethodParameters( m );
+                    this.obfuscateMethodDeclaredVariables( m );
+                } );
 
                 this.obfuscateClassLocalVarsAndReferences();
             }
@@ -79,6 +82,17 @@ public class LayoutManager
                 .filter( c -> c instanceof VariableDeclarationStatementNodeFoundCallBack )
                 .findFirst().get().getFoundNodes().stream()
                 .map( VariableDeclarationStatement.class::cast )
+                .filter( vds -> {
+                    VariableDeclarationFragment vdf = ( VariableDeclarationFragment )vds.fragments().get( 0 );
+                    Optional<IVariableBinding> oivb = OptionalUtils.getIVariableBinding( vdf );
+                    if ( oivb.isPresent() )
+                    {
+                        return oivb.get().getDeclaringMethod().isEqualTo( methodDeclaration.resolveBinding() );
+                    } else
+                    {
+                        return false;
+                    }
+                } )
                 .sorted( byOccurence )
                 .collect( toList() );
 
@@ -93,8 +107,7 @@ public class LayoutManager
                             .filter( occurence -> occurence instanceof SimpleName )
                             .map( SimpleName.class::cast )
                             .filter( fsn -> OptionalUtils.getIVariableBinding( sn ).isPresent() )
-                            .filter( fsn -> OptionalUtils.getIVariableBinding( sn )
-                                    .get().getDeclaringMethod()
+                            .filter( fsn -> OptionalUtils.getIVariableBinding( sn ).get().getDeclaringMethod()
                                     .isEqualTo( methodDeclaration.resolveBinding() ) )
                             .forEach( fsn -> fsn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
                     sn.setIdentifier( obfuscatedVariableNames.poll() );

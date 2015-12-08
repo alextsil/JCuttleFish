@@ -10,4 +10,9 @@ public class Test
         ccc = bbb + aaa;
         ccc = null;
     }
+
+    public void test2 ( String aa, String bb )
+    {
+        test( aa, bb );
+    }
 }
