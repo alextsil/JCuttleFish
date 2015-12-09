@@ -1,38 +1,237 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="JCuttleFish" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$" external.system.id="GRADLE" external.system.module.group="com.Jfish" external.system.module.version="0.2" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
-    <output url="file://$MODULE_DIR$/target/classes" />
-    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <output url="file://$MODULE_DIR$/build/classes/main" />
+    <output-test url="file://$MODULE_DIR$/build/classes/test" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/.settings" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="org.eclipse.jdt.apt.core-3.4.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="org.eclipse.jdt.core-3.12.0-SNAPSHOT-sources" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
-    <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.10" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.10" level="project" />
-    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.core.contenttype:3.4.200.v20140207-1251" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.core.jobs:3.6.0.v20140424-0053" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.core.resources:3.9.1.v20140825-1431" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.core.runtime:3.10.0.v20140318-2214" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.equinox.common:3.6.200.v20130402-1505" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.birt.runtime:org.eclipse.equinox.preferences:3.5.200.v20140224-1527" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse:org.eclipse.osgi:3.8.0.v20120529-1548" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.jdt.compiler:tool:1.0.0-v_771" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.tycho:org.eclipse.jdt.compiler.apt:1.1.0.v20140509-1235" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.text:org.eclipse.text:3.5.101" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.core:org.eclipse.core.commands:3.6.0" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.equinox:org.eclipse.equinox.common:3.6.0" level="project" />
-    <orderEntry type="library" name="Maven: org.jibx.config.3rdparty.org.eclipse:org.eclipse.text:3.5.100.v20110505-0800" level="project" />
+    <orderEntry type="module-library">
+      <library name="Gradle: :org.eclipse.jdt.core:3.12.0-SNAPSHOT">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/org.eclipse.jdt.core-3.12.0-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/libs/org.eclipse.jdt.core-3.12.0-SNAPSHOT-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: commons-io:commons-io:2.4">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.4/b1b6ea3b7e4aa4f492509a4952029cd8e48019ad/commons-io-2.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.4/f2d8698c46d1167ff24b06a840a87d91a02db891/commons-io-2.4-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.slf4j:slf4j-log4j12:1.7.10">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-log4j12/1.7.10/b3eeae7d1765f988a1f45ea81517191315c69c9e/slf4j-log4j12-1.7.10.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-log4j12/1.7.10/49c7ee5f2f363e6fa8ce5faa7e3be49d0124884e/slf4j-log4j12-1.7.10-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.slf4j:slf4j-api:1.7.10">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.10/5b338f206827d88acd890739f400a9b7664e5984/slf4j-api-1.7.10.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.10/4d2725efe68b9943ba0deaf334bb27116ca6b687/slf4j-api-1.7.10-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: log4j:log4j:1.2.17">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/log4j/log4j/1.2.17/5af35056b4d257e4b64b9e8069c0746e8b08629f/log4j-1.2.17.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/log4j/log4j/1.2.17/677abe279b68c5e7490d6d50c6951376238d7d3e/log4j-1.2.17-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.eclipse.birt.runtime:org.eclipse.core.contenttype:3.4.200.v20140207-1251">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.birt.runtime/org.eclipse.core.contenttype/3.4.200.v20140207-1251/5a88250f5130bc9614eac00ba7bb4bf4524e4585/org.eclipse.core.contenttype-3.4.200.v20140207-1251.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.birt.runtime/org.eclipse.core.contenttype/3.4.200.v20140207-1251/c0f177b75c34878dd3a6b941b99f4bcbff1f2804/org.eclipse.core.contenttype-3.4.200.v20140207-1251-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.eclipse.birt.runtime:org.eclipse.core.jobs:3.6.0.v20140424-0053">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.birt.runtime/org.eclipse.core.jobs/3.6.0.v20140424-0053/e013c919510607d9c8ac5585b66ff4ee5e364ec9/org.eclipse.core.jobs-3.6.0.v20140424-0053.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.birt.runtime/org.eclipse.core.jobs/3.6.0.v20140424-0053/2937c6bf50293283784be3d434863041461dedb0/org.eclipse.core.jobs-3.6.0.v20140424-0053-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.eclipse.birt.runtime:org.eclipse.core.resources:3.9.1.v20140825-1431">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.birt.runtime/org.eclipse.core.resources/3.9.1.v20140825-1431/24a0e4b809d9cb102e7bf8123a2844657b916090/org.eclipse.core.resources-3.9.1.v20140825-1431.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.birt.runtime/org.eclipse.core.resources/3.9.1.v20140825-1431/69cd4e2946b8260a7070b412cc39c034e6df3e8/org.eclipse.core.resources-3.9.1.v20140825-1431-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.eclipse.birt.runtime:org.eclipse.core.runtime:3.10.0.v20140318-2214">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.birt.runtime/org.eclipse.core.runtime/3.10.0.v20140318-2214/a537de26c1e322a68536a3a2c3cb2389d5dbcb00/org.eclipse.core.runtime-3.10.0.v20140318-2214.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.birt.runtime/org.eclipse.core.runtime/3.10.0.v20140318-2214/93435d6f0a307689e33fb46d42b4b810e732a932/org.eclipse.core.runtime-3.10.0.v20140318-2214-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.eclipse.birt.runtime:org.eclipse.equinox.common:3.6.200.v20130402-1505">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.birt.runtime/org.eclipse.equinox.common/3.6.200.v20130402-1505/550778d95ea4d5f2fee765e85eb799cec21067e0/org.eclipse.equinox.common-3.6.200.v20130402-1505.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.birt.runtime/org.eclipse.equinox.common/3.6.200.v20130402-1505/35fac95917b54da3680546c8230be6a7f06eb16/org.eclipse.equinox.common-3.6.200.v20130402-1505-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.eclipse.birt.runtime:org.eclipse.equinox.preferences:3.5.200.v20140224-1527">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.birt.runtime/org.eclipse.equinox.preferences/3.5.200.v20140224-1527/4490f949d8e53afeaa8dc2ebcb8dedc46bf5f7db/org.eclipse.equinox.preferences-3.5.200.v20140224-1527.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.birt.runtime/org.eclipse.equinox.preferences/3.5.200.v20140224-1527/c0f177b75c34878dd3a6b941b99f4bcbff1f2804/org.eclipse.equinox.preferences-3.5.200.v20140224-1527-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.eclipse:org.eclipse.osgi:3.8.0.v20120529-1548">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse/org.eclipse.osgi/3.8.0.v20120529-1548/b54e470d47df378b9dce9423f919ccf4c7a60138/org.eclipse.osgi-3.8.0.v20120529-1548.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse/org.eclipse.osgi/3.8.0.v20120529-1548/e150624772453437d207f01896b30c8bdba7bf37/org.eclipse.osgi-3.8.0.v20120529-1548-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.eclipse.jdt.compiler:tool:1.0.0-v_771">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jdt.compiler/tool/1.0.0-v_771/7b32379d39a00351d01f5ae72cca1cb392cc37fb/tool-1.0.0-v_771.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.eclipse.tycho:org.eclipse.jdt.compiler.apt:1.1.0.v20140509-1235">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.tycho/org.eclipse.jdt.compiler.apt/1.1.0.v20140509-1235/4b08d8b4a586a8e6804b3f1121e37ce578bdc52/org.eclipse.jdt.compiler.apt-1.1.0.v20140509-1235.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.tycho/org.eclipse.jdt.compiler.apt/1.1.0.v20140509-1235/82445ff4ba27687414a97e79e97ccb5e19341f68/org.eclipse.jdt.compiler.apt-1.1.0.v20140509-1235-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.eclipse.text:org.eclipse.text:3.5.101">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.text/org.eclipse.text/3.5.101/54a442442c575e6809c18f7dfc848755a58ab955/org.eclipse.text-3.5.101.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.text/org.eclipse.text/3.5.101/5ff04e5cad411110121254b80650a42758c4170e/org.eclipse.text-3.5.101-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.jibx.config.3rdparty.org.eclipse:org.eclipse.text:3.5.100.v20110505-0800">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jibx.config.3rdparty.org.eclipse/org.eclipse.text/3.5.100.v20110505-0800/3dc1f98d887201bb243136f81b2c641c1ae442e9/org.eclipse.text-3.5.100.v20110505-0800.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jibx.config.3rdparty.org.eclipse/org.eclipse.text/3.5.100.v20110505-0800/62fbbfce8cfc59da787cf4a6c728baee0820d89a/org.eclipse.text-3.5.100.v20110505-0800-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.eclipse.core:org.eclipse.core.commands:3.6.0">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.core/org.eclipse.core.commands/3.6.0/11c16b281bc722e9acb07a0562f0aa6e824d6215/org.eclipse.core.commands-3.6.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.core/org.eclipse.core.commands/3.6.0/b2e6f6a01dfad2730c3b7f9368b57f76bf35ae2f/org.eclipse.core.commands-3.6.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Gradle: org.eclipse.equinox:org.eclipse.equinox.common:3.6.0">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.equinox/org.eclipse.equinox.common/3.6.0/78e5d0b8516b042495660da36ce5114650f8f156/org.eclipse.equinox.common-3.6.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.equinox/org.eclipse.equinox.common/3.6.0/5f79e3e9a454d4b7255dc5d091c93e03e0c4e488/org.eclipse.equinox.common-3.6.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library name="Gradle: junit:junit:4.11">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.11/4e031bb61df09069aeb2bffb4019e7a5034a4ee0/junit-4.11.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.11/28e0ad201304e4a4abf999ca0570b7cffc352c3c/junit-4.11-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library name="Gradle: org.hamcrest:hamcrest-core:1.3">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

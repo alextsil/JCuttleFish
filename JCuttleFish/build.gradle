@@ -1,0 +1,49 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'application'
+
+group = 'com.Jfish'
+version = '0.2'
+
+description = """JCuttleFish"""
+
+mainClassName = "Main"
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
+}
+
+compileJava {
+    sourceCompatibility = '1.8'
+}
+
+
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+
+    maven { url "http://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    compile name: 'org.eclipse.jdt.core-3.12.0-SNAPSHOT', version: '3.12.0-SNAPSHOT'
+    compile group: 'commons-io', name: 'commons-io', version: '2.4'
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.10'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.10'
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    compile group: 'org.eclipse.birt.runtime', name: 'org.eclipse.core.contenttype', version: '3.4.200.v20140207-1251'
+    compile group: 'org.eclipse.birt.runtime', name: 'org.eclipse.core.jobs', version: '3.6.0.v20140424-0053'
+    compile group: 'org.eclipse.birt.runtime', name: 'org.eclipse.core.resources', version: '3.9.1.v20140825-1431'
+    compile group: 'org.eclipse.birt.runtime', name: 'org.eclipse.core.runtime', version: '3.10.0.v20140318-2214'
+    compile group: 'org.eclipse.birt.runtime', name: 'org.eclipse.equinox.common', version: '3.6.200.v20130402-1505'
+    compile group: 'org.eclipse.birt.runtime', name: 'org.eclipse.equinox.preferences', version: '3.5.200.v20140224-1527'
+    compile group: 'org.eclipse', name: 'org.eclipse.osgi', version: '3.8.0.v20120529-1548'
+    compile group: 'org.eclipse.jdt.compiler', name: 'tool', version: '1.0.0-v_771'
+    compile group: 'org.eclipse.tycho', name: 'org.eclipse.jdt.compiler.apt', version: '1.1.0.v20140509-1235'
+    compile group: 'org.eclipse.text', name: 'org.eclipse.text', version: '3.5.101'
+    compile group: 'org.jibx.config.3rdparty.org.eclipse', name: 'org.eclipse.text', version: '3.5.100.v20110505-0800'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
