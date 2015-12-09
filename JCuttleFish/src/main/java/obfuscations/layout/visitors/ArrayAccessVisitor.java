@@ -24,8 +24,10 @@ public class ArrayAccessVisitor extends ASTVisitor
     public boolean visit ( ArrayAccess arrayAccess )
     {
         this.callbacks.stream().forEach( c -> c.notify( arrayAccess ) );
-        logger.info( "ran : " + arrayAccess.getClass() );
+
         new ExpressionVisitor( this.callbacks ).visit( arrayAccess.getArray() );
+        new ExpressionVisitor( this.callbacks ).visit( arrayAccess.getIndex() );
+
         return false;
     }
 }
