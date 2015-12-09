@@ -6,7 +6,10 @@ public class Main
 
     public static void main ( String[] args )
     {
-        new ObfuscationCoordinator();
+        String originalLocationPath = args[ 0 ];
+        String backupLocationPath = args[ 1 ];
+
+        new ObfuscationCoordinator( originalLocationPath, backupLocationPath );
     }
 
 }

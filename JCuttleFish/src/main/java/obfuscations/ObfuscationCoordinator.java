@@ -19,10 +19,13 @@ import java.util.List;
 public class ObfuscationCoordinator
 {
 
-    public ObfuscationCoordinator ()
+    public ObfuscationCoordinator ( String originalAbsolutePath, String backupAbsolutePath )
     {
-        File originalLocation = new File( "C:/target/main/java" );
-        File backupLocation = new File( "C:/freshbackup/backup" );
+//        File originalLocation = new File( "C:/target/main/java" );
+//        File backupLocation = new File( "C:/freshbackup" );
+
+        File originalLocation = new File( originalAbsolutePath );
+        File backupLocation = new File( backupAbsolutePath );
         this.backupFilesAtLocation( originalLocation, backupLocation );
 
         PathsExtractor pathsExtractor = new PathsExtractor( originalLocation.getAbsolutePath() );
@@ -36,18 +39,23 @@ public class ObfuscationCoordinator
         {
             UnitSource unitSource = initiator.fetchUnitSource( fileSourceCodeProvider.get( file ) );
             unitSource = layoutManager.obfuscate( unitSource );
-            try
-            {
-                FileUtils.writeStringToFile( file, unitSource.getDocument().get() );
-            } catch ( IOException ioe )
-            {
-                ioe.printStackTrace();
-            }
+            this.writeUnitSourceToFile( file, unitSource );
         }
     }
 
     private void backupFilesAtLocation ( File originalLocation, File backupLocation )
     {
         BackupFilesHelper.backupFiles( originalLocation, backupLocation );
+    }
+
+    private void writeUnitSourceToFile ( File file, UnitSource unitSource )
+    {
+        try
+        {
+            FileUtils.writeStringToFile( file, unitSource.getDocument().get() );
+        } catch ( IOException ioe )
+        {
+            ioe.printStackTrace();
+        }
     }
 }

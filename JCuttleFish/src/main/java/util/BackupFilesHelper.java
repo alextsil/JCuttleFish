@@ -1,6 +1,7 @@
 package util;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,31 +10,25 @@ import java.io.IOException;
 public class BackupFilesHelper
 {
 
-    static public boolean backupFiles ( File sourceDir, File destDir )
+    static public void backupFiles ( File sourceDir, File destDirBase )
     {
         try
         {
-            if ( destDir.isDirectory() )
+            if ( destDirBase.isDirectory() )
             {
-                FileUtils.forceDelete( destDir );
-                FileUtils.forceMkdir( destDir );
-                destDir.setWritable( true );
+                String destinationPath = FilenameUtils.concat( destDirBase.getPath(), "JCuttleFishBackup" );
+                final File destinationDir = new File( destinationPath );
+                FileUtils.forceMkdir( destinationDir );
+                destinationDir.setWritable( true );
+                FileUtils.copyDirectory( sourceDir, destinationDir );
+            } else
+            {
+                throw new RuntimeException( "Given backup directory does not exist." );
             }
         } catch ( IOException ioex1 )
         {
             ioex1.printStackTrace();
-            return false;
+            throw new RuntimeException( "Cannot complete backup." );
         }
-
-        try
-        {
-            FileUtils.copyDirectory( sourceDir, destDir );
-        } catch ( IOException e )
-        {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
     }
 }
