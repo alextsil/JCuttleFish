@@ -1,33 +1,31 @@
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'application'
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '1.2.2'
+}
 
 group = 'com.Jfish'
 version = '0.2'
 
 description = """JCuttleFish"""
 
-mainClassName = "Main"
-
-jar {
-    manifest {
-        attributes 'Main-Class': 'Main'
-    }
-}
-
 compileJava {
     sourceCompatibility = '1.8'
 }
 
-
+jar {
+    manifest {
+        attributes 'Main-Class': 'Main', 'Built-At': new Date();
+    }
+}
 
 repositories {
+    mavenCentral()
+
     flatDir {
         dirs 'libs'
     }
-
-    maven { url "http://repo.maven.apache.org/maven2" }
 }
+
 dependencies {
     compile name: 'org.eclipse.jdt.core-3.12.0-SNAPSHOT', version: '3.12.0-SNAPSHOT'
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
