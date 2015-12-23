@@ -7,6 +7,12 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.UnitSource;
+import providers.FileSourceCodeProvider;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class UnitSourceInitiator
@@ -19,9 +25,9 @@ public class UnitSourceInitiator
     {
     }
 
-    public UnitSource fetchUnitSource ( String sourceCode )
+    public UnitSource fetchUnitSource ( File file )
     {
-        this.sourceCode = sourceCode;
+        this.sourceCode = this.getSourceCodeFromFile( file );
         ObfuscationEnvironment obfuscationEnvironment = new ObfuscationEnvironment();
         ASTParser parser = ASTParser.newParser( AST.JLS8 );
         parser.setKind( ASTParser.K_COMPILATION_UNIT );
@@ -36,6 +42,20 @@ public class UnitSourceInitiator
         parser.setResolveBindings( true );
 
         CompilationUnit cu = ( CompilationUnit )parser.createAST( null );
-        return new UnitSource( cu, this.sourceCode );
+        return new UnitSource( cu, file, this.sourceCode );
+    }
+
+    public Collection<UnitSource> fetchUnitSourceCollection ( Collection<File> files )
+    {
+        List<UnitSource> unitSources = files.stream()
+                .map( this::fetchUnitSource )
+                .collect( Collectors.toList() );
+        return unitSources;
+    }
+
+    private String getSourceCodeFromFile ( File file )
+    {
+        FileSourceCodeProvider fileSourceCodeProvider = new FileSourceCodeProvider();
+        return fileSourceCodeProvider.get( file );
     }
 }

@@ -7,11 +7,11 @@ import obfuscations.layout.LayoutManager;
 import org.apache.commons.io.FileUtils;
 import parser.UnitSourceInitiator;
 import pojo.UnitSource;
-import providers.FileSourceCodeProvider;
 import util.BackupFilesHelper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -28,19 +28,17 @@ public class ObfuscationCoordinator
         File backupLocation = new File( backupAbsolutePath );
         this.backupFilesAtLocation( originalLocation, backupLocation );
 
-        PathsExtractor pathsExtractor = new PathsExtractor( originalLocation.getAbsolutePath() );
-        List<File> originalFiles = pathsExtractor.getFilesInstances( new SuffixFolderFilter( SuffixFilters.JAVA ) );
+        Collection<File> originalFiles = this.getAbsolutePaths( originalLocation.getAbsolutePath() );
 
         UnitSourceInitiator initiator = new UnitSourceInitiator();
 
+        Collection<UnitSource> unitSources = initiator.fetchUnitSourceCollection( originalFiles );
+        //TODO : call nodeFinder and map the UnitSource list to a UnitNode list -> pass into layoutmanager
         obfuscations.layout.LayoutManager layoutManager = new LayoutManager();
-        FileSourceCodeProvider fileSourceCodeProvider = new FileSourceCodeProvider();
-        for ( File file : originalFiles )
-        {
-            UnitSource unitSource = initiator.fetchUnitSource( fileSourceCodeProvider.get( file ) );
-            unitSource = layoutManager.obfuscate( unitSource );
-            this.writeUnitSourceToFile( file, unitSource );
-        }
+        layoutManager.obfuscate( unitSources );
+
+        this.saveUnitSourcesToFiles( unitSources );
+
     }
 
     private void backupFilesAtLocation ( File originalLocation, File backupLocation )
@@ -48,14 +46,24 @@ public class ObfuscationCoordinator
         BackupFilesHelper.backupFiles( originalLocation, backupLocation );
     }
 
-    private void writeUnitSourceToFile ( File file, UnitSource unitSource )
+    private void saveUnitSourcesToFiles ( Collection<UnitSource> unitSources )
     {
-        try
+        for ( UnitSource unitSource : unitSources )
         {
-            FileUtils.writeStringToFile( file, unitSource.getDocument().get() );
-        } catch ( IOException ioe )
-        {
-            ioe.printStackTrace();
+            try
+            {
+                FileUtils.writeStringToFile( unitSource.getFile(), unitSource.getDocument().get() );
+            } catch ( IOException ioe )
+            {
+                ioe.printStackTrace();
+            }
         }
+    }
+
+    private Collection<File> getAbsolutePaths ( String rootAbsolutePath )
+    {
+        PathsExtractor pathsExtractor = new PathsExtractor( rootAbsolutePath );
+        List<File> originalFiles = pathsExtractor.getFilesInstances( new SuffixFolderFilter( SuffixFilters.JAVA ) );
+        return originalFiles;
     }
 }

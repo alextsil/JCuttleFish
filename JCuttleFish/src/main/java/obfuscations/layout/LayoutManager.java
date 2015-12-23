@@ -1,15 +1,12 @@
 package obfuscations.layout;
 
-import obfuscations.layout.callbacks.*;
-import obfuscations.layout.visitors.StatementVisitor;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.UnitSource;
+import pojo.UnitNode;
 import providers.ObfuscatedNamesProvider;
 import util.ConvenienceWrappers;
 import util.OptionalUtils;
-import util.SourceUtil;
 import util.enums.ObfuscatedNamesVariations;
 
 import java.util.*;
@@ -20,81 +17,55 @@ import static java.util.stream.Collectors.toList;
 public class LayoutManager
 {
 
-    private Collection<AstNodeFoundCallback> callbacks = new ArrayList<AstNodeFoundCallback>()
-    {{
-        this.add( new SimpleNameNodeFoundCallBack() );
-        this.add( new FieldAccessNodeFoundCallBack() );
-        this.add( new QualifiedNameNodeFoundCallBack() );
-        this.add( new VariableDeclarationStatementNodeFoundCallBack() );
-    }};
-    private CompilationUnit cu;
-    private HashMap<String, List<ASTNode>> collectedNodes = new HashMap<>();
-    private List<SimpleName> classLocalFields;
     private final Logger logger = LoggerFactory.getLogger( LayoutManager.class );
 
-    public UnitSource obfuscate ( UnitSource unitSource )
+    public Collection<UnitNode> obfuscate ( Collection<UnitNode> unitNodeCollection )
     {
-        this.cu = unitSource.getCompilationUnit();
-        this.cu.recordModifications();
-
-        if ( ConvenienceWrappers.isValidCompilationUnit( this.cu ) )
+        for ( UnitNode unitNode : unitNodeCollection )
         {
-            TypeDeclaration typeDeclaration = ( TypeDeclaration )this.cu.types().get( 0 );
-            if ( typeDeclaration.resolveBinding().isClass() )
-            {
-                this.populateClassLocalFieldsCollection( typeDeclaration );
-                this.addClassLocalVariablesToMap();
-                this.collectNodes( typeDeclaration );
+            unitNode.recordMofications();
 
-                this.groupFoundNodesToCollection();
+            Collection<MethodDeclaration> methods = ConvenienceWrappers.returnMethodDeclarations( unitNode.getUnitSource().getTypeDeclarationIfIsClass() );
+            methods.stream().forEach( m -> {
+                this.obfuscateMethodParameters( unitNode, m );
+                this.obfuscateMethodDeclaredVariables( unitNode, m );
+            } );
 
-                Collection<MethodDeclaration> methods = ConvenienceWrappers.returnMethodDeclarations( typeDeclaration );
-                methods.stream().forEach( m -> {
-                    this.obfuscateMethodParameters( m );
-                    this.obfuscateMethodDeclaredVariables( m );
-                } );
-
-                this.obfuscateClassLocalVarsAndReferences();
-            }
+            this.obfuscateClassLocalVarsAndReferences( unitNode );
         }
 
-        //TODO: Move "replace" to ObfuscationCoordinator
-        return SourceUtil.replace( unitSource );
+        return unitNodeCollection;
     }
 
-    private void populateClassLocalFieldsCollection ( TypeDeclaration typeDeclaration )
-    {
-        this.classLocalFields = ConvenienceWrappers.getPrivateFieldDeclarations( typeDeclaration )
-                .stream().map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
-                .map( vdf -> vdf.getName() )
-                .collect( toList() );
-    }
-
-    private void obfuscateMethodDeclaredVariables ( MethodDeclaration methodDeclaration )
+    private void obfuscateMethodDeclaredVariables ( UnitNode unitNode, MethodDeclaration methodDeclaration )
     {
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.METHOD_LOCAL_VARS );
 
-        Comparator<VariableDeclarationStatement> byOccurence =
+        Comparator<VariableDeclarationStatement> byOccurrence =
                 ( VariableDeclarationStatement o1, VariableDeclarationStatement o2 ) -> o1.getStartPosition() - o2.getStartPosition();
 
-        List<VariableDeclarationStatement> methodDeclaredVarDeclStatements = this.callbacks.stream()
-                .filter( c -> c instanceof VariableDeclarationStatementNodeFoundCallBack )
-                .findFirst().get().getFoundNodes().stream()
-                .map( VariableDeclarationStatement.class::cast )
-                .filter( vds -> {
-                    VariableDeclarationFragment vdf = ( VariableDeclarationFragment )vds.fragments().get( 0 );
-                    Optional<IVariableBinding> oivb = OptionalUtils.getIVariableBinding( vdf );
-                    if ( oivb.isPresent() )
-                    {
-                        return oivb.get().getDeclaringMethod().isEqualTo( methodDeclaration.resolveBinding() );
-                    } else
-                    {
-                        return false;
-                    }
-                } )
-                .sorted( byOccurence )
-                .collect( toList() );
+//XXX : fix new stream, remove old stream
+//        List<VariableDeclarationStatement> methodDeclaredVarDeclStatements = unitNode.getCollectedNodes()
+//                .values().stream().
+//
+//        List<VariableDeclarationStatement> methodDeclaredVarDeclStatementsOld = this.callbacks.stream()
+//                .filter( c -> c instanceof VariableDeclarationStatementNodeFoundCallBack )
+//                .findFirst().get().getFoundNodes().stream()
+//                .map( VariableDeclarationStatement.class::cast )
+//                .filter( vds -> {
+//                    VariableDeclarationFragment vdf = ( VariableDeclarationFragment )vds.fragments().get( 0 );
+//                    Optional<IVariableBinding> oivb = OptionalUtils.getIVariableBinding( vdf );
+//                    if ( oivb.isPresent() )
+//                    {
+//                        return oivb.get().getDeclaringMethod().isEqualTo( methodDeclaration.resolveBinding() );
+//                    } else
+//                    {
+//                        return false;
+//                    }
+//                } )
+//                .sorted( byOccurrence )
+//                .collect( toList() );
 
         methodDeclaredVarDeclStatements.stream()
                 .forEach( vds ->
@@ -103,7 +74,7 @@ public class LayoutManager
                     SimpleName sn = f.getName();
                     IVariableBinding fragIvb = OptionalUtils.getIVariableBinding( sn ).get();
 
-                    this.collectedNodes.getOrDefault( sn.getIdentifier(), Collections.emptyList() )
+                    unitNode.getCollectedNodes().getOrDefault( sn.getIdentifier(), Collections.emptyList() )
                             .stream()
                             .filter( occurence -> occurence instanceof SimpleName )
                             .map( SimpleName.class::cast )
@@ -114,7 +85,7 @@ public class LayoutManager
                 } );
     }
 
-    private void obfuscateMethodParameters ( MethodDeclaration methodDeclaration )
+    private void obfuscateMethodParameters ( UnitNode unitNode, MethodDeclaration methodDeclaration )
     {
         List<SingleVariableDeclaration> parameters = methodDeclaration.parameters();
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
@@ -124,7 +95,7 @@ public class LayoutManager
             //find occurences and replace
             IVariableBinding paramIvb = OptionalUtils.getIVariableBinding( p ).get();
 
-            this.collectedNodes.getOrDefault( p.getName().getIdentifier(), Collections.emptyList() )
+            unitNode.getCollectedNodes().getOrDefault( p.getName().getIdentifier(), Collections.emptyList() )
                     .stream()
                     .filter( occurence -> occurence instanceof SimpleName )
                     .map( SimpleName.class::cast )
@@ -134,48 +105,24 @@ public class LayoutManager
                     .forEach( sn -> sn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
 
             //rename param on method declaration
-            p.setName( this.cu.getAST().newSimpleName( obfuscatedVariableNames.poll() ) );
+            p.setName( unitNode.getUnitSource().getCompilationUnit().getAST()
+                    .newSimpleName( obfuscatedVariableNames.poll() ) );
         } );
     }
 
-    private void putToMapOrAddToListIfExists ( String identifier, ASTNode node )
-    {
-        if ( this.collectedNodes.containsKey( identifier ) )
-        {
-            List<ASTNode> list = this.collectedNodes.get( identifier );
-            list.add( node );
-        } else
-        {
-            List<ASTNode> list = new ArrayList<>();
-            list.add( node );
-            this.collectedNodes.put( identifier, list );
-        }
-    }
-
-    private void collectNodes ( TypeDeclaration typeDeclaration )
-    {
-        Collection<MethodDeclaration> methodDeclarations = ConvenienceWrappers.returnMethodDeclarations( typeDeclaration );
-
-        methodDeclarations.stream().forEach( md -> {
-            List<Statement> statements = md.getBody().statements();
-            statements.stream().forEach( s -> new StatementVisitor( this.callbacks ).visit( s ) );
-        } );
-    }
-
-    private void addClassLocalVariablesToMap ()
-    {
-        this.classLocalFields.stream()
-                .forEachOrdered( sn -> this.putToMapOrAddToListIfExists( sn.getIdentifier(), sn ) );
-    }
-
-    private void obfuscateClassLocalVarsAndReferences ()
+    private void obfuscateClassLocalVarsAndReferences ( UnitNode unitNode )
     {
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
 
-        this.classLocalFields.stream().forEach( clf ->
+        List<SimpleName> classLocalFields = ConvenienceWrappers.getPrivateFieldDeclarations( unitNode.getUnitSource().getTypeDeclarationIfIsClass() )
+                .stream().map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
+                .map( vdf -> vdf.getName() )
+                .collect( toList() );
+
+        classLocalFields.stream().forEach( clf ->
                 {
-                    this.collectedNodes.get( clf.getIdentifier() )
+                    unitNode.getCollectedNodes().get( clf.getIdentifier() )
                             .stream().forEach( item -> {
                         if ( item instanceof SimpleName )
                         {
@@ -199,31 +146,4 @@ public class LayoutManager
         );
     }
 
-    //TODO : find a way to run only one stream
-    private void groupFoundNodesToCollection ()
-    {
-        this.callbacks.stream()
-                .filter( c -> c instanceof SimpleNameNodeFoundCallBack )
-                .map( c -> ( SimpleNameNodeFoundCallBack )c )
-                .findFirst().ifPresent( c ->
-                c.getFoundNodes().stream()
-                        .map( SimpleName.class::cast )
-                        .forEachOrdered( sn -> this.putToMapOrAddToListIfExists( sn.getIdentifier(), sn ) ) );
-
-        this.callbacks.stream()
-                .filter( c -> c instanceof FieldAccessNodeFoundCallBack )
-                .map( c -> ( FieldAccessNodeFoundCallBack )c )
-                .findFirst().ifPresent( c ->
-                c.getFoundNodes().stream()
-                        .map( FieldAccess.class::cast )
-                        .forEachOrdered( fa -> this.putToMapOrAddToListIfExists( fa.getName().getIdentifier(), fa ) ) );
-
-        this.callbacks.stream()
-                .filter( c -> c instanceof QualifiedNameNodeFoundCallBack )
-                .map( c -> ( QualifiedNameNodeFoundCallBack )c )
-                .findFirst().ifPresent( c ->
-                c.getFoundNodes().stream()
-                        .map( QualifiedName.class::cast )
-                        .forEachOrdered( qn -> this.putToMapOrAddToListIfExists( qn.getName().getIdentifier(), qn ) ) );
-    }
 }
