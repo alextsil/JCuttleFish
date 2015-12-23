@@ -6,6 +6,7 @@ import extractor.filefilters.enums.SuffixFilters;
 import obfuscations.layout.LayoutManager;
 import org.apache.commons.io.FileUtils;
 import parser.UnitSourceInitiator;
+import pojo.UnitNode;
 import pojo.UnitSource;
 import util.BackupFilesHelper;
 
@@ -33,9 +34,9 @@ public class ObfuscationCoordinator
         UnitSourceInitiator initiator = new UnitSourceInitiator();
 
         Collection<UnitSource> unitSources = initiator.fetchUnitSourceCollection( originalFiles );
-        //TODO : call nodeFinder and map the UnitSource list to a UnitNode list -> pass into layoutmanager
+        Collection<UnitNode> unitNodes = new NodeFinder().getUnitNodesCollectionFromUnitSources( unitSources );
         obfuscations.layout.LayoutManager layoutManager = new LayoutManager();
-        layoutManager.obfuscate( unitSources );
+        layoutManager.obfuscate( unitNodes );
 
         this.saveUnitSourcesToFiles( unitSources );
 

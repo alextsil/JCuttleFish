@@ -7,6 +7,7 @@ import pojo.UnitNode;
 import providers.ObfuscatedNamesProvider;
 import util.ConvenienceWrappers;
 import util.OptionalUtils;
+import util.SourceUtil;
 import util.enums.ObfuscatedNamesVariations;
 
 import java.util.*;
@@ -32,6 +33,7 @@ public class LayoutManager
             } );
 
             this.obfuscateClassLocalVarsAndReferences( unitNode );
+            SourceUtil.replace( unitNode.getUnitSource() );
         }
 
         return unitNodeCollection;
@@ -45,29 +47,32 @@ public class LayoutManager
         Comparator<VariableDeclarationStatement> byOccurrence =
                 ( VariableDeclarationStatement o1, VariableDeclarationStatement o2 ) -> o1.getStartPosition() - o2.getStartPosition();
 
-//XXX : fix new stream, remove old stream
-//        List<VariableDeclarationStatement> methodDeclaredVarDeclStatements = unitNode.getCollectedNodes()
-//                .values().stream().
-//
-//        List<VariableDeclarationStatement> methodDeclaredVarDeclStatementsOld = this.callbacks.stream()
-//                .filter( c -> c instanceof VariableDeclarationStatementNodeFoundCallBack )
-//                .findFirst().get().getFoundNodes().stream()
-//                .map( VariableDeclarationStatement.class::cast )
-//                .filter( vds -> {
-//                    VariableDeclarationFragment vdf = ( VariableDeclarationFragment )vds.fragments().get( 0 );
-//                    Optional<IVariableBinding> oivb = OptionalUtils.getIVariableBinding( vdf );
-//                    if ( oivb.isPresent() )
-//                    {
-//                        return oivb.get().getDeclaringMethod().isEqualTo( methodDeclaration.resolveBinding() );
-//                    } else
-//                    {
-//                        return false;
-//                    }
-//                } )
-//                .sorted( byOccurrence )
-//                .collect( toList() );
+        Collection<List<ASTNode>> eksw = unitNode.getCollectedNodes().values();
+        List<VariableDeclarationStatement> methodDeclaredVarDeclStatements = new ArrayList<>();
+        //TODO : fix monstrosity
+        for ( List<ASTNode> mesaLista : eksw )
+        {
+            for ( ASTNode node : mesaLista )
+            {
+                if ( node instanceof VariableDeclarationStatement )
+                {
+                    VariableDeclarationStatement vds = ( VariableDeclarationStatement )node;
+                    VariableDeclarationFragment vdf = ( VariableDeclarationFragment )vds.fragments().get( 0 );
+                    Optional<IVariableBinding> oivb = OptionalUtils.getIVariableBinding( vdf );
+                    if ( oivb.isPresent() )
+                    {
+                        if ( oivb.get().getDeclaringMethod().isEqualTo( methodDeclaration.resolveBinding() ) )
+                        {
+                            methodDeclaredVarDeclStatements.add( vds );
+                        }
+                    }
+                }
+            }
+        }
 
+        methodDeclaredVarDeclStatements.sort( byOccurrence );
         methodDeclaredVarDeclStatements.stream()
+                .map( VariableDeclarationStatement.class::cast )
                 .forEach( vds ->
                 {
                     VariableDeclarationFragment f = ( VariableDeclarationFragment )vds.fragments().get( 0 );
@@ -80,7 +85,7 @@ public class LayoutManager
                             .map( SimpleName.class::cast )
                             .filter( foundsn -> OptionalUtils.getIVariableBinding( foundsn ).isPresent() )
                             .filter( foundsn -> OptionalUtils.getIVariableBinding( foundsn ).get().isEqualTo( fragIvb ) )
-                            .forEach( foundsn -> foundsn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
+                            .forEachOrdered( foundsn -> foundsn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
                     sn.setIdentifier( obfuscatedVariableNames.poll() );
                 } );
     }

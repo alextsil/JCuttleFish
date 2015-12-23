@@ -10,8 +10,6 @@ import util.ConvenienceWrappers;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
-
 
 public class NodeFinder
 {
@@ -80,19 +78,26 @@ public class NodeFinder
                 c.getFoundNodes().stream()
                         .map( QualifiedName.class::cast )
                         .forEachOrdered( qn -> this.putToMapOrAddToListIfExists( map, qn.getName().getIdentifier(), qn ) ) );
+
+        this.callbacks.stream()
+                .filter( c -> c instanceof VariableDeclarationStatementNodeFoundCallBack )
+                .map( c -> ( VariableDeclarationStatementNodeFoundCallBack )c )
+                .findFirst().ifPresent( c ->
+                c.getFoundNodes().stream()
+                        .map( VariableDeclarationStatement.class::cast )
+                        .forEachOrdered( vds -> {
+                            VariableDeclarationFragment vdf = ( VariableDeclarationFragment )vds.fragments().get( 0 );
+                            this.putToMapOrAddToListIfExists( map, vdf.getName().getIdentifier(), vds);
+                        } ) );
     }
 
     private void addClassLocalFieldsToMap ( Map<String, List<ASTNode>> map, TypeDeclaration typeDeclaration )
     {
-        List<SimpleName> classLocalFields;
-
-        classLocalFields = ConvenienceWrappers.getPrivateFieldDeclarations( typeDeclaration )
+        ConvenienceWrappers.getPrivateFieldDeclarations( typeDeclaration )
                 .stream().map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
                 .map( vdf -> vdf.getName() )
-                .collect( toList() );
+                .forEach( sn -> this.putToMapOrAddToListIfExists( map, sn.getIdentifier(), sn ) );
 
-        classLocalFields.stream()
-                .forEachOrdered( sn -> this.putToMapOrAddToListIfExists( map, sn.getIdentifier(), sn ) );
     }
 
     private void putToMapOrAddToListIfExists ( Map<String, List<ASTNode>> map, String identifier, ASTNode node )
