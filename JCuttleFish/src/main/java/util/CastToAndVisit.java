@@ -133,14 +133,7 @@ public class CastToAndVisit
     public static <V extends ASTNode> void simpleName ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         SimpleName simpleName = ( SimpleName )node;
-        new SimpleNameVisitor( callbacks )
-                .visit( simpleName );
-//        Optional<IVariableBinding> optionalIvb = OptionalUtils.getIVariableBinding( simpleName );
-//        if ( simpleName.getIdentifier().equals( callbacks.getObfuscatedVarName() )
-//                && optionalIvb.map( IVariableBinding::isField ).orElse( false ) )
-//        {
-//            ModifyAst.thisifyName( callbacks.getAst(), simpleName );
-//        }
+        new SimpleNameVisitor( callbacks ).visit( simpleName );
     }
 
 }

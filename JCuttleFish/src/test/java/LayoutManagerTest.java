@@ -5,8 +5,6 @@ import providers.FileSourceCodeProvider;
 
 import java.io.File;
 
-import static org.junit.Assert.assertEquals;
-
 
 public class LayoutManagerTest
 {
@@ -22,7 +20,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/UnitSourceObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -33,7 +31,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/ObfuscationEnvironmentObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -44,7 +42,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/PrivateProtectedMatcherObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -56,7 +54,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/ContactObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -67,7 +65,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/SuffixFolderFilterObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -78,7 +76,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/SwingSingleObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -94,7 +92,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/StopwatchObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -110,7 +108,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/staticFinalObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -121,7 +119,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue36_37_38Obfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -132,7 +130,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/animationsObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -143,7 +141,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue40Obfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -154,7 +152,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/IfTreeObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -165,7 +163,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/PostfixExpressionsObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -176,7 +174,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/WhileStatementsObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -187,7 +185,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/DoStatementsObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -198,7 +196,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/SwitchStatementsObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -209,7 +207,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/TryStatementObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -220,7 +218,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/ArrayAccessObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -231,7 +229,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/MethodVarsObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -242,7 +240,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/SuperInvocationObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 
@@ -254,7 +252,7 @@ public class LayoutManagerTest
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/ontheflyObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( this.sourceCodeProvider.get( originalFile ) ) )
+                this.layoutManager.obfuscate( this.initiator.fetchUnitSource( originalFile ) )
                         .getDocument().get() );
     }
 }
