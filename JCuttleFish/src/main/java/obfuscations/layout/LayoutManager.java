@@ -26,7 +26,8 @@ public class LayoutManager
         {
             unitNode.recordMofications();
 
-            Collection<MethodDeclaration> methods = ConvenienceWrappers.returnMethodDeclarations( unitNode.getUnitSource().getTypeDeclarationIfIsClass() );
+            Collection<MethodDeclaration> methods = ConvenienceWrappers
+                    .returnMethodDeclarations( unitNode.getUnitSource().getTypeDeclarationIfIsClass() );
             methods.stream().forEach( m -> {
                 this.obfuscateMethodParameters( unitNode, m );
                 this.obfuscateMethodDeclaredVariables( unitNode, m );
@@ -47,15 +48,12 @@ public class LayoutManager
         Comparator<VariableDeclarationStatement> byOccurrence =
                 ( VariableDeclarationStatement o1, VariableDeclarationStatement o2 ) -> o1.getStartPosition() - o2.getStartPosition();
 
-        Collection<List<ASTNode>> eksw = unitNode.getCollectedNodes().values();
-        List<VariableDeclarationStatement> methodDeclaredVarDeclStatements = new ArrayList<>();
-        //TODO : fix monstrosity
-        for ( List<ASTNode> mesaLista : eksw )
-        {
-            for ( ASTNode node : mesaLista )
-            {
-                if ( node instanceof VariableDeclarationStatement )
-                {
+        Collection<List<ASTNode>> ASTNodeListCollection = unitNode.getCollectedNodes().values();
+
+        List<VariableDeclarationStatement> methodDeclaredVarDeclStatements = ASTNodeListCollection.stream()
+                .flatMap( List::stream )
+                .filter( node -> node instanceof VariableDeclarationStatement )
+                .filter( node -> {
                     VariableDeclarationStatement vds = ( VariableDeclarationStatement )node;
                     VariableDeclarationFragment vdf = ( VariableDeclarationFragment )vds.fragments().get( 0 );
                     Optional<IVariableBinding> oivb = OptionalUtils.getIVariableBinding( vdf );
@@ -63,14 +61,15 @@ public class LayoutManager
                     {
                         if ( oivb.get().getDeclaringMethod().isEqualTo( methodDeclaration.resolveBinding() ) )
                         {
-                            methodDeclaredVarDeclStatements.add( vds );
+                            return true;
                         }
                     }
-                }
-            }
-        }
+                    return false;
+                } )
+                .map( VariableDeclarationStatement.class::cast )
+                .sorted( byOccurrence )
+                .collect( toList() );
 
-        methodDeclaredVarDeclStatements.sort( byOccurrence );
         methodDeclaredVarDeclStatements.stream()
                 .map( VariableDeclarationStatement.class::cast )
                 .forEach( vds ->
