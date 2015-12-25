@@ -1,5 +1,5 @@
 import obfuscations.NodeFinder;
-import obfuscations.layout.LayoutManager;
+import obfuscations.layoutobfuscation.LayoutManager;
 import org.junit.Test;
 import parser.UnitSourceInitiator;
 import providers.FileSourceCodeProvider;

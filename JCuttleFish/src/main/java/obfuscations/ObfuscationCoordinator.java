@@ -3,7 +3,7 @@ package obfuscations;
 import extractor.PathsExtractor;
 import extractor.filefilters.SuffixFolderFilter;
 import extractor.filefilters.enums.SuffixFilters;
-import obfuscations.layout.LayoutManager;
+import obfuscations.layoutobfuscation.LayoutManager;
 import org.apache.commons.io.FileUtils;
 import parser.UnitSourceInitiator;
 import pojo.UnitNode;
@@ -22,12 +22,9 @@ public class ObfuscationCoordinator
 
     public ObfuscationCoordinator ( String originalAbsolutePath, String backupAbsolutePath )
     {
-//        File originalLocation = new File( "C:/target/main/java" );
-//        File backupLocation = new File( "C:/freshbackup" );
-
         File originalLocation = new File( originalAbsolutePath );
         File backupLocation = new File( backupAbsolutePath );
-        this.backupFilesAtLocation( originalLocation, backupLocation );
+        BackupFilesHelper.backupFiles( originalLocation, backupLocation );
 
         Collection<File> originalFiles = this.getAbsolutePaths( originalLocation.getAbsolutePath() );
 
@@ -35,16 +32,11 @@ public class ObfuscationCoordinator
 
         Collection<UnitSource> unitSources = initiator.fetchUnitSourceCollection( originalFiles );
         Collection<UnitNode> unitNodes = new NodeFinder().getUnitNodesCollectionFromUnitSources( unitSources );
-        obfuscations.layout.LayoutManager layoutManager = new LayoutManager();
+        obfuscations.layoutobfuscation.LayoutManager layoutManager = new LayoutManager();
         layoutManager.obfuscate( unitNodes );
 
         this.saveUnitSourcesToFiles( unitSources );
 
-    }
-
-    private void backupFilesAtLocation ( File originalLocation, File backupLocation )
-    {
-        BackupFilesHelper.backupFiles( originalLocation, backupLocation );
     }
 
     private void saveUnitSourcesToFiles ( Collection<UnitSource> unitSources )

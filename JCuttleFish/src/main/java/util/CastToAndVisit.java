@@ -1,7 +1,7 @@
 package util;
 
-import obfuscations.layout.callbacks.AstNodeFoundCallback;
-import obfuscations.layout.visitors.*;
+import obfuscations.callbacks.AstNodeFoundCallback;
+import obfuscations.visitors.*;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.Collection;

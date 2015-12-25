@@ -1,11 +1,12 @@
 package obfuscations;
 
-import obfuscations.layout.callbacks.*;
-import obfuscations.layout.visitors.StatementVisitor;
+import obfuscations.callbacks.*;
+import obfuscations.visitors.StatementVisitor;
 import org.eclipse.jdt.core.dom.*;
 import pojo.UnitNode;
 import pojo.UnitSource;
 import util.ConvenienceWrappers;
+import util.NodeIdentification;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,10 +17,11 @@ public class NodeFinder
 
     private Collection<AstNodeFoundCallback> callbacks = new ArrayList<AstNodeFoundCallback>()
     {{
-        this.add( new SimpleNameNodeFoundCallBack() );
-        this.add( new FieldAccessNodeFoundCallBack() );
-        this.add( new QualifiedNameNodeFoundCallBack() );
-        this.add( new VariableDeclarationStatementNodeFoundCallBack() );
+        this.add( new SimpleNameCallback() );
+        this.add( new FieldAccessCallback() );
+        this.add( new QualifiedNameCallback() );
+        this.add( new VariableDeclarationStatementCallback() );
+        this.add( new ClassInstanceCreationCallback() );
     }};
 
     public UnitNode getUnitNodesFromUnitSource ( UnitSource unitSource )
@@ -55,40 +57,50 @@ public class NodeFinder
 
     private void groupFoundNodesToMap ( Map<String, List<ASTNode>> map )
     {
+
         this.callbacks.stream()
-                .filter( c -> c instanceof SimpleNameNodeFoundCallBack )
-                .map( c -> ( SimpleNameNodeFoundCallBack )c )
+                .filter( c -> c instanceof SimpleNameCallback )
+                .map( c -> ( SimpleNameCallback )c )
                 .findFirst().ifPresent( c ->
                 c.getFoundNodes().stream()
                         .map( SimpleName.class::cast )
-                        .forEachOrdered( sn -> this.putToMapOrAddToListIfExists( map, sn.getIdentifier(), sn ) ) );
+                        .forEachOrdered( sn -> this.putToMapOrAddToListIfExists( map,
+                                NodeIdentification.getNodeIdentifierString( sn ), sn ) ) );
 
         this.callbacks.stream()
-                .filter( c -> c instanceof FieldAccessNodeFoundCallBack )
-                .map( c -> ( FieldAccessNodeFoundCallBack )c )
+                .filter( c -> c instanceof FieldAccessCallback )
+                .map( c -> ( FieldAccessCallback )c )
                 .findFirst().ifPresent( c ->
                 c.getFoundNodes().stream()
                         .map( FieldAccess.class::cast )
-                        .forEachOrdered( fa -> this.putToMapOrAddToListIfExists( map, fa.getName().getIdentifier(), fa ) ) );
+                        .forEachOrdered( fa -> this.putToMapOrAddToListIfExists( map,
+                                NodeIdentification.getNodeIdentifierString( fa ), fa ) ) );
 
         this.callbacks.stream()
-                .filter( c -> c instanceof QualifiedNameNodeFoundCallBack )
-                .map( c -> ( QualifiedNameNodeFoundCallBack )c )
+                .filter( c -> c instanceof QualifiedNameCallback )
+                .map( c -> ( QualifiedNameCallback )c )
                 .findFirst().ifPresent( c ->
                 c.getFoundNodes().stream()
                         .map( QualifiedName.class::cast )
-                        .forEachOrdered( qn -> this.putToMapOrAddToListIfExists( map, qn.getName().getIdentifier(), qn ) ) );
+                        .forEachOrdered( qn -> this.putToMapOrAddToListIfExists( map,
+                                NodeIdentification.getNodeIdentifierString( qn ), qn ) ) );
 
         this.callbacks.stream()
-                .filter( c -> c instanceof VariableDeclarationStatementNodeFoundCallBack )
-                .map( c -> ( VariableDeclarationStatementNodeFoundCallBack )c )
+                .filter( c -> c instanceof VariableDeclarationStatementCallback )
+                .map( c -> ( VariableDeclarationStatementCallback )c )
                 .findFirst().ifPresent( c ->
                 c.getFoundNodes().stream()
                         .map( VariableDeclarationStatement.class::cast )
-                        .forEachOrdered( vds -> {
-                            VariableDeclarationFragment vdf = ( VariableDeclarationFragment )vds.fragments().get( 0 );
-                            this.putToMapOrAddToListIfExists( map, vdf.getName().getIdentifier(), vds);
-                        } ) );
+                        .forEachOrdered( vds -> this.putToMapOrAddToListIfExists( map,
+                                NodeIdentification.getNodeIdentifierString( vds ), vds ) ) );
+        this.callbacks.stream()
+                .filter( c -> c instanceof ClassInstanceCreationCallback )
+                .map( c -> ( ClassInstanceCreationCallback )c )
+                .findFirst().ifPresent( c ->
+                c.getFoundNodes().stream()
+                        .map( ClassInstanceCreation.class::cast )
+                        .forEachOrdered( cic -> this.putToMapOrAddToListIfExists( map,
+                                NodeIdentification.getNodeIdentifierString( cic ), cic ) ) );
     }
 
     private void addClassLocalFieldsToMap ( Map<String, List<ASTNode>> map, TypeDeclaration typeDeclaration )

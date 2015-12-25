@@ -1,6 +1,6 @@
 package pojo;
 
-import obfuscations.layout.callbacks.AstNodeFoundCallback;
+import obfuscations.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.SimpleName;
 

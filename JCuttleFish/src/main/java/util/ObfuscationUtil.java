@@ -1,6 +1,6 @@
 package util;
 
-import obfuscations.layout.ModifyAst;
+import obfuscations.layoutobfuscation.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
 import pojo.UnitNode;
 import providers.ObfuscatedNamesProvider;
@@ -13,6 +13,7 @@ import static java.util.stream.Collectors.toList;
 
 public class ObfuscationUtil
 {
+
     public static void obfuscateMethodDeclaredVariables ( UnitNode unitNode, MethodDeclaration methodDeclaration )
     {
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
@@ -121,6 +122,15 @@ public class ObfuscationUtil
                     obfuscatedVariableNames.poll();
                 }
         );
+    }
+
+    public static void obfuscateClassNames ( UnitNode unitNode )
+    {
+        ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
+        Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
+
+
+
     }
 
 }
