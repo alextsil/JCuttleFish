@@ -10,7 +10,7 @@ public class UnitNode
 {
 
     private UnitSource unitSource;
-    private HashMap<String, List<ASTNode>> collectedNodes = new HashMap<>();
+    private HashMap<String, List<ASTNode>> collectedNodes;
 
     public UnitNode ( UnitSource unitSource, HashMap<String, List<ASTNode>> collectedNodes )
     {

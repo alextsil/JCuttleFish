@@ -3,6 +3,7 @@ package util;
 import obfuscations.layoutobfuscation.ModifyAst;
 import org.eclipse.jdt.core.dom.*;
 import pojo.UnitNode;
+import pojo.UnitSource;
 import providers.ObfuscatedNamesProvider;
 import util.enums.ObfuscatedNamesVariations;
 
@@ -19,17 +20,14 @@ public class ObfuscationUtil
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.METHOD_LOCAL_VARS );
 
-        Comparator<VariableDeclarationStatement> byOccurrence =
-                ( VariableDeclarationStatement o1, VariableDeclarationStatement o2 ) -> o1.getStartPosition() - o2.getStartPosition();
-
         Collection<List<ASTNode>> ASTNodeListCollection = unitNode.getCollectedNodes().values();
 
         List<VariableDeclarationStatement> methodDeclaredVarDeclStatements = ASTNodeListCollection.stream()
                 .flatMap( List::stream )
                 .filter( node -> node instanceof VariableDeclarationStatement )
+                .map( VariableDeclarationStatement.class::cast )
                 .filter( node -> {
-                    VariableDeclarationStatement vds = ( VariableDeclarationStatement )node;
-                    VariableDeclarationFragment vdf = ( VariableDeclarationFragment )vds.fragments().get( 0 );
+                    VariableDeclarationFragment vdf = ( VariableDeclarationFragment )node.fragments().get( 0 );
                     Optional<IVariableBinding> oivb = OptionalUtils.getIVariableBinding( vdf );
                     if ( oivb.isPresent() )
                     {
@@ -40,8 +38,7 @@ public class ObfuscationUtil
                     }
                     return false;
                 } )
-                .map( VariableDeclarationStatement.class::cast )
-                .sorted( byOccurrence )
+                .sorted( ( vds1, vds2 ) -> vds1.getStartPosition() - vds2.getStartPosition() )
                 .collect( toList() );
 
         methodDeclaredVarDeclStatements.stream()
@@ -94,8 +91,9 @@ public class ObfuscationUtil
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
 
         List<SimpleName> classLocalFields = ConvenienceWrappers.getPrivateFieldDeclarations( unitNode.getUnitSource().getTypeDeclarationIfIsClass() )
-                .stream().map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
-                .map( vdf -> vdf.getName() )
+                .stream()
+                .map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
+                .map( VariableDeclaration::getName )
                 .collect( toList() );
 
         classLocalFields.stream().forEach( clf ->
@@ -124,13 +122,23 @@ public class ObfuscationUtil
         );
     }
 
-    public static void obfuscateClassNames ( UnitNode unitNode )
+    public static void obfuscateClassNames ( Collection<UnitNode> unitNodes )
     {
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
 
+        unitNodes.stream()
+                .map( UnitNode::getUnitSource )
+                .map( UnitSource::getTypeDeclarationIfIsClass )
+                .forEach( td -> renameClassAndReferences( td, obfuscatedVariableNames.pollFirst(), unitNodes ) );
+    }
 
-
+    private static void renameClassAndReferences ( TypeDeclaration typeDeclaration, String obfuscatedName, Collection<UnitNode> unitNodes )
+    {
+        SimpleName className = typeDeclaration.getName();
+//        unitNodes.stream().map( v -> v.getCollectedNodes().getOrDefault( className, Collections.emptyList() ).stream()
+//                .filter( n -> n instanceof FieldDeclaration ) )
+//
     }
 
 }

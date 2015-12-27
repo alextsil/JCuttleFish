@@ -1,11 +1,18 @@
+import extractor.PathsExtractor;
+import extractor.filefilters.SuffixFolderFilter;
+import extractor.filefilters.enums.SuffixFilters;
 import obfuscations.NodeFinder;
 import obfuscations.layoutobfuscation.LayoutManager;
 import org.junit.Test;
 import parser.UnitSourceInitiator;
+import pojo.UnitNode;
+import pojo.UnitSource;
 import providers.FileSourceCodeProvider;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -295,13 +302,15 @@ public class LayoutManagerTest
     @Test
     public void onthefly ()
     {
-        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/ontheflyOriginal.java" );
-        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/ontheflyObfuscated.java" );
+        PathsExtractor pathsExtractor = new PathsExtractor( "src/test/resources/sampleapplications/classrefs/original" );
+        Collection<File> originalFiles = pathsExtractor.getFilesInstances( new SuffixFolderFilter( SuffixFilters.JAVA ) );
 
-        assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+        Collection<UnitNode> unitNodes = this.nodeFinder
+                .getUnitNodesCollectionFromUnitSources( this.initiator.fetchUnitSourceCollection( originalFiles ) );
+        unitNodes = this.layoutManager.obfuscate( unitNodes );
+
+        List<UnitSource> unitSources = unitNodes.stream().map( UnitNode::getUnitSource ).collect( Collectors.toList() );
+        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/classrefs/obfuscated/pack1/Two.java" ) ),
+                unitSources.get( 0 ).getDocument().get() );
     }
 }

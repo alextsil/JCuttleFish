@@ -6,12 +6,30 @@ import org.eclipse.jdt.core.dom.*;
 public class NodeIdentification
 {
 
-    public static String getNodeIdentifierString ( SimpleName simpleName )
+    public static String mapNodeToIdentifier ( ASTNode node )
+    {
+        if ( node instanceof SimpleName )
+            return getNodeIdentifierString( ( SimpleName )node );
+        if ( node instanceof ClassInstanceCreation )
+            return getNodeIdentifierString( ( ClassInstanceCreation )node );
+        if ( node instanceof VariableDeclarationStatement )
+            return getNodeIdentifierString( ( VariableDeclarationStatement )node );
+        if ( node instanceof QualifiedName )
+            return getNodeIdentifierString( ( QualifiedName )node );
+        if ( node instanceof FieldAccess )
+            return getNodeIdentifierString( ( FieldAccess )node );
+        if ( node instanceof Type )
+            return getNodeIdentifierString( ( Type )node );
+
+        throw new IllegalArgumentException( "Node type not supported" );
+    }
+
+    private static String getNodeIdentifierString ( SimpleName simpleName )
     {
         return simpleName.getIdentifier();
     }
 
-    public static String getNodeIdentifierString ( ClassInstanceCreation classInstanceCreation )
+    private static String getNodeIdentifierString ( ClassInstanceCreation classInstanceCreation )
     {
         Type type = classInstanceCreation.getType();
         if ( type.isSimpleType() )
@@ -28,23 +46,23 @@ public class NodeIdentification
         }
     }
 
-    public static String getNodeIdentifierString ( VariableDeclarationStatement variableDeclarationStatement )
+    private static String getNodeIdentifierString ( VariableDeclarationStatement variableDeclarationStatement )
     {
         VariableDeclarationFragment vdf = ( VariableDeclarationFragment )variableDeclarationStatement.fragments().get( 0 );
         return vdf.getName().getIdentifier();
     }
 
-    public static String getNodeIdentifierString ( QualifiedName qualifiedName )
+    private static String getNodeIdentifierString ( QualifiedName qualifiedName )
     {
         return qualifiedName.getName().getIdentifier();
     }
 
-    public static String getNodeIdentifierString ( FieldAccess fieldAccess )
+    private static String getNodeIdentifierString ( FieldAccess fieldAccess )
     {
         return fieldAccess.getName().getIdentifier();
     }
 
-    public static String getNodeIdentifierString ( Type type )
+    private static String getNodeIdentifierString ( Type type )
     {
         SimpleType simpleType = ( SimpleType )type;
         Name name = simpleType.getName();
@@ -58,13 +76,14 @@ public class NodeIdentification
             if ( qualifiedName.getName().isSimpleName() )
             {
                 return qualifiedName.getName().getIdentifier();
-            } else {
+            } else
+            {
                 throw new RuntimeException( "not mapped" );
             }
         } else
         {
-            int debug = 1;
             throw new RuntimeException( "not mapped" );
         }
     }
+
 }

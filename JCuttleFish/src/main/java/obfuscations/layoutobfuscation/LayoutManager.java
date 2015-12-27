@@ -18,10 +18,12 @@ public class LayoutManager
 
     public Collection<UnitNode> obfuscate ( Collection<UnitNode> unitNodeCollection )
     {
+        unitNodeCollection.stream().forEach( UnitNode::recordMofications );
+
+        ObfuscationUtil.obfuscateClassNames( unitNodeCollection );
+
         for ( UnitNode unitNode : unitNodeCollection )
         {
-            unitNode.recordMofications();
-
             Collection<MethodDeclaration> methods = ConvenienceWrappers
                     .returnMethodDeclarations( unitNode.getUnitSource().getTypeDeclarationIfIsClass() );
             methods.stream().forEach( m -> {
@@ -29,10 +31,10 @@ public class LayoutManager
                 ObfuscationUtil.obfuscateMethodDeclaredVariables( unitNode, m );
             } );
             ObfuscationUtil.obfuscateClassLocalVarsAndReferences( unitNode );
-
-
-            SourceUtil.replace( unitNode.getUnitSource() );
         }
+
+        unitNodeCollection.stream().forEach( un -> SourceUtil.replace( un.getUnitSource() ) );
         return unitNodeCollection;
+
     }
 }
