@@ -2,13 +2,17 @@ package obfuscations;
 
 import obfuscations.callbacks.*;
 import obfuscations.visitors.StatementVisitor;
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import pojo.UnitNode;
 import pojo.UnitSource;
 import util.ConvenienceWrappers;
-import util.NodeIdentification;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -23,18 +27,16 @@ public class NodeFinder
 
         this.collectNodesFromMethods( unitSource.getTypeDeclarationIfIsClass() );
 
-        HashMap<String, List<ASTNode>> collectedNodes = new HashMap<>();
+        Collection<ASTNode> collectedNodes = this.addCollectedNodesToCollection();
 
-        this.groupFoundNodesToMap( collectedNodes );
-
-        this.addClassLocalFieldsToMap( collectedNodes, unitSource.getTypeDeclarationIfIsClass() );
+        this.addClassLocalFieldsToCollection( collectedNodes, unitSource.getTypeDeclarationIfIsClass() );
 
         return new UnitNode( unitSource, collectedNodes );
     }
 
     private void initiateCallbacks ()
     {
-        this.callbacks = new ArrayList<AstNodeFoundCallback>();
+        this.callbacks = new ArrayList<>();
         this.callbacks.add( new SimpleNameCallback() );
         this.callbacks.add( new FieldAccessCallback() );
         this.callbacks.add( new QualifiedNameCallback() );
@@ -60,35 +62,23 @@ public class NodeFinder
         } );
     }
 
-    private void groupFoundNodesToMap ( Map<String, List<ASTNode>> map )
+    private Collection<ASTNode> addCollectedNodesToCollection ()
     {
+        Collection<ASTNode> collectedNodesAsList = new ArrayList<>();
+
         this.callbacks.stream().forEach( c ->
                 c.getFoundNodes().stream()
-                        .forEachOrdered( sn -> this.putToMapOrAddToListIfExists( map,
-                                NodeIdentification.mapNodeToIdentifier( sn ), sn ) ) );
+                        .forEachOrdered( collectedNodesAsList::add ) );
+
+        return collectedNodesAsList;
     }
 
-    private void addClassLocalFieldsToMap ( Map<String, List<ASTNode>> map, TypeDeclaration typeDeclaration )
+    //Workaround. Will be replaced by visitors that visit TypeDeclaration instead of going straight to the methods.
+    private void addClassLocalFieldsToCollection ( Collection<ASTNode> collection, TypeDeclaration typeDeclaration )
     {
         ConvenienceWrappers.getPrivateFieldDeclarations( typeDeclaration )
-                .stream().map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
-                .map( vdf -> vdf.getName() )
-                .forEach( sn -> this.putToMapOrAddToListIfExists( map, sn.getIdentifier(), sn ) );
+                .stream()
+                .forEach( n -> collection.add( n ) );
 
     }
-
-    private void putToMapOrAddToListIfExists ( Map<String, List<ASTNode>> map, String identifier, ASTNode node )
-    {
-        if ( map.containsKey( identifier ) )
-        {
-            List<ASTNode> list = map.get( identifier );
-            list.add( node );
-        } else
-        {
-            List<ASTNode> list = new ArrayList<>();
-            list.add( node );
-            map.put( identifier, list );
-        }
-    }
-
 }

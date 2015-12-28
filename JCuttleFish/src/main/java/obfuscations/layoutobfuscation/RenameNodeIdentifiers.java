@@ -1,12 +1,9 @@
 package obfuscations.layoutobfuscation;
 
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.FieldAccess;
-import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.*;
 
 
-public class ModifyAst
+public class RenameNodeIdentifiers
 {
 
     public static void renameFieldAccessName ( FieldAccess fieldAccess, String obfuscatedVarName )
@@ -28,5 +25,11 @@ public class ModifyAst
     public static void renameSimpleName ( SimpleName simpleName, String obfuscatedVarName )
     {
         simpleName.setIdentifier( obfuscatedVarName );
+    }
+
+    public static void renameFieldDeclaration ( FieldDeclaration fieldDeclaration, String obfuscatedVarName )
+    {
+        VariableDeclarationFragment vdf = ( VariableDeclarationFragment )fieldDeclaration.fragments().get( 0 );
+        vdf.getName().setIdentifier( obfuscatedVarName );
     }
 }

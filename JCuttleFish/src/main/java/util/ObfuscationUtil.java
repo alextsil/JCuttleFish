@@ -1,6 +1,6 @@
 package util;
 
-import obfuscations.layoutobfuscation.ModifyAst;
+import obfuscations.layoutobfuscation.RenameNodeIdentifiers;
 import org.eclipse.jdt.core.dom.*;
 import pojo.UnitNode;
 import pojo.UnitSource;
@@ -20,7 +20,7 @@ public class ObfuscationUtil
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.METHOD_LOCAL_VARS );
 
-        Collection<List<ASTNode>> ASTNodeListCollection = unitNode.getCollectedNodes().values();
+        Collection<List<ASTNode>> ASTNodeListCollection = unitNode.getCollectedNodesGroupedByIdentifier().values();
 
         List<VariableDeclarationStatement> methodDeclaredVarDeclStatements = ASTNodeListCollection.stream()
                 .flatMap( List::stream )
@@ -49,7 +49,7 @@ public class ObfuscationUtil
                     SimpleName sn = f.getName();
                     IVariableBinding fragIvb = OptionalUtils.getIVariableBinding( sn ).get();
 
-                    unitNode.getCollectedNodes().getOrDefault( sn.getIdentifier(), Collections.emptyList() )
+                    unitNode.getCollectedNodesGroupedByIdentifier().getOrDefault( sn.getIdentifier(), Collections.emptyList() )
                             .stream()
                             .filter( occurence -> occurence instanceof SimpleName )
                             .map( SimpleName.class::cast )
@@ -70,7 +70,7 @@ public class ObfuscationUtil
             //find occurences and replace
             IVariableBinding paramIvb = OptionalUtils.getIVariableBinding( p ).get();
 
-            unitNode.getCollectedNodes().getOrDefault( p.getName().getIdentifier(), Collections.emptyList() )
+            unitNode.getCollectedNodesGroupedByIdentifier().getOrDefault( p.getName().getIdentifier(), Collections.emptyList() )
                     .stream()
                     .filter( occurence -> occurence instanceof SimpleName )
                     .map( SimpleName.class::cast )
@@ -98,7 +98,7 @@ public class ObfuscationUtil
 
         classLocalFields.stream().forEach( clf ->
                 {
-                    unitNode.getCollectedNodes().get( clf.getIdentifier() )
+                    unitNode.getCollectedNodesGroupedByIdentifier().get( clf.getIdentifier() )
                             .stream().forEach( item -> {
                         if ( item instanceof SimpleName )
                         {
@@ -108,13 +108,17 @@ public class ObfuscationUtil
                             {
                                 if ( ivb.get().isField() )
                                 {
-                                    ModifyAst.renameSimpleName( simpleName, obfuscatedVariableNames.peekFirst() );
+                                    RenameNodeIdentifiers.renameSimpleName( simpleName, obfuscatedVariableNames.peekFirst() );
                                 }
                             }
                         } else if ( item instanceof FieldAccess )
                         {
                             FieldAccess fieldAccess = ( FieldAccess )item;
-                            ModifyAst.renameFieldAccessName( fieldAccess, obfuscatedVariableNames.peekFirst() );
+                            RenameNodeIdentifiers.renameFieldAccessName( fieldAccess, obfuscatedVariableNames.peekFirst() );
+                        } else if ( item instanceof FieldDeclaration )
+                        {
+                            FieldDeclaration fieldDeclaration = ( FieldDeclaration )item;
+                            RenameNodeIdentifiers.renameFieldDeclaration( fieldDeclaration, obfuscatedVariableNames.peekFirst() );
                         }
                     } );
                     obfuscatedVariableNames.poll();
@@ -136,9 +140,6 @@ public class ObfuscationUtil
     private static void renameClassAndReferences ( TypeDeclaration typeDeclaration, String obfuscatedName, Collection<UnitNode> unitNodes )
     {
         SimpleName className = typeDeclaration.getName();
-//        unitNodes.stream().map( v -> v.getCollectedNodes().getOrDefault( className, Collections.emptyList() ).stream()
-//                .filter( n -> n instanceof FieldDeclaration ) )
-//
     }
 
 }

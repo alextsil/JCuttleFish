@@ -20,10 +20,16 @@ public class NodeIdentification
             return getNodeIdentifierString( ( FieldAccess )node );
         if ( node instanceof Type )
             return getNodeIdentifierString( ( Type )node );
+        if (node instanceof FieldDeclaration)
+            return getNodeIdentifierString( ( FieldDeclaration )node );
 
         throw new IllegalArgumentException( "Node type not supported" );
     }
 
+    private static String getNodeIdentifierString (FieldDeclaration fieldDeclaration) {
+        VariableDeclarationFragment vdf = ( VariableDeclarationFragment )fieldDeclaration.fragments().get( 0 );
+        return vdf.getName().getIdentifier();
+    }
     private static String getNodeIdentifierString ( SimpleName simpleName )
     {
         return simpleName.getIdentifier();
