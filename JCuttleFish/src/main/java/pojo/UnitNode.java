@@ -31,20 +31,22 @@ public class UnitNode
     public Map<String, List<ASTNode>> getCollectedNodesGroupedByIdentifier ()
     {
         Map<String, List<ASTNode>> groupedNodes = new HashMap<>();
-
         this.collectedNodes.stream()
                 .forEach( n -> this.putToMapOrAddToListIfExists( groupedNodes,
                         NodeIdentification.mapNodeToIdentifier( n ), n ) );
         return groupedNodes;
     }
 
-    public void recordMofications ()
+    public Map<Class<? extends ASTNode>, List<ASTNode>> getCollectedNodesGroupedByClass ()
     {
-        this.unitSource.getCompilationUnit().recordModifications();
+        Map<Class<? extends ASTNode>, List<ASTNode>> groupedNodes = new HashMap<>();
+        this.collectedNodes.stream()
+                .forEach( n -> this.putToMapOrAddToListIfExists( groupedNodes,
+                        n.getClass(), n ) );
+        return groupedNodes;
     }
 
-    //TODO : generics
-    private void putToMapOrAddToListIfExists ( Map<String, List<ASTNode>> map, String identifier, ASTNode node )
+    private <T> void putToMapOrAddToListIfExists ( Map<T, List<ASTNode>> map, T identifier, ASTNode node )
     {
         if ( map.containsKey( identifier ) )
         {
@@ -57,4 +59,10 @@ public class UnitNode
             map.put( identifier, list );
         }
     }
+
+    public void recordMofications ()
+    {
+        this.unitSource.getCompilationUnit().recordModifications();
+    }
+
 }

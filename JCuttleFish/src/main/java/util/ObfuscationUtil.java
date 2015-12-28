@@ -140,6 +140,8 @@ public class ObfuscationUtil
     private static void renameClassAndReferences ( TypeDeclaration typeDeclaration, String obfuscatedName, Collection<UnitNode> unitNodes )
     {
         SimpleName className = typeDeclaration.getName();
+        Map<Class<? extends ASTNode>, List<ASTNode>> collectedNodesGroupedByClass =
+                unitNodes.stream().findFirst().get().getCollectedNodesGroupedByClass();
     }
 
 }
