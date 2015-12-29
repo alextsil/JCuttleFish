@@ -1,27 +1,32 @@
 package obfuscations.visitors;
 
+import obfuscations.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
-import pojo.ObfuscationInfo;
+import org.eclipse.jdt.core.dom.Statement;
 
+import java.util.Collection;
 import java.util.List;
 
 
 public class MethodDeclarationVisitor extends ASTVisitor
 {
 
-    private ObfuscationInfo obfuscationInfo;
+    private Collection<AstNodeFoundCallback> callbacks;
 
-    public MethodDeclarationVisitor ( ObfuscationInfo obfuscationInfo )
+    public MethodDeclarationVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
-        this.obfuscationInfo = obfuscationInfo;
+        this.callbacks = callbacks;
     }
 
     @Override
     public boolean visit ( MethodDeclaration methodDeclaration )
     {
-        List<SingleVariableDeclaration> parameters = methodDeclaration.parameters();
+        this.callbacks.stream().forEach( c -> c.notify( methodDeclaration ) );
+
+        List<Statement> statements = methodDeclaration.getBody().statements();
+        statements.stream().forEach( s -> new StatementVisitor( this.callbacks ).visit( s ) );
+
         return false;
     }
 }

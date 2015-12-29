@@ -13,10 +13,10 @@ public class ConvenienceWrappers
 {
 
     /**
-     * Receives a TypeDeclaration (essentially a Class) and returns a List of private fields as FieldDeclaration.
+     * Receives a TypeDeclaration (essentially a Class) and returns a List of its private fields as FieldDeclaration.
      *
      * @param typeDeclaration - The target class
-     * @return List of private FieldDeclaration. Empty list if none found.
+     * @return List of private FieldDeclaration(s). Empty list if none found.
      */
     public static List<FieldDeclaration> getPrivateFieldDeclarations ( TypeDeclaration typeDeclaration )
     {
@@ -34,7 +34,12 @@ public class ConvenienceWrappers
         return privateFieldDeclarations;
     }
 
-    public static Collection<MethodDeclaration> returnMethodDeclarations ( TypeDeclaration typeDeclaration )
+    public static Collection<FieldDeclaration> getFieldDeclarationsAsList ( TypeDeclaration typeDeclaration )
+    {
+        return Arrays.stream( typeDeclaration.getFields() ).collect( Collectors.toList() );
+    }
+
+    public static Collection<MethodDeclaration> getMethodDeclarationsAsList ( TypeDeclaration typeDeclaration )
     {
         return Arrays.stream( typeDeclaration.getMethods() ).collect( Collectors.toList() );
     }

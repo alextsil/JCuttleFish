@@ -25,7 +25,7 @@ public class LayoutManager
         for ( UnitNode unitNode : unitNodeCollection )
         {
             Collection<MethodDeclaration> methods = ConvenienceWrappers
-                    .returnMethodDeclarations( unitNode.getUnitSource().getTypeDeclarationIfIsClass() );
+                    .getMethodDeclarationsAsList( unitNode.getUnitSource().getTypeDeclarationIfIsClass() );
             methods.stream().forEach( m -> {
                 ObfuscationUtil.obfuscateMethodParameters( unitNode, m );
                 ObfuscationUtil.obfuscateMethodDeclaredVariables( unitNode, m );

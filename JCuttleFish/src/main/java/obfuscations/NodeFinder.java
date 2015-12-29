@@ -1,18 +1,14 @@
 package obfuscations;
 
 import obfuscations.callbacks.*;
-import obfuscations.visitors.StatementVisitor;
+import obfuscations.visitors.TypeDeclarationVisitor;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import pojo.UnitNode;
 import pojo.UnitSource;
-import util.ConvenienceWrappers;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -23,18 +19,16 @@ public class NodeFinder
 
     public UnitNode getUnitNodesFromUnitSource ( UnitSource unitSource )
     {
-        this.initiateCallbacks();
+        this.initializeCallbacks();
 
         this.collectNodesFromMethods( unitSource.getTypeDeclarationIfIsClass() );
 
         Collection<ASTNode> collectedNodes = this.addCollectedNodesToCollection();
 
-        this.addClassLocalFieldsToCollection( collectedNodes, unitSource.getTypeDeclarationIfIsClass() );
-
         return new UnitNode( unitSource, collectedNodes );
     }
 
-    private void initiateCallbacks ()
+    private void initializeCallbacks ()
     {
         this.callbacks = new ArrayList<>();
         this.callbacks.add( new SimpleNameCallback() );
@@ -42,6 +36,8 @@ public class NodeFinder
         this.callbacks.add( new QualifiedNameCallback() );
         this.callbacks.add( new VariableDeclarationStatementCallback() );
         this.callbacks.add( new ClassInstanceCreationCallback() );
+        this.callbacks.add( new TypeDeclarationCallback() );
+        this.callbacks.add( new FieldDeclarationCallback() );
     }
 
     public Collection<UnitNode> getUnitNodesCollectionFromUnitSources ( Collection<UnitSource> unitSources )
@@ -53,13 +49,7 @@ public class NodeFinder
 
     private void collectNodesFromMethods ( TypeDeclaration typeDeclaration )
     {
-        Collection<MethodDeclaration> methodDeclarations = ConvenienceWrappers
-                .returnMethodDeclarations( typeDeclaration );
-
-        methodDeclarations.stream().forEach( md -> {
-            List<Statement> statements = md.getBody().statements();
-            statements.stream().forEach( s -> new StatementVisitor( this.callbacks ).visit( s ) );
-        } );
+        new TypeDeclarationVisitor( this.callbacks ).visit( typeDeclaration );
     }
 
     private Collection<ASTNode> addCollectedNodesToCollection ()
@@ -71,14 +61,5 @@ public class NodeFinder
                         .forEachOrdered( collectedNodesAsList::add ) );
 
         return collectedNodesAsList;
-    }
-
-    //Workaround. Will be replaced by visitors that visit TypeDeclaration instead of going straight to the methods.
-    private void addClassLocalFieldsToCollection ( Collection<ASTNode> collection, TypeDeclaration typeDeclaration )
-    {
-        ConvenienceWrappers.getPrivateFieldDeclarations( typeDeclaration )
-                .stream()
-                .forEach( n -> collection.add( n ) );
-
     }
 }
