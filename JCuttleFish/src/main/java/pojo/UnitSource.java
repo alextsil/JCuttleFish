@@ -1,9 +1,7 @@
 package pojo;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jface.text.Document;
-import util.ConvenienceWrappers;
 
 import java.io.File;
 
@@ -36,19 +34,5 @@ public class UnitSource
     public Document getDocument ()
     {
         return this.document;
-    }
-
-    public TypeDeclaration getTypeDeclarationIfIsClass ()
-    {
-        if ( ConvenienceWrappers.isValidCompilationUnit( this.compilationUnit ) )
-        {
-            TypeDeclaration typeDeclaration = ( TypeDeclaration )this.compilationUnit.types().get( 0 );
-            if ( typeDeclaration.resolveBinding().isClass() )
-            {
-                return typeDeclaration;
-            }
-        }
-
-        throw new RuntimeException( "Type declaration is not a class" );
     }
 }

@@ -1,3 +1,4 @@
+import configuration.ConfigurationEnvironment;
 import extractor.PathsExtractor;
 import extractor.filefilters.SuffixFolderFilter;
 import extractor.filefilters.enums.SuffixFilters;
@@ -302,6 +303,8 @@ public class LayoutManagerTest
     @Test
     public void onthefly ()
     {
+        ConfigurationEnvironment.createConfigurationInstance( "src/test/resources/sampleapplications/classrefs/original" );
+
         PathsExtractor pathsExtractor = new PathsExtractor( "src/test/resources/sampleapplications/classrefs/original" );
         Collection<File> originalFiles = pathsExtractor.getFilesInstances( new SuffixFolderFilter( SuffixFilters.JAVA ) );
 

@@ -3,7 +3,6 @@ package util;
 import obfuscations.layoutobfuscation.RenameNodeIdentifiers;
 import org.eclipse.jdt.core.dom.*;
 import pojo.UnitNode;
-import pojo.UnitSource;
 import providers.ObfuscatedNamesProvider;
 import util.enums.ObfuscatedNamesVariations;
 
@@ -90,7 +89,8 @@ public class ObfuscationUtil
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
 
-        List<SimpleName> classLocalFields = ConvenienceWrappers.getPrivateFieldDeclarations( unitNode.getUnitSource().getTypeDeclarationIfIsClass() )
+        List<SimpleName> classLocalFields = ConvenienceWrappers.getPrivateFieldDeclarations( ( TypeDeclaration )unitNode.getUnitSource()
+                .getCompilationUnit().types().get( 0 ) )
                 .stream()
                 .map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
                 .map( VariableDeclaration::getName )
@@ -133,15 +133,27 @@ public class ObfuscationUtil
 
         unitNodes.stream()
                 .map( UnitNode::getUnitSource )
-                .map( UnitSource::getTypeDeclarationIfIsClass )
-                .forEach( td -> renameClassAndReferences( td, obfuscatedVariableNames.pollFirst(), unitNodes ) );
+                .map( us -> us.getCompilationUnit().types().get( 0 ) )
+                .forEach( td -> renameClassAndReferences( ( TypeDeclaration )td, obfuscatedVariableNames.pollFirst(), unitNodes ) );
     }
 
     private static void renameClassAndReferences ( TypeDeclaration typeDeclaration, String obfuscatedName, Collection<UnitNode> unitNodes )
     {
         SimpleName className = typeDeclaration.getName();
-        Map<Class<? extends ASTNode>, List<ASTNode>> collectedNodesGroupedByClass =
+
+        Map<Class<? extends ASTNode>, List<ASTNode>> collectedNodes =
                 unitNodes.stream().findFirst().get().getCollectedNodesGroupedByClass();
+
+        List<ASTNode> fieldDeclarationRefs = collectedNodes.get( FieldDeclaration.class );
+
+        FieldDeclaration fd1 = ( FieldDeclaration )fieldDeclarationRefs.get( 0 );
+        FieldDeclaration fd2 = ( FieldDeclaration )fieldDeclarationRefs.get( 1 );
+
+        fieldDeclarationRefs.stream()
+                .map( FieldDeclaration.class::cast )
+                .forEach( fd -> RenameNodeIdentifiers.renameTypeIdentifiers( fd.getType(), obfuscatedName ) );
+
+        typeDeclaration.getName().setIdentifier( obfuscatedName );
     }
 
 }

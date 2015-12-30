@@ -21,7 +21,7 @@ public class NodeFinder
     {
         this.initializeCallbacks();
 
-        this.collectNodesFromMethods( unitSource.getTypeDeclarationIfIsClass() );
+        this.collectNodes( ( TypeDeclaration )unitSource.getCompilationUnit().types().get( 0 ) );
 
         Collection<ASTNode> collectedNodes = this.addCollectedNodesToCollection();
 
@@ -47,7 +47,7 @@ public class NodeFinder
                 .collect( Collectors.toList() );
     }
 
-    private void collectNodesFromMethods ( TypeDeclaration typeDeclaration )
+    private void collectNodes ( TypeDeclaration typeDeclaration )
     {
         new TypeDeclarationVisitor( this.callbacks ).visit( typeDeclaration );
     }

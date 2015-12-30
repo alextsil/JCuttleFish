@@ -1,6 +1,7 @@
 package obfuscations.layoutobfuscation;
 
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.UnitNode;
@@ -25,16 +26,18 @@ public class LayoutManager
         for ( UnitNode unitNode : unitNodeCollection )
         {
             Collection<MethodDeclaration> methods = ConvenienceWrappers
-                    .getMethodDeclarationsAsList( unitNode.getUnitSource().getTypeDeclarationIfIsClass() );
+                    .getMethodDeclarationsAsList( ( TypeDeclaration )unitNode.getUnitSource()
+                            .getCompilationUnit().types().get( 0 ) );
+
             methods.stream().forEach( m -> {
                 ObfuscationUtil.obfuscateMethodParameters( unitNode, m );
                 ObfuscationUtil.obfuscateMethodDeclaredVariables( unitNode, m );
             } );
+
             ObfuscationUtil.obfuscateClassLocalVarsAndReferences( unitNode );
         }
 
         unitNodeCollection.stream().forEach( un -> SourceUtil.replace( un.getUnitSource() ) );
         return unitNodeCollection;
-
     }
 }

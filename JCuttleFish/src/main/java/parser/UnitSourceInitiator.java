@@ -1,6 +1,6 @@
 package parser;
 
-import configuration.ObfuscationEnvironment;
+import configuration.ConfigurationEnvironment;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -28,15 +28,15 @@ public class UnitSourceInitiator
     public UnitSource fetchUnitSource ( File file )
     {
         this.sourceCode = this.getSourceCodeFromFile( file );
-        ObfuscationEnvironment obfuscationEnvironment = new ObfuscationEnvironment();
+        ConfigurationEnvironment configurationEnvironment = ConfigurationEnvironment.getInstance();
         ASTParser parser = ASTParser.newParser( AST.JLS8 );
         parser.setKind( ASTParser.K_COMPILATION_UNIT );
         parser.setSource( this.sourceCode.toCharArray() );
         parser.setBindingsRecovery( true );
 
-        parser.setUnitName( obfuscationEnvironment.getRelativeSourcePath() );
-        String[] classPath = obfuscationEnvironment.getClasspath();
-        String[] srcPath = obfuscationEnvironment.getAbsoluteSourcePath();
+        parser.setUnitName( configurationEnvironment.getRelativeSourcePath() );
+        String[] classPath = configurationEnvironment.getClasspath();
+        String[] srcPath = configurationEnvironment.getAbsoluteSourcePath();
         parser.setEnvironment( classPath, srcPath, null, false );
 
         parser.setResolveBindings( true );
