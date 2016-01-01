@@ -4,11 +4,14 @@ import extractor.filefilters.SuffixFolderFilter;
 import extractor.filefilters.enums.SuffixFilters;
 import obfuscations.NodeFinder;
 import obfuscations.layoutobfuscation.LayoutManager;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import parser.UnitSourceInitiator;
 import pojo.UnitNode;
 import pojo.UnitSource;
 import providers.FileSourceCodeProvider;
+import testcategories.MultipleFileTest;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,6 +30,12 @@ public class LayoutManagerTest
     private UnitSourceInitiator initiator = new UnitSourceInitiator();
     private NodeFinder nodeFinder = new NodeFinder();
     private FileSourceCodeProvider sourceCodeProvider = new FileSourceCodeProvider();
+
+    @Before
+    public void setEmptyConfig ()
+    {
+        ConfigurationEnvironment.createConfigurationInstance( "" );
+    }
 
     @Test
     public void testObfuscate_UnitSource ()
@@ -301,6 +310,7 @@ public class LayoutManagerTest
 
     //A "scratchpad" test
     @Test
+    @Category ( MultipleFileTest.class )
     public void onthefly ()
     {
         ConfigurationEnvironment.createConfigurationInstance( "src/test/resources/sampleapplications/classrefs/original" );

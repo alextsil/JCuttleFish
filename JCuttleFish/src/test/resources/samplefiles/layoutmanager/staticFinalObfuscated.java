@@ -1,6 +1,6 @@
 package test;
 
-public class Onthefly
+public class a
 {
 
     public String alpha;
@@ -13,7 +13,7 @@ public class Onthefly
 
     private final static String d = "3";
 
-    public Onthefly ( String aa, String bb, String cc )
+    public a ( String aa, String bb, String cc )
     {
         this.alpha = aa;
         this.a = bb;

@@ -8,11 +8,11 @@ import java.io.File;
 import java.io.FileFilter;
 
 
-public class SuffixFolderFilterOriginal implements FileFilter {
+public class a implements FileFilter {
 
     private String a;
 
-    public SuffixFolderFilterOriginal ( SuffixFilters aa ) {
+    public a ( SuffixFilters aa ) {
         this.a = aa.toString();
     }
 

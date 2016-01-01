@@ -1,6 +1,6 @@
 package test;
 
-public class Stopwatch
+public class a
 {
 
     private long a;

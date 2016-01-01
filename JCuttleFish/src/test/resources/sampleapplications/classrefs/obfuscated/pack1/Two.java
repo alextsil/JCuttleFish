@@ -1,25 +1,29 @@
 package pack1;
 
-import pack2.One;
+import pack2.c;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Two
+public class a
 {
 
-    private One one;
-    private List<List<One>> ones;
+    private c a;
+    private List<List<c>> b;
+    private List<List<Map<String, c>>> c;
+    private List<? extends c> d;
+    private c[] e;
+    private List<c[]> f;
 
-    public Two ()
+    public a ()
     {
-        One newOne = new One();
-        List<One> newOnes = new ArrayList<One>();
-        newOne.funct1();
-        One.class.getClass();
-        String static1Str = One.static1;
-        One.staticFunct();
-        pack2.One.staticFunct();
+        c aaa = new c();
+        List<c> bbb = new ArrayList<c>();
+        aaa.funct1();
+        c.class.getClass();
+        String ccc = c.static1;
+        c.staticFunct();
+        pack2.c.staticFunct();
     }
 }

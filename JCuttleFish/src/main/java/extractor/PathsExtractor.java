@@ -26,12 +26,14 @@ public class PathsExtractor
     public List<File> getFilesInstances ()
     {
         this.extractPathsRaw( this.pathName );
+        this.targetFilesInstances.sort( File::compareTo );
         return this.targetFilesInstances;
     }
 
     public List<File> getFilesInstances ( FileFilter filter )
     {
         this.extractPathsFiltered( this.pathName, filter );
+        this.targetFilesInstances.sort( File::compareTo );
         return this.targetFilesInstances;
     }
 

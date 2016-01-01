@@ -1,7 +1,12 @@
 package util;
 
-import obfuscations.layoutobfuscation.RenameNodeIdentifiers;
+import obfuscations.callbacks.AstNodeFoundCallback;
+import obfuscations.callbacks.RenameTypesCallback;
+import obfuscations.visitors.FieldDeclarationVisitor;
+import obfuscations.visitors.MethodDeclarationVisitor;
 import org.eclipse.jdt.core.dom.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pojo.UnitNode;
 import providers.ObfuscatedNamesProvider;
 import util.enums.ObfuscatedNamesVariations;
@@ -13,6 +18,8 @@ import static java.util.stream.Collectors.toList;
 
 public class ObfuscationUtil
 {
+
+    private final Logger logger = LoggerFactory.getLogger( ObfuscationUtil.class );
 
     public static void obfuscateMethodDeclaredVariables ( UnitNode unitNode, MethodDeclaration methodDeclaration )
     {
@@ -108,17 +115,17 @@ public class ObfuscationUtil
                             {
                                 if ( ivb.get().isField() )
                                 {
-                                    RenameNodeIdentifiers.renameSimpleName( simpleName, obfuscatedVariableNames.peekFirst() );
+                                    RenameNodeUtil.renameSimpleName( simpleName, obfuscatedVariableNames.peekFirst() );
                                 }
                             }
                         } else if ( item instanceof FieldAccess )
                         {
                             FieldAccess fieldAccess = ( FieldAccess )item;
-                            RenameNodeIdentifiers.renameFieldAccessName( fieldAccess, obfuscatedVariableNames.peekFirst() );
+                            RenameNodeUtil.renameFieldAccessName( fieldAccess, obfuscatedVariableNames.peekFirst() );
                         } else if ( item instanceof FieldDeclaration )
                         {
                             FieldDeclaration fieldDeclaration = ( FieldDeclaration )item;
-                            RenameNodeIdentifiers.renameFieldDeclaration( fieldDeclaration, obfuscatedVariableNames.peekFirst() );
+                            RenameNodeUtil.renameFieldDeclaration( fieldDeclaration, obfuscatedVariableNames.peekFirst() );
                         }
                     } );
                     obfuscatedVariableNames.poll();
@@ -134,26 +141,64 @@ public class ObfuscationUtil
         unitNodes.stream()
                 .map( UnitNode::getUnitSource )
                 .map( us -> us.getCompilationUnit().types().get( 0 ) )
-                .forEach( td -> renameClassAndReferences( ( TypeDeclaration )td, obfuscatedVariableNames.pollFirst(), unitNodes ) );
+                .forEach( td -> {
+                    TypeDeclaration typeDeclaration = ( TypeDeclaration )td;
+                    ITypeBinding typeBinding = typeDeclaration.resolveBinding();
+                    if ( typeBinding.isClass() && typeBinding.isFromSource() )
+                    {
+                        renameClassAndReferences( typeDeclaration, obfuscatedVariableNames.pollFirst(), unitNodes );
+                    }
+                } );
     }
 
     private static void renameClassAndReferences ( TypeDeclaration typeDeclaration, String obfuscatedName, Collection<UnitNode> unitNodes )
     {
-        SimpleName className = typeDeclaration.getName();
+        Map<Class<? extends ASTNode>, List<ASTNode>> globalCollectedNodes = mergeNodeMapsToGlobalMap( unitNodes );
+        String classIdentifier = typeDeclaration.getName().getIdentifier();
 
-        Map<Class<? extends ASTNode>, List<ASTNode>> collectedNodes =
-                unitNodes.stream().findFirst().get().getCollectedNodesGroupedByClass();
+        Collection<AstNodeFoundCallback> callbacks = new ArrayList<>();
+        callbacks.add( new RenameTypesCallback( classIdentifier, obfuscatedName ) );
 
-        List<ASTNode> fieldDeclarationRefs = collectedNodes.get( FieldDeclaration.class );
-
-        FieldDeclaration fd1 = ( FieldDeclaration )fieldDeclarationRefs.get( 0 );
-        FieldDeclaration fd2 = ( FieldDeclaration )fieldDeclarationRefs.get( 1 );
-
-        fieldDeclarationRefs.stream()
+        globalCollectedNodes.getOrDefault( FieldDeclaration.class, Collections.emptyList() ).stream()
                 .map( FieldDeclaration.class::cast )
-                .forEach( fd -> RenameNodeIdentifiers.renameTypeIdentifiers( fd.getType(), obfuscatedName ) );
+                .forEach( fd -> new FieldDeclarationVisitor( callbacks ).visit( fd ) );
 
+        globalCollectedNodes.getOrDefault( MethodDeclaration.class, Collections.emptyList() ).stream()
+                .map( MethodDeclaration.class::cast )
+                .forEach( md -> new MethodDeclarationVisitor( callbacks ).visit( md ) );
+
+        //Rename constructor(s)
+        globalCollectedNodes.getOrDefault( MethodDeclaration.class, Collections.emptyList() ).stream()
+                .map( MethodDeclaration.class::cast )
+                .filter( md -> {
+                    TypeDeclaration parentTypeDeclaration = ( TypeDeclaration )md.getParent();
+                    return ( parentTypeDeclaration.resolveBinding().isEqualTo( typeDeclaration.resolveBinding() ) );
+                } )
+                .filter( MethodDeclaration::isConstructor )
+                .forEach( md -> RenameNodeUtil.renameMethodDeclaration( md, obfuscatedName ) );
+
+        //Rename actual class
         typeDeclaration.getName().setIdentifier( obfuscatedName );
     }
 
+    private static Map<Class<? extends ASTNode>, List<ASTNode>> mergeNodeMapsToGlobalMap ( Collection<UnitNode> unitNodes )
+    {
+        Map<Class<? extends ASTNode>, List<ASTNode>> globalCollectedNodes = new HashMap<>();
+
+        unitNodes.stream().map( UnitNode::getCollectedNodesGroupedByClass )
+                .forEach( m -> m.keySet()
+                        .forEach( key -> {
+                            List<ASTNode> nonEmptyNodeList = m.getOrDefault( key, Collections.emptyList() );
+
+                            List<ASTNode> nodeListFromGlobalMap = globalCollectedNodes.getOrDefault( key, Collections.emptyList() );
+                            if ( nodeListFromGlobalMap.isEmpty() )
+                            {
+                                globalCollectedNodes.put( key, nonEmptyNodeList );
+                            } else
+                            {
+                                nodeListFromGlobalMap.addAll( nonEmptyNodeList );
+                            }
+                        } ) );
+        return globalCollectedNodes;
+    }
 }

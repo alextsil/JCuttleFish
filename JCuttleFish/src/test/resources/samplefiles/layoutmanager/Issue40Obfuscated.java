@@ -1,11 +1,11 @@
 package test;
 
-public class Text implements Comparable<Text>
+public class a implements Comparable<a>
 {
 
     private RectF a;
 
-    public Text ()
+    public a ()
     {
         a.set(
                 a.left,

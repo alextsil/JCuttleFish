@@ -1,6 +1,6 @@
 package test;
 
-public class ArrayAccess
+public class a
 {
 
     private int a[] = new int[ 2 ];

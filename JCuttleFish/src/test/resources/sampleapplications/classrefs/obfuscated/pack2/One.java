@@ -1,6 +1,6 @@
 package pack2;
 
-public class One {
+public class c {
 
 	static public String static1 = "static1";
 	public void funct1(){}

@@ -17,7 +17,7 @@ import su.levenetc.android.textsurface.utils.Utils;
 /**
  * Created by Eugene Levenetc.
  */
-public class Text implements Comparable<Text> {
+public class a implements Comparable<a> {
 
     private Paint a;
     private final String b;
@@ -32,7 +32,7 @@ public class Text implements Comparable<Text> {
     private float k;
     private float l;
 
-    public Text(String aa, Position bb, RectF cc, Paint dd) {
+    public a(String aa, Position bb, RectF cc, Paint dd) {
         this.b = aa;
         this.e = bb;
         this.f = cc;

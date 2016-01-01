@@ -1,7 +1,7 @@
 package test;
 
 //Holds the target project specific paths and the JAVA_HOME path.
-public class ObfuscationEnvironment {
+public class a {
 
     private String a;
 
@@ -9,7 +9,7 @@ public class ObfuscationEnvironment {
 
     private String[] c = new String[ 1 ];
 
-    public ObfuscationEnvironment () {
+    public a () {
         this.a = "JCuttleFish" + System.lineSeparator() + "src";
         this.b[ 0 ] = "C:/test/JCuttleFish/src";
         this.c[ 0 ] = System.getenv( "JAVA_HOME" ) + System.lineSeparator() + "bin";

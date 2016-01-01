@@ -21,7 +21,7 @@ public final class ConfigurationEnvironment
     {
         if ( instance == null )
         {
-            throw new RuntimeException( "Source path not set. Please set path first" );
+            throw new RuntimeException( "Source path not set. Please use createConfigurationInstance first." );
         }
         return instance;
     }

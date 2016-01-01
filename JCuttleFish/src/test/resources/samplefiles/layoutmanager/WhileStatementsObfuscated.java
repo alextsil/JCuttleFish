@@ -1,6 +1,6 @@
 package test;
 
-public class While
+public class a
 {
 
     private double a;

@@ -6,7 +6,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 
-public class PanelChoixType extends JPanel
+public class a extends JPanel
 {
 
     private Border a;
@@ -27,7 +27,7 @@ public class PanelChoixType extends JPanel
 
     private Fenetre i;
 
-    public PanelChoixType ( Fenetre aa )
+    public a ( Fenetre aa )
     {
         this.i = aa;
         String[] aaa = new String[]{ "Musique", "Video", "Documents Texte", "Images", "Gestion", "Cours" };

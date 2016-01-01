@@ -1,6 +1,6 @@
 package test;
 
-public class Postfix
+public class a
 {
 
     private int a;

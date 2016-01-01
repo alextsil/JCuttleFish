@@ -1,4 +1,4 @@
-public class Test
+public class a
 {
 
     public FtpletResult onUploadStart ( final FtpSession aa, final FtpRequest bb ) throws FtpException, IOException

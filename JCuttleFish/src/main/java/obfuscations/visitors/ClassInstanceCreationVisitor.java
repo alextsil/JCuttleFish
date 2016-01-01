@@ -23,7 +23,8 @@ public class ClassInstanceCreationVisitor extends ASTVisitor
     {
         this.callbacks.stream().forEach( c -> c.notify( classInstanceCreation ) );
 
-        //Rename arguments
+        new TypeVisitor( this.callbacks ).visit( classInstanceCreation.getType() );
+
         List<Object> arguments = classInstanceCreation.arguments();
         new MethodArgumentsVisitor( this.callbacks ).visit( arguments );
         return false;

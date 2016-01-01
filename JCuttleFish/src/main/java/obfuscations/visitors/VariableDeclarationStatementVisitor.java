@@ -24,6 +24,8 @@ public class VariableDeclarationStatementVisitor extends ASTVisitor
     {
         this.callbacks.stream().forEach( c -> c.notify( variableDeclarationStatement ) );
 
+        new TypeVisitor( this.callbacks ).visit( variableDeclarationStatement.getType() );
+
         VariableDeclarationFragment variableDeclarationFragment = ( VariableDeclarationFragment )variableDeclarationStatement.fragments().get( 0 );
         Expression expression = variableDeclarationFragment.getInitializer();
         if ( expression != null )

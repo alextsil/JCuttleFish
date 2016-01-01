@@ -3,7 +3,7 @@ package test;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PrivateProtectedMatcher {
+public class a {
 
     private String a = "protected|private";
 
@@ -13,7 +13,7 @@ public class PrivateProtectedMatcher {
 
     private Matcher d;
 
-    public PrivateProtectedMatcher () {
+    public a () {
         c = Pattern.compile( a );
     }
 

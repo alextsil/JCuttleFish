@@ -1,6 +1,6 @@
 package test;
 
-public class Switch
+public class a
 {
 
     private int a;

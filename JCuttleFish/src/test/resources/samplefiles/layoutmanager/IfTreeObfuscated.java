@@ -1,6 +1,6 @@
 package test;
 
-public class ifTrees
+public class a
 {
 
     private int a;

@@ -1,6 +1,6 @@
 package test;
 
-public class DoWhile
+public class a
 {
 
     private double a;

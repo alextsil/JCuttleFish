@@ -22,6 +22,7 @@ public class FieldDeclarationVisitor extends ASTVisitor
     {
         this.callbacks.stream().forEach( c -> c.notify( fieldDeclaration ) );
 
+        new TypeVisitor( this.callbacks ).visit( fieldDeclaration.getType() );
         return false;
     }
 }

@@ -11,6 +11,10 @@ public class Two
 
     private One one;
     private List<List<One>> ones;
+    private List<List<Map<String, One>>> onesmap;
+    private List<? extends One> extendone;
+    private One[] onearray;
+    private List<One[]> listarrayone;
 
     public Two ()
     {

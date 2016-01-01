@@ -38,6 +38,7 @@ public class NodeFinder
         this.callbacks.add( new ClassInstanceCreationCallback() );
         this.callbacks.add( new TypeDeclarationCallback() );
         this.callbacks.add( new FieldDeclarationCallback() );
+        this.callbacks.add( new MethodDeclarationCallback() );
     }
 
     public Collection<UnitNode> getUnitNodesCollectionFromUnitSources ( Collection<UnitSource> unitSources )

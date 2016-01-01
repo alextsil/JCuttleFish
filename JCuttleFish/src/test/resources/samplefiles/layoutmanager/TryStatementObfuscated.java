@@ -1,6 +1,6 @@
 package test;
 
-public class KeybIntReader
+public class a
 {
 
     private String a;

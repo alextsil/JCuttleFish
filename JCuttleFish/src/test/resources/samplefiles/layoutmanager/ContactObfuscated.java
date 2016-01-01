@@ -10,7 +10,7 @@ import API.IContact;
 /**
  * @author Alexei
  */
-public class Contact implements IContact
+public class a implements IContact
 {
 
     private String a;
@@ -28,7 +28,7 @@ public class Contact implements IContact
      * initialisation of it's objects
      *
      */
-    public Contact ( String aa, String bb )
+    public a ( String aa, String bb )
     {
         this.b = aa;
         this.e = bb;
@@ -43,7 +43,7 @@ public class Contact implements IContact
     /**
      * simple constructor
      */
-    public Contact ()
+    public a ()
     {
         this.a = "";
         this.b = "";
