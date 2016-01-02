@@ -1,6 +1,6 @@
 package test;
 
-public class Text implements Comparable<Text>
+public class Text
 {
 
     private RectF defaultSize;

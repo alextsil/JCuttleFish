@@ -1,6 +1,6 @@
 package test;
 
-public class a implements Comparable<a>
+public class a
 {
 
     private RectF a;

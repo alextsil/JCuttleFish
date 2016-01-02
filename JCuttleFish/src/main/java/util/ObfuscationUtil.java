@@ -167,6 +167,14 @@ public class ObfuscationUtil
                 .map( MethodDeclaration.class::cast )
                 .forEach( md -> new MethodDeclarationVisitor( callbacks ).visit( md ) );
 
+        //Rename mixins
+        List superInterfaceTypes = typeDeclaration.superInterfaceTypes();
+        if ( !superInterfaceTypes.isEmpty() )
+        {
+            superInterfaceTypes.stream()
+                    .forEach( sit -> RenameNodeUtil.renameIdentifierOccurencesInTypeHierarchy( ( Type )sit, classIdentifier, obfuscatedName ) );
+        }
+
         //Rename constructor(s)
         globalCollectedNodes.getOrDefault( MethodDeclaration.class, Collections.emptyList() ).stream()
                 .map( MethodDeclaration.class::cast )

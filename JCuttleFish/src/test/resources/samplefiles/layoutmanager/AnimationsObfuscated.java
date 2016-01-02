@@ -190,7 +190,7 @@ public class a implements Comparable<a> {
         e.setTranslationY(aa);
     }
 
-    @Override public int compareTo(@NonNull Text aa) {
+    @Override public int compareTo(@NonNull a aa) {
         return b.compareTo(aa.text);
     }
 

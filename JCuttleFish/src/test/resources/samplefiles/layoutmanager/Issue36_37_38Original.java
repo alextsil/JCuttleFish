@@ -7,7 +7,7 @@ import android.graphics.RectF;
 /**
  * Created by Eugene Levenetc.
  */
-public class Text implements Comparable<Text> {
+public class Text {
 
     private Paint paint;
     private RectF defaultSize;

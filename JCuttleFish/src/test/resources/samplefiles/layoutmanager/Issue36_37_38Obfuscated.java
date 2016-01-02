@@ -7,7 +7,7 @@ import android.graphics.RectF;
 /**
  * Created by Eugene Levenetc.
  */
-public class a implements Comparable<a> {
+public class a {
 
     private Paint a;
     private RectF b;
