@@ -4,6 +4,8 @@ import obfuscations.callbacks.AstNodeFoundCallback;
 import obfuscations.callbacks.RenameTypesCallback;
 import obfuscations.visitors.FieldDeclarationVisitor;
 import obfuscations.visitors.MethodDeclarationVisitor;
+import obfuscations.visitors.TypeDeclarationVisitor;
+import obfuscations.visitors.TypeVisitor;
 import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -159,21 +161,26 @@ public class ObfuscationUtil
         Collection<AstNodeFoundCallback> callbacks = new ArrayList<>();
         callbacks.add( new RenameTypesCallback( classIdentifier, obfuscatedName ) );
 
+        //Rename occurences in field declarations
         globalCollectedNodes.getOrDefault( FieldDeclaration.class, Collections.emptyList() ).stream()
                 .map( FieldDeclaration.class::cast )
                 .forEach( fd -> new FieldDeclarationVisitor( callbacks ).visit( fd ) );
 
+        //Rename occurences in methods
         globalCollectedNodes.getOrDefault( MethodDeclaration.class, Collections.emptyList() ).stream()
                 .map( MethodDeclaration.class::cast )
-                .forEach( md -> new MethodDeclarationVisitor( callbacks ).visit( md ) );
+                .forEach( md -> {
+                    new MethodDeclarationVisitor( callbacks ).visit( md );
+                    //Rename occurences in method parameters
+                    md.parameters().stream()
+                            .forEach( p -> {
+                                SingleVariableDeclaration svd = ( SingleVariableDeclaration )p;
+                                new TypeVisitor( callbacks ).visit( svd.getType() );
+                            } );
+                } );
 
-        //Rename mixins
-        List superInterfaceTypes = typeDeclaration.superInterfaceTypes();
-        if ( !superInterfaceTypes.isEmpty() )
-        {
-            superInterfaceTypes.stream()
-                    .forEach( sit -> RenameNodeUtil.renameIdentifierOccurencesInTypeHierarchy( ( Type )sit, classIdentifier, obfuscatedName ) );
-        }
+        //Rename mixins - TODO : find a better solution
+        new TypeDeclarationVisitor( callbacks ).visit( typeDeclaration );
 
         //Rename constructor(s)
         globalCollectedNodes.getOrDefault( MethodDeclaration.class, Collections.emptyList() ).stream()

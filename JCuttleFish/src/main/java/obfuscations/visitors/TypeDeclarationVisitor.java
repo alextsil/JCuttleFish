@@ -3,12 +3,14 @@ package obfuscations.visitors;
 import obfuscations.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.ConvenienceWrappers;
 
 import java.util.Collection;
+import java.util.List;
 
 
 public class TypeDeclarationVisitor extends ASTVisitor
@@ -35,6 +37,13 @@ public class TypeDeclarationVisitor extends ASTVisitor
 
             ConvenienceWrappers.getMethodDeclarationsAsList( typeDeclaration ).stream()
                     .forEach( md -> new MethodDeclarationVisitor( this.callbacks ).visit( md ) );
+
+            List superInterfaceTypes = typeDeclaration.superInterfaceTypes();
+            if ( !superInterfaceTypes.isEmpty() )
+            {
+                superInterfaceTypes.stream()
+                        .forEach( sit -> new TypeVisitor( this.callbacks ).visit( ( Type )sit ) );
+            }
         } else
         {
             this.logger.warn( "Type binding is not a class" );
