@@ -179,6 +179,20 @@ public class ObfuscationUtil
                             } );
                 } );
 
+        //Rename occurences in import declarations
+        globalCollectedNodes.getOrDefault( ImportDeclaration.class, Collections.emptyList() ).stream()
+                .map( ImportDeclaration.class::cast )
+                .forEach( impDecl -> {
+                    //binding type might differ based on import type.
+                    IBinding typeBinding = impDecl.resolveBinding();
+                    if ( typeBinding.isEqualTo( typeDeclaration.resolveBinding() ) )
+                    {
+                        QualifiedName qualifiedName = ( QualifiedName )impDecl.getName();
+                        SimpleName simpleName = qualifiedName.getName();
+                        simpleName.setIdentifier( obfuscatedName );
+                    }
+                } );
+
         //Rename mixins - TODO : find a better solution
         new TypeDeclarationVisitor( callbacks ).visit( typeDeclaration );
 

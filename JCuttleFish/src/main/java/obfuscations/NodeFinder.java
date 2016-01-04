@@ -1,9 +1,9 @@
 package obfuscations;
 
 import obfuscations.callbacks.*;
-import obfuscations.visitors.TypeDeclarationVisitor;
+import obfuscations.visitors.CompilationUnitVisitor;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import pojo.UnitNode;
 import pojo.UnitSource;
 
@@ -21,7 +21,7 @@ public class NodeFinder
     {
         this.initializeCallbacks();
 
-        this.collectNodes( ( TypeDeclaration )unitSource.getCompilationUnit().types().get( 0 ) );
+        this.collectNodes( unitSource.getCompilationUnit() );
 
         Collection<ASTNode> collectedNodes = this.addCollectedNodesToCollection();
 
@@ -39,6 +39,7 @@ public class NodeFinder
         this.callbacks.add( new TypeDeclarationCallback() );
         this.callbacks.add( new FieldDeclarationCallback() );
         this.callbacks.add( new MethodDeclarationCallback() );
+        this.callbacks.add( new ImportDeclarationCallback() );
     }
 
     public Collection<UnitNode> getUnitNodesCollectionFromUnitSources ( Collection<UnitSource> unitSources )
@@ -48,9 +49,9 @@ public class NodeFinder
                 .collect( Collectors.toList() );
     }
 
-    private void collectNodes ( TypeDeclaration typeDeclaration )
+    private void collectNodes ( CompilationUnit compilationUnit )
     {
-        new TypeDeclarationVisitor( this.callbacks ).visit( typeDeclaration );
+        new CompilationUnitVisitor( this.callbacks ).visit( compilationUnit );
     }
 
     private Collection<ASTNode> addCollectedNodesToCollection ()

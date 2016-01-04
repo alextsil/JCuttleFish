@@ -1,11 +1,11 @@
 package pack2;
 
-import pack1.a;
+import pack1.Two;
 
 public class Main {
 
 	public static void main(String[] args) {
-		a aaa = new a();
+		Two two = new Two();
 
 	}
 

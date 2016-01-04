@@ -26,4 +26,9 @@ public class a
         c.staticFunct();
         pack2.c.staticFunct();
     }
+
+    public void both ( c aa, a bb )
+    {
+        //
+    }
 }

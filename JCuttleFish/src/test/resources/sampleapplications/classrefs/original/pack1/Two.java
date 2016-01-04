@@ -26,4 +26,9 @@ public class Two
         One.staticFunct();
         pack2.One.staticFunct();
     }
+
+    public void both ( One one, Two two )
+    {
+        //
+    }
 }
