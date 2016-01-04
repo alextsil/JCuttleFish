@@ -325,5 +325,9 @@ public class LayoutManagerTest
         List<UnitSource> unitSources = unitNodes.stream().map( UnitNode::getUnitSource ).collect( Collectors.toList() );
         assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/classrefs/obfuscated/pack1/Two.java" ) ),
                 unitSources.get( 0 ).getDocument().get() );
+        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/classrefs/obfuscated/pack2/Main.java" ) ),
+                unitSources.get( 1 ).getDocument().get() );
+        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/classrefs/obfuscated/pack2/One.java" ) ),
+                unitSources.get( 2 ).getDocument().get() );
     }
 }
