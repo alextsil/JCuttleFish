@@ -1,6 +1,7 @@
 package util;
 
 import obfuscations.callbacks.AstNodeFoundCallback;
+import obfuscations.callbacks.RenameClassReferenceCallback;
 import obfuscations.callbacks.RenameTypesCallback;
 import obfuscations.visitors.FieldDeclarationVisitor;
 import obfuscations.visitors.MethodDeclarationVisitor;
@@ -160,6 +161,7 @@ public class ObfuscationUtil
 
         Collection<AstNodeFoundCallback> callbacks = new ArrayList<>();
         callbacks.add( new RenameTypesCallback( classIdentifier, obfuscatedName ) );
+        callbacks.add( new RenameClassReferenceCallback( typeDeclaration.getName().resolveBinding(), obfuscatedName ) );
 
         //Rename occurences in field declarations
         globalCollectedNodes.getOrDefault( FieldDeclaration.class, Collections.emptyList() ).stream()
@@ -183,7 +185,6 @@ public class ObfuscationUtil
         globalCollectedNodes.getOrDefault( ImportDeclaration.class, Collections.emptyList() ).stream()
                 .map( ImportDeclaration.class::cast )
                 .forEach( impDecl -> {
-                    //binding type might differ based on import type.
                     IBinding typeBinding = impDecl.resolveBinding();
                     if ( typeBinding.isEqualTo( typeDeclaration.resolveBinding() ) )
                     {

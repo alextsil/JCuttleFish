@@ -4,6 +4,8 @@ import obfuscations.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ParenthesizedExpression;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.CastToAndVisit;
 
 import java.util.Collection;
@@ -13,6 +15,7 @@ public class ExpressionVisitor extends ASTVisitor
 {
 
     private Collection<AstNodeFoundCallback> callbacks;
+    private final Logger logger = LoggerFactory.getLogger( ExpressionVisitor.class );
 
     public ExpressionVisitor ( Collection<AstNodeFoundCallback> callbacks )
     {
@@ -59,9 +62,12 @@ public class ExpressionVisitor extends ASTVisitor
         } else if ( expressionNodeType == ASTNode.ASSIGNMENT )
         {
             CastToAndVisit.assignment( expression, this.callbacks );
+        } else if ( expressionNodeType == ASTNode.TYPE_LITERAL )
+        {
+            CastToAndVisit.typeLitelar( expression, this.callbacks );
         } else
         {
-            //throw new RuntimeException( "NOT" );
+            this.logger.warn( expression.getClass() + " not mapped" );
         }
         return false;
     }

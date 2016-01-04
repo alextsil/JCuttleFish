@@ -191,7 +191,7 @@ public class a implements Comparable<a> {
     }
 
     @Override public int compareTo(@NonNull a aa) {
-        return b.compareTo(aa.text);
+        return b.compareTo(aa.b);
     }
 
     public float getWidth() {

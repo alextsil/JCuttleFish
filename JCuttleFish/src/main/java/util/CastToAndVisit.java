@@ -136,4 +136,10 @@ public class CastToAndVisit
         new SimpleNameVisitor( callbacks ).visit( simpleName );
     }
 
+    public static <V extends ASTNode> void typeLitelar ( V node, Collection<AstNodeFoundCallback> callbacks )
+    {
+        TypeLiteral typeLiteral = ( TypeLiteral )node;
+        new TypeLiteralVisitor( callbacks ).visit( typeLiteral );
+    }
+
 }

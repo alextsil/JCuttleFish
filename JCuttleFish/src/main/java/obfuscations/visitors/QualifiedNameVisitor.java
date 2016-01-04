@@ -24,7 +24,6 @@ public class QualifiedNameVisitor extends ASTVisitor
     {
         this.callbacks.stream().forEach( c -> c.notify( qualifiedName ) );
 
-        //visit qualifier
         Name qualifier = qualifiedName.getQualifier();
         if ( qualifier.isSimpleName() )
         {
@@ -33,6 +32,8 @@ public class QualifiedNameVisitor extends ASTVisitor
         {
             CastToAndVisit.qualifiedName( qualifier, this.callbacks );
         }
+
+        CastToAndVisit.simpleName( qualifiedName.getName(), this.callbacks );
 
         return false;
     }
