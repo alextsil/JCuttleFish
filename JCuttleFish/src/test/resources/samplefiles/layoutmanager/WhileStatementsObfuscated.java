@@ -6,7 +6,7 @@ public class a
     private double a;
     private double b;
 
-    public void whileStuff ()
+    public void a ()
     {
         int aaa = 0;
 

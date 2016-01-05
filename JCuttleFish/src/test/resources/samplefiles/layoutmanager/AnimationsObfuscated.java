@@ -1,23 +1,20 @@
 package su.levenetc.android.textsurface;
 
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
+import android.graphics.*;
 import android.support.annotation.NonNull;
-
-import java.util.ArrayList;
-
 import su.levenetc.android.textsurface.common.Position;
 import su.levenetc.android.textsurface.common.ScaleValue;
 import su.levenetc.android.textsurface.interfaces.ITextEffect;
 import su.levenetc.android.textsurface.utils.Utils;
 
+import java.util.ArrayList;
+
+
 /**
  * Created by Eugene Levenetc.
  */
-public class a implements Comparable<a> {
+public class a implements Comparable<a>
+{
 
     private Paint a;
     private final String b;
@@ -32,41 +29,46 @@ public class a implements Comparable<a> {
     private float k;
     private float l;
 
-    public a(String aa, Position bb, RectF cc, Paint dd) {
+    public a ( String aa, Position bb, RectF cc, Paint dd )
+    {
         this.b = aa;
         this.e = bb;
         this.f = cc;
         this.a = dd;
 
-        initBounds(aa);
+        c( aa );
     }
 
-    public void addEffect(ITextEffect aa) {
-        j.add(aa);
+    public void a ( ITextEffect aa )
+    {
+        j.add( aa );
     }
 
-    public float getFontDescent() {
+    public float b ()
+    {
         return l;
     }
 
-    private void initBounds(String aa) {
+    private void c ( String aa )
+    {
         String aaa = aa.trim();
-        if (aaa.length() < aa.length()) {
+        if ( aaa.length() < aa.length() )
+        {
 
             int bbb = aa.length();
-            int ccc = aa.lastIndexOf(aaa);
-            int ddd = bbb - (ccc + aaa.length());
+            int ccc = aa.lastIndexOf( aaa );
+            int ddd = bbb - ( ccc + aaa.length() );
 
-            aa = Utils.genString(ccc) + aa + Utils.genString(ddd);
+            aa = Utils.genString( ccc ) + aa + Utils.genString( ddd );
         }
 
         Rect eee = new Rect();
-        a.getTextBounds(aa, 0, aa.length(), eee);
+        a.getTextBounds( aa, 0, aa.length(), eee );
 
         l = a.getFontMetrics().descent;
-        c = new RectF(eee);
+        c = new RectF( eee );
         //a little workaround because getTextBounds returns smaller width than it is
-        k = a.measureText(aa) - eee.width();
+        k = a.measureText( aa ) - eee.width();
         c.left = 0;
         c.right = eee.width() + k;
         c.top = -a.getFontSpacing();
@@ -87,30 +89,36 @@ public class a implements Comparable<a> {
         );
     }
 
-    public void setIndex(int aa) {
+    public void d ( int aa )
+    {
         this.g = aa;
     }
 
-    public int getIndex() {
+    public int e ()
+    {
         return g;
     }
 
-    public void onDraw(Canvas aa, TextSurface bb) {
+    public void f ( Canvas aa, TextSurface bb )
+    {
 
-        layout(bb);
+        g( bb );
 
         aa.save();
         aa.concat( i );
 
         final float aaa = f.left;
 
-        if (j.isEmpty()) {
-            aa.drawText(b, aaa, -f.bottom - l, a);
-        } else {
-            for (ITextEffect effect : j) {
+        if ( j.isEmpty() )
+        {
+            aa.drawText( b, aaa, -f.bottom - l, a );
+        } else
+        {
+            for ( ITextEffect effect : j )
+            {
                 aa.save();
-                effect.apply(aa, b, aaa, -f.bottom, a);
-                aa.drawText(b, aaa, -f.bottom, a);
+                effect.apply( aa, b, aaa, -f.bottom, a );
+                aa.drawText( b, aaa, -f.bottom, a );
                 aa.restore();
             }
 
@@ -118,7 +126,8 @@ public class a implements Comparable<a> {
 
         aa.restore();
 
-        if (Debug.ENABLED) {
+        if ( Debug.ENABLED )
+        {
             aa.drawRect(
                     d.left,
                     d.top - f.bottom - f.top,
@@ -129,106 +138,130 @@ public class a implements Comparable<a> {
         }
     }
 
-    void layout(TextSurface aa) {
+    void g ( TextSurface aa )
+    {
 
-        d.set(c.left, c.top, c.right, c.bottom);
+        d.set( c.left, c.top, c.right, c.bottom );
 
         final float aaa = h.getScaleX();
         final float bbb = h.getScaleY();
-        final float ccc = e.getRelativeX((int) h.getPivot().x, this, false);
-        final float ddd = e.getRelativeY((int) h.getPivot().y, this, false);
-        final float eee = e.getX(aa, getWidth() * aaa);
-        final float fff = e.getY(aa, getHeight() * bbb);
+        final float ccc = e.getRelativeX( ( int )h.getPivot().x, this, false );
+        final float ddd = e.getRelativeY( ( int )h.getPivot().y, this, false );
+        final float eee = e.getX( aa, s() * aaa );
+        final float fff = e.getY( aa, t() * bbb );
 
         i.reset();
-        i.preTranslate(eee, fff);
-        i.preScale(aaa, bbb, ccc, ddd);
-        i.mapRect(d);
+        i.preTranslate( eee, fff );
+        i.preScale( aaa, bbb, ccc, ddd );
+        i.mapRect( d );
     }
 
-    public float getY(TextSurface aa) {
-        return e.getY(aa, getHeight());
+    public float h ( TextSurface aa )
+    {
+        return e.getY( aa, t() );
     }
 
-    public float getX(TextSurface aa) {
-        return e.getX(aa, getWidth());
+    public float i ( TextSurface aa )
+    {
+        return e.getX( aa, s() );
     }
 
-    public void setAlpha(int aa) {
-        a.setAlpha(aa);
+    public void j ( int aa )
+    {
+        a.setAlpha( aa );
     }
 
-    public RectF bounds() {
+    public RectF k ()
+    {
         return c;
     }
 
-    public void setPosition(Position aa) {
+    public void l ( Position aa )
+    {
         this.e = aa;
     }
 
-    public void setScaleX(float aa) {
-        h.setValueX(aa);
+    public void m ( float aa )
+    {
+        h.setValueX( aa );
     }
 
-    public void setScaleY(float aa) {
-        h.setValueY(aa);
+    public void n ( float aa )
+    {
+        h.setValueY( aa );
     }
 
-    public void setScalePivot(float aa, float bb) {
-        h.getPivot().set(aa, bb);
+    public void o ( float aa, float bb )
+    {
+        h.getPivot().set( aa, bb );
     }
 
-    public float getScaleY() {
+    public float p ()
+    {
         return h.getScaleY();
     }
 
-    public void setTranslationX(float aa) {
-        e.setTranslationX(aa);
+    public void q ( float aa )
+    {
+        e.setTranslationX( aa );
     }
 
-    public void setTranslationY(float aa) {
-        e.setTranslationY(aa);
+    public void r ( float aa )
+    {
+        e.setTranslationY( aa );
     }
 
-    @Override public int compareTo(@NonNull a aa) {
-        return b.compareTo(aa.b);
+    @Override
+    public int compareTo ( @NonNull a aa )
+    {
+        return b.compareTo( aa.b );
     }
 
-    public float getWidth() {
-        return (d.width() + f.left + f.right);
+    public float s ()
+    {
+        return ( d.width() + f.left + f.right );
     }
 
-    public float getHeight() {
-        return (d.height() + f.top + f.bottom);
+    public float t ()
+    {
+        return ( d.height() + f.top + f.bottom );
     }
 
-    public Position getPosition() {
+    public Position u ()
+    {
         return e;
     }
 
-    public void onAnimationEnd() {
+    public void v ()
+    {
         e.onAnimationEnd();
     }
 
-    public float getScaleX() {
+    public float w ()
+    {
         return h.getScaleX();
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString ()
+    {
         return "Text{" +
                 "text='" + b + '\'' +
                 '}';
     }
 
-    public void removeEffect(ITextEffect aa) {
-        j.remove(aa);
+    public void x ( ITextEffect aa )
+    {
+        j.remove( aa );
     }
 
-    public String getValue() {
+    public String y ()
+    {
         return b;
     }
 
-    public Paint getPaint() {
+    public Paint z ()
+    {
         return a;
     }
 }

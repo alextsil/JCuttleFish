@@ -5,7 +5,7 @@ public class a
 
     private int a;
 
-    public void switchStatements ()
+    public void a ()
     {
         char aaa = 'C';
 

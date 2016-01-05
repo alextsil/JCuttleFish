@@ -15,7 +15,7 @@ public class a {
     private float d;
 
 
-    private void initBounds(String aa) {
+    private void a(String aa) {
 
         Rect aaa = new Rect();
         a.getTextBounds(aa, 0, aa.length(), aaa);

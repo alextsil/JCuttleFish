@@ -5,7 +5,7 @@ public class a
 
     private int a[] = new int[ 2 ];
 
-    public void go ()
+    public void a ()
     {
         try
         {

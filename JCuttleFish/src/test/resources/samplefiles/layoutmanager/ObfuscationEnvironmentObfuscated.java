@@ -15,15 +15,15 @@ public class a {
         this.c[ 0 ] = System.getenv( "JAVA_HOME" ) + System.lineSeparator() + "bin";
     }
 
-    public String getRelativeSourcePath () {
+    public String a () {
         return a;
     }
 
-    public String[] getAbsoluteSourcePath () {
+    public String[] b () {
         return b;
     }
 
-    public String[] getClasspath () {
+    public String[] c () {
         return c;
     }
 }

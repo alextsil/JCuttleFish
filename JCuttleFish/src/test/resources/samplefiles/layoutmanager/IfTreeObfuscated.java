@@ -6,7 +6,7 @@ public class a
     private int a;
     private int b = 0;
 
-    public void ifTree ()
+    public void a ()
     {
         if ( a < 10 )
         {

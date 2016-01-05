@@ -1,7 +1,7 @@
 public class a
 {
 
-    public void test ()
+    public void a ()
     {
         int aaa = 5;
         String bbb = "test";
@@ -11,12 +11,12 @@ public class a
         ccc = null;
     }
 
-    public void test2 ( String aa, String bb )
+    public void b ( String aa, String bb )
     {
-        test( aa, bb );
+        a( aa, bb );
     }
 
-    public static double var ( double[] aa, int bb, int cc )
+    public static double c ( double[] aa, int bb, int cc )
     {
         int aaa = cc - bb + 1;
         if ( bb < 0 || cc >= aa.length || bb > cc )
@@ -31,7 +31,7 @@ public class a
         return ccc / ( aaa - 1 );
     }
 
-    public static void show ( boolean[][] aa, boolean bb )
+    public static void d ( boolean[][] aa, boolean bb )
     {
         int aaa = aa.length;
         StdDraw.setXscale( -1, aaa );
@@ -101,7 +101,7 @@ public class a
         }
     }
 
-    public static void main2 ( String[] aa )
+    public static void e ( String[] aa )
     {
         AudioFormat.Encoding aaa = null;
         String bbb = null;

@@ -8,8 +8,6 @@ import obfuscations.visitors.MethodDeclarationVisitor;
 import obfuscations.visitors.TypeDeclarationVisitor;
 import obfuscations.visitors.TypeVisitor;
 import org.eclipse.jdt.core.dom.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import pojo.UnitNode;
 import providers.ObfuscatedNamesProvider;
 import util.enums.ObfuscatedNamesVariations;
@@ -21,8 +19,6 @@ import static java.util.stream.Collectors.toList;
 
 public class ObfuscationUtil
 {
-
-    private final Logger logger = LoggerFactory.getLogger( ObfuscationUtil.class );
 
     public static void obfuscateMethodDeclaredVariables ( UnitNode unitNode, MethodDeclaration methodDeclaration )
     {
@@ -209,6 +205,46 @@ public class ObfuscationUtil
 
         //Rename actual class
         typeDeclaration.getName().setIdentifier( obfuscatedName );
+    }
+
+    public static void obfuscateMethodNames ( Collection<UnitNode> unitNodes )
+    {
+        unitNodes.stream()
+                .map( UnitNode::getUnitSource )
+                .map( us -> us.getCompilationUnit().types().get( 0 ) )
+                .forEach( td -> {
+                    TypeDeclaration typeDeclaration = ( TypeDeclaration )td;
+                    ITypeBinding typeBinding = typeDeclaration.resolveBinding();
+                    if ( typeBinding.isClass() && typeBinding.isFromSource() )
+                    {
+                        renameMethodsAndReferences( typeDeclaration, unitNodes );
+                    }
+                } );
+    }
+
+    private static void renameMethodsAndReferences ( TypeDeclaration typeDeclaration, Collection<UnitNode> unitNodes )
+    {
+        Map<Class<? extends ASTNode>, List<ASTNode>> globalCollectedNodes = mergeNodeMapsToGlobalMap( unitNodes );
+
+        ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
+        Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
+
+        ConvenienceWrappers.getMethodDeclarationsAsList( typeDeclaration ).stream()
+                .map( MethodDeclaration.class::cast )
+                .filter( md -> !md.isConstructor() )
+                .filter( md -> !md.getName().getIdentifier().equals( "main" ) )
+                .filter( md -> !md.getName().getIdentifier().equals( "compareTo" ) )
+                .filter( md -> !md.getName().getIdentifier().equals( "toString" ) )
+                .filter( md -> !md.getName().getIdentifier().equals( "accept" ) )
+                .forEach( md -> {
+                    //obfuscate refs
+                    globalCollectedNodes.getOrDefault( MethodInvocation.class, Collections.emptyList() ).stream()
+                            .map( MethodInvocation.class::cast )
+                            .filter( mi -> md.getName().resolveBinding().isEqualTo( mi.getName().resolveBinding() ) )
+                            .forEach( mi -> mi.getName().setIdentifier( obfuscatedVariableNames.peekFirst() ) );
+                    //obfuscate method name
+                    md.getName().setIdentifier( obfuscatedVariableNames.pollFirst() );
+                } );
     }
 
     private static Map<Class<? extends ASTNode>, List<ASTNode>> mergeNodeMapsToGlobalMap ( Collection<UnitNode> unitNodes )

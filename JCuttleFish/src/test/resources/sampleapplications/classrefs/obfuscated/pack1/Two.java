@@ -20,14 +20,14 @@ public class a
     {
         c aaa = new c();
         List<c> bbb = new ArrayList<c>();
-        aaa.funct1();
+        aaa.a();
         c.class.getClass();
         String ccc = c.static1;
-        c.staticFunct();
-        pack2.c.staticFunct();
+        c.b();
+        pack2.c.b();
     }
 
-    public void both ( c aa, a bb )
+    public void a ( c aa, a bb )
     {
         //
     }

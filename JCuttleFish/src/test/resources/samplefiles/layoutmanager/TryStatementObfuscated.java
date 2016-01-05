@@ -7,7 +7,7 @@ public class a
     private String b;
     private int c = 0;
 
-    public void read ()
+    public void a ()
     {
         BufferedReader aaa = new BufferedReader( new InputStreamReader(
                 System.in ) );

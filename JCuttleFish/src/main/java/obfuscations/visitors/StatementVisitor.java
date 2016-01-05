@@ -77,7 +77,7 @@ public class StatementVisitor
             CastToAndVisit.constructorInvocation( statement, this.callbacks );
         } else
         {
-            this.logger.debug( "Not mapped yet. type : " + statement.getClass() );
+            this.logger.warn( "Not mapped yet. type : " + statement.getClass() );
         }
         return true;
     }

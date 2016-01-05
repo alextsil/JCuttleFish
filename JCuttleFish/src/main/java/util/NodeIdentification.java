@@ -28,8 +28,15 @@ public class NodeIdentification
             return getNodeIdentifierString( ( MethodDeclaration )node );
         if ( node instanceof ImportDeclaration )
             return getNodeIdentifierString( ( ImportDeclaration )node );
+        if ( node instanceof MethodInvocation )
+            return getNodeIdentifierString( ( MethodInvocation )node );
 
         throw new IllegalArgumentException( node.getClass() + " type not supported" );
+    }
+
+    private static String getNodeIdentifierString ( MethodInvocation methodInvocation )
+    {
+        return methodInvocation.getName().getIdentifier();
     }
 
     private static String getNodeIdentifierString ( ImportDeclaration importDeclaration )

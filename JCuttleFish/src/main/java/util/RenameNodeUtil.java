@@ -52,7 +52,7 @@ public class RenameNodeUtil
                 }
             } else
             {
-                logger.error( "QualifiedName found in type. Cannot handle - Might cause test errors." ); //FIXME: Not sure how to handle
+                logger.warn( "QualifiedName found in type. Cannot handle - Might cause test errors." ); //FIXME: Not sure how to handle
             }
         } else if ( type.isParameterizedType() )
         {

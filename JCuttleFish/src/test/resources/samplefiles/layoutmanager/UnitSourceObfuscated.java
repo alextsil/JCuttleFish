@@ -13,11 +13,11 @@ public class a {
         this.b = bb;
     }
 
-    public CompilationUnit getCompilationUnit () {
+    public CompilationUnit a () {
         return a;
     }
 
-    public String getSourceCode () {
+    public String b () {
         return b;
     }
 }

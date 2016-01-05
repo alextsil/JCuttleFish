@@ -9,27 +9,27 @@ public class a
 
     public static final double NANOS_PER_SEC = 1000000000.0;
 
-    public void start ()
+    public void a ()
     {
         a = System.nanoTime();
     }
 
-    public void stop ()
+    public void b ()
     {
         b = System.nanoTime();
     }
 
-    public double time ()
+    public double c ()
     {
         return ( b - a ) / NANOS_PER_SEC;
     }
 
     public String toString ()
     {
-        return "elapsed time: " + time() + " seconds.";
+        return "elapsed time: " + c() + " seconds.";
     }
 
-    public long timeInNanoseconds ()
+    public long d ()
     {
         return ( b - a );
     }

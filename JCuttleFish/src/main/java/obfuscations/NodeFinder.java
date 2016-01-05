@@ -40,6 +40,7 @@ public class NodeFinder
         this.callbacks.add( new FieldDeclarationCallback() );
         this.callbacks.add( new MethodDeclarationCallback() );
         this.callbacks.add( new ImportDeclarationCallback() );
+        this.callbacks.add( new MethodInvocationCallback() );
     }
 
     public Collection<UnitNode> getUnitNodesCollectionFromUnitSources ( Collection<UnitSource> unitSources )

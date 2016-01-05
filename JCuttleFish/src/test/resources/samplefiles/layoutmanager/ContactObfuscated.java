@@ -56,97 +56,97 @@ public class a implements IContact
     }
 
     @Override
-    public void setId ( String aa )
+    public void a ( String aa )
     {
         this.a = aa;
     }
 
     @Override
-    public String getId ()
+    public String b ()
     {
         return a;
     }
 
     @Override
-    public String getFirstname ()
+    public String c ()
     {
         return b;
     }
 
     @Override
-    public void setFirstname ( String aa )
+    public void d ( String aa )
     {
         this.b = aa;
     }
 
     @Override
-    public String getLastname ()
+    public String e ()
     {
         return c;
     }
 
     @Override
-    public void setLastname ( String aa )
+    public void f ( String aa )
     {
         this.c = aa;
     }
 
     @Override
-    public String getEmail ()
+    public String g ()
     {
         return d;
     }
 
     @Override
-    public void setEmail ( String aa )
+    public void h ( String aa )
     {
         this.d = aa;
     }
 
     @Override
-    public String getTelephone ()
+    public String i ()
     {
         return e;
     }
 
     @Override
-    public void setTelephone ( String aa )
+    public void j ( String aa )
     {
         this.e = aa;
     }
 
     @Override
-    public String getMtelephone ()
+    public String k ()
     {
         return f;
     }
 
     @Override
-    public void setMtelephone ( String aa )
+    public void l ( String aa )
     {
         this.f = aa;
     }
 
     @Override
-    public String getAddress ()
+    public String m ()
     {
         return g;
     }
 
     @Override
-    public void setAddress ( String aa )
+    public void n ( String aa )
     {
         this.g = aa;
     }
 
     @Override
-    public String getCity ()
+    public String o ()
     {
         return h;
     }
 
     @Override
-    public void setCity ( String aa )
+    public void p ( String aa )
     {
         this.h = aa;
     }

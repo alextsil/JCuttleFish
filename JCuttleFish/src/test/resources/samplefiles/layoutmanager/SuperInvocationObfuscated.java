@@ -1,7 +1,7 @@
 public class a
 {
 
-    public FtpletResult onUploadStart ( final FtpSession aa, final FtpRequest bb ) throws FtpException, IOException
+    public FtpletResult a ( final FtpSession aa, final FtpRequest bb ) throws FtpException, IOException
     {
         String aaa = bb.getArgument();
 
@@ -14,7 +14,7 @@ public class a
         return super.onUploadStart( aa, bb );
     }
 
-    public FtpletResult onUploadEnd ( final FtpSession aa, final FtpRequest bb ) throws FtpException, IOException
+    public FtpletResult b ( final FtpSession aa, final FtpRequest bb ) throws FtpException, IOException
     {
         EOEditingContext aaa = ERXEC.newEditingContext();
         aaa.lock();

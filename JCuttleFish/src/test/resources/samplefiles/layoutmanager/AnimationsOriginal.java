@@ -1,23 +1,20 @@
 package su.levenetc.android.textsurface;
 
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
+import android.graphics.*;
 import android.support.annotation.NonNull;
-
-import java.util.ArrayList;
-
 import su.levenetc.android.textsurface.common.Position;
 import su.levenetc.android.textsurface.common.ScaleValue;
 import su.levenetc.android.textsurface.interfaces.ITextEffect;
 import su.levenetc.android.textsurface.utils.Utils;
 
+import java.util.ArrayList;
+
+
 /**
  * Created by Eugene Levenetc.
  */
-public class Text implements Comparable<Text> {
+public class Text implements Comparable<Text>
+{
 
     private Paint paint;
     private final String text;
@@ -32,41 +29,46 @@ public class Text implements Comparable<Text> {
     private float dx;
     private float fontDescent;
 
-    public Text(String text, Position position, RectF padding, Paint paint) {
+    public Text ( String text, Position position, RectF padding, Paint paint )
+    {
         this.text = text;
         this.position = position;
         this.padding = padding;
         this.paint = paint;
 
-        initBounds(text);
+        initBounds( text );
     }
 
-    public void addEffect(ITextEffect effect) {
-        effects.add(effect);
+    public void addEffect ( ITextEffect effect )
+    {
+        effects.add( effect );
     }
 
-    public float getFontDescent() {
+    public float getFontDescent ()
+    {
         return fontDescent;
     }
 
-    private void initBounds(String text) {
+    private void initBounds ( String text )
+    {
         String trimmed = text.trim();
-        if (trimmed.length() < text.length()) {
+        if ( trimmed.length() < text.length() )
+        {
 
             int length = text.length();
-            int start = text.lastIndexOf(trimmed);
-            int end = length - (start + trimmed.length());
+            int start = text.lastIndexOf( trimmed );
+            int end = length - ( start + trimmed.length() );
 
-            text = Utils.genString(start) + text + Utils.genString(end);
+            text = Utils.genString( start ) + text + Utils.genString( end );
         }
 
         Rect tmp = new Rect();
-        paint.getTextBounds(text, 0, text.length(), tmp);
+        paint.getTextBounds( text, 0, text.length(), tmp );
 
         fontDescent = paint.getFontMetrics().descent;
-        defaultSize = new RectF(tmp);
+        defaultSize = new RectF( tmp );
         //a little workaround because getTextBounds returns smaller width than it is
-        dx = paint.measureText(text) - tmp.width();
+        dx = paint.measureText( text ) - tmp.width();
         defaultSize.left = 0;
         defaultSize.right = tmp.width() + dx;
         defaultSize.top = -paint.getFontSpacing();
@@ -87,30 +89,36 @@ public class Text implements Comparable<Text> {
         );
     }
 
-    public void setIndex(int index) {
+    public void setIndex ( int index )
+    {
         this.index = index;
     }
 
-    public int getIndex() {
+    public int getIndex ()
+    {
         return index;
     }
 
-    public void onDraw(Canvas canvas, TextSurface textSurface) {
+    public void onDraw ( Canvas canvas, TextSurface textSurface )
+    {
 
-        layout(textSurface);
+        layout( textSurface );
 
         canvas.save();
         canvas.concat( matrix );
 
         final float finalX = padding.left;
 
-        if (effects.isEmpty()) {
-            canvas.drawText(text, finalX, -padding.bottom - fontDescent, paint);
-        } else {
-            for (ITextEffect effect : effects) {
+        if ( effects.isEmpty() )
+        {
+            canvas.drawText( text, finalX, -padding.bottom - fontDescent, paint );
+        } else
+        {
+            for ( ITextEffect effect : effects )
+            {
                 canvas.save();
-                effect.apply(canvas, text, finalX, -padding.bottom, paint);
-                canvas.drawText(text, finalX, -padding.bottom, paint);
+                effect.apply( canvas, text, finalX, -padding.bottom, paint );
+                canvas.drawText( text, finalX, -padding.bottom, paint );
                 canvas.restore();
             }
 
@@ -118,7 +126,8 @@ public class Text implements Comparable<Text> {
 
         canvas.restore();
 
-        if (Debug.ENABLED) {
+        if ( Debug.ENABLED )
+        {
             canvas.drawRect(
                     currentSize.left,
                     currentSize.top - padding.bottom - padding.top,
@@ -129,106 +138,130 @@ public class Text implements Comparable<Text> {
         }
     }
 
-    void layout(TextSurface textSurface) {
+    void layout ( TextSurface textSurface )
+    {
 
-        currentSize.set(defaultSize.left, defaultSize.top, defaultSize.right, defaultSize.bottom);
+        currentSize.set( defaultSize.left, defaultSize.top, defaultSize.right, defaultSize.bottom );
 
         final float sx = scale.getScaleX();
         final float sy = scale.getScaleY();
-        final float sPivotX = position.getRelativeX((int) scale.getPivot().x, this, false);
-        final float sPivotY = position.getRelativeY((int) scale.getPivot().y, this, false);
-        final float x = position.getX(textSurface, getWidth() * sx);
-        final float y = position.getY(textSurface, getHeight() * sy);
+        final float sPivotX = position.getRelativeX( ( int )scale.getPivot().x, this, false );
+        final float sPivotY = position.getRelativeY( ( int )scale.getPivot().y, this, false );
+        final float x = position.getX( textSurface, getWidth() * sx );
+        final float y = position.getY( textSurface, getHeight() * sy );
 
         matrix.reset();
-        matrix.preTranslate(x, y);
-        matrix.preScale(sx, sy, sPivotX, sPivotY);
-        matrix.mapRect(currentSize);
+        matrix.preTranslate( x, y );
+        matrix.preScale( sx, sy, sPivotX, sPivotY );
+        matrix.mapRect( currentSize );
     }
 
-    public float getY(TextSurface textSurface) {
-        return position.getY(textSurface, getHeight());
+    public float getY ( TextSurface textSurface )
+    {
+        return position.getY( textSurface, getHeight() );
     }
 
-    public float getX(TextSurface textSurface) {
-        return position.getX(textSurface, getWidth());
+    public float getX ( TextSurface textSurface )
+    {
+        return position.getX( textSurface, getWidth() );
     }
 
-    public void setAlpha(int alpha) {
-        paint.setAlpha(alpha);
+    public void setAlpha ( int alpha )
+    {
+        paint.setAlpha( alpha );
     }
 
-    public RectF bounds() {
+    public RectF bounds ()
+    {
         return defaultSize;
     }
 
-    public void setPosition(Position position) {
+    public void setPosition ( Position position )
+    {
         this.position = position;
     }
 
-    public void setScaleX(float value) {
-        scale.setValueX(value);
+    public void setScaleX ( float value )
+    {
+        scale.setValueX( value );
     }
 
-    public void setScaleY(float value) {
-        scale.setValueY(value);
+    public void setScaleY ( float value )
+    {
+        scale.setValueY( value );
     }
 
-    public void setScalePivot(float x, float y) {
-        scale.getPivot().set(x, y);
+    public void setScalePivot ( float x, float y )
+    {
+        scale.getPivot().set( x, y );
     }
 
-    public float getScaleY() {
+    public float getScaleY ()
+    {
         return scale.getScaleY();
     }
 
-    public void setTranslationX(float value) {
-        position.setTranslationX(value);
+    public void setTranslationX ( float value )
+    {
+        position.setTranslationX( value );
     }
 
-    public void setTranslationY(float value) {
-        position.setTranslationY(value);
+    public void setTranslationY ( float value )
+    {
+        position.setTranslationY( value );
     }
 
-    @Override public int compareTo(@NonNull Text another) {
-        return text.compareTo(another.text);
+    @Override
+    public int compareTo ( @NonNull Text another )
+    {
+        return text.compareTo( another.text );
     }
 
-    public float getWidth() {
-        return (currentSize.width() + padding.left + padding.right);
+    public float getWidth ()
+    {
+        return ( currentSize.width() + padding.left + padding.right );
     }
 
-    public float getHeight() {
-        return (currentSize.height() + padding.top + padding.bottom);
+    public float getHeight ()
+    {
+        return ( currentSize.height() + padding.top + padding.bottom );
     }
 
-    public Position getPosition() {
+    public Position getPosition ()
+    {
         return position;
     }
 
-    public void onAnimationEnd() {
+    public void onAnimationEnd ()
+    {
         position.onAnimationEnd();
     }
 
-    public float getScaleX() {
+    public float getScaleX ()
+    {
         return scale.getScaleX();
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString ()
+    {
         return "Text{" +
                 "text='" + text + '\'' +
                 '}';
     }
 
-    public void removeEffect(ITextEffect effect) {
-        effects.remove(effect);
+    public void removeEffect ( ITextEffect effect )
+    {
+        effects.remove( effect );
     }
 
-    public String getValue() {
+    public String getValue ()
+    {
         return text;
     }
 
-    public Paint getPaint() {
+    public Paint getPaint ()
+    {
         return paint;
     }
 }

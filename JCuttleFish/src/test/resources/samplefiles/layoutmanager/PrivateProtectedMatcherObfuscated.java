@@ -17,7 +17,7 @@ public class a {
         c = Pattern.compile( a );
     }
 
-    public String applyMatcher ( String aa ) {
+    public String a ( String aa ) {
         this.b = aa;
         d = c.matcher( this.b );
         this.b = d.replaceFirst( "public" );
