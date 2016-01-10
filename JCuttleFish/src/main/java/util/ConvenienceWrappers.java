@@ -1,6 +1,9 @@
 package util;
 
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,11 +45,6 @@ public class ConvenienceWrappers
     public static Collection<MethodDeclaration> getMethodDeclarationsAsList ( TypeDeclaration typeDeclaration )
     {
         return Arrays.stream( typeDeclaration.getMethods() ).collect( Collectors.toList() );
-    }
-
-    public static boolean isValidCompilationUnit ( CompilationUnit cu )
-    {
-        return !cu.types().isEmpty();
     }
 
 }

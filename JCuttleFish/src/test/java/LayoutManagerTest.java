@@ -12,6 +12,7 @@ import pojo.UnitNode;
 import pojo.UnitSource;
 import providers.FileSourceCodeProvider;
 import testcategories.MultipleFileTest;
+import testcategories.SingleFileTest;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,83 +38,79 @@ public class LayoutManagerTest
         ConfigurationEnvironment.createConfigurationInstance( "" );
     }
 
+    private String invokeObfuscateAndGetResultAsString ( File originalFile )
+    {
+        return this.layoutManager.obfuscate( this.nodeFinder
+                .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
+                        .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
+                .get( 0 ).getUnitSource().getDocument().get();
+    }
+
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_UnitSource ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/UnitSourceOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/UnitSourceObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_ObfuscationEnvironment ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/ObfuscationEnvironmentOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/ObfuscationEnvironmentObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_PrivateProtectedMatcher ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/PrivateProtectedMatcherOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/PrivateProtectedMatcherObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     //Testing : pojo
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_Contact ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/ContactOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/ContactObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_SuffixFolderFilter ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/SuffixFolderFilterOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/SuffixFolderFilterObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_SwingSingle ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/SwingSingleOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/SwingSingleObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     /* Testing :
@@ -122,16 +119,14 @@ public class LayoutManagerTest
     - Private only (class) fields obfuscation
     */
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_Stopwatch ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/StopwatchOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/StopwatchObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     /* Testing :
@@ -140,172 +135,157 @@ public class LayoutManagerTest
     - Static final variable ofbuscation
      */
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_StaticFinalTest ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/staticFinalOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/staticFinalObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_Issue36_37_38 ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue36_37_38Original.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue36_37_38Obfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_AnimationsTest ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/animationsOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/animationsObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_Issue40 ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue40Original.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/Issue40Obfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_IfTree ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/IfTreeOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/IfTreeObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_PostfixExpressions ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/PostfixExpressionsOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/PostfixExpressionsObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_WhileStatements ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/WhileStatementsOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/WhileStatementsObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_DoStatements ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/DoStatementsOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/DoStatementsObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_SwitchStatements ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/SwitchStatementsOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/SwitchStatementsObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_TryStatement ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/TryStatementOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/TryStatementObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_ArrayAccess ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/ArrayAccessOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/ArrayAccessObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_MethodVars ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/MethodVarsOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/MethodVarsObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     @Test
+    @Category ( SingleFileTest.class )
     public void testObfuscate_SuperInvocation ()
     {
         File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/SuperInvocationOriginal.java" );
         File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/SuperInvocationObfuscated.java" );
 
         assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.layoutManager.obfuscate( this.nodeFinder
-                        .getUnitNodesCollectionFromUnitSources( Stream.of( this.initiator.fetchUnitSource( originalFile ) )
-                                .collect( Collectors.toCollection( ArrayList::new ) ) ) ).stream().collect( Collectors.toCollection( ArrayList::new ) )
-                        .get( 0 ).getUnitSource().getDocument().get() );
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
+    }
+
+    @Test
+    @Category ( SingleFileTest.class )
+    public void testObfuscate_Days ()
+    {
+        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/DaysOriginal.java" );
+        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/DaysObfuscated.java" );
+
+        assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
+                this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
     //A "scratchpad" test

@@ -21,7 +21,7 @@ public class LayoutManager
     {
         unitNodeCollection.stream().forEach( UnitNode::recordMofications );
 
-        ObfuscationUtil.obfuscateClassNames( unitNodeCollection );
+        ObfuscationUtil.obfuscateAbstractTypeDeclarationNames( unitNodeCollection );
         ObfuscationUtil.obfuscateMethodNames( unitNodeCollection );
 
         for ( UnitNode unitNode : unitNodeCollection )

@@ -39,14 +39,13 @@ public class TypeDeclarationVisitor extends ASTVisitor
                     .forEach( md -> new MethodDeclarationVisitor( this.callbacks ).visit( md ) );
 
             List superInterfaceTypes = typeDeclaration.superInterfaceTypes();
-            if ( !superInterfaceTypes.isEmpty() )
-            {
-                superInterfaceTypes.stream()
-                        .forEach( sit -> new TypeVisitor( this.callbacks ).visit( ( Type )sit ) );
-            }
+
+            superInterfaceTypes.stream()
+                    .forEach( sit -> new TypeVisitor( this.callbacks ).visit( ( Type )sit ) );
+
         } else
         {
-            this.logger.warn( "Type binding is not a class" );
+            this.logger.info( "Type binding is not a class" );
         }
 
         return false;

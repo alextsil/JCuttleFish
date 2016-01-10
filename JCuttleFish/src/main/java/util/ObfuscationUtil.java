@@ -1,12 +1,10 @@
 package util;
 
 import obfuscations.callbacks.AstNodeFoundCallback;
+import obfuscations.callbacks.RenameAbstractTypeDeclarationCallback;
 import obfuscations.callbacks.RenameClassReferenceCallback;
 import obfuscations.callbacks.RenameTypesCallback;
-import obfuscations.visitors.FieldDeclarationVisitor;
-import obfuscations.visitors.MethodDeclarationVisitor;
-import obfuscations.visitors.TypeDeclarationVisitor;
-import obfuscations.visitors.TypeVisitor;
+import obfuscations.visitors.*;
 import org.eclipse.jdt.core.dom.*;
 import pojo.UnitNode;
 import providers.ObfuscatedNamesProvider;
@@ -132,25 +130,24 @@ public class ObfuscationUtil
         );
     }
 
-    public static void obfuscateClassNames ( Collection<UnitNode> unitNodes )
+    public static void obfuscateAbstractTypeDeclarationNames ( Collection<UnitNode> unitNodes )
     {
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
 
         unitNodes.stream()
                 .map( UnitNode::getUnitSource )
-                .map( us -> us.getCompilationUnit().types().get( 0 ) )
-                .forEach( td -> {
-                    TypeDeclaration typeDeclaration = ( TypeDeclaration )td;
-                    ITypeBinding typeBinding = typeDeclaration.resolveBinding();
-                    if ( typeBinding.isClass() && typeBinding.isFromSource() )
-                    {
-                        renameClassAndReferences( typeDeclaration, obfuscatedVariableNames.pollFirst(), unitNodes );
-                    }
-                } );
+                .map( us -> us.getCompilationUnit() )
+                .forEach( cu -> cu.types().stream()
+                        .forEach( atd -> {
+                            Collection<AstNodeFoundCallback> callbacks = new ArrayList<>();
+                            callbacks.add( new RenameAbstractTypeDeclarationCallback( obfuscatedVariableNames.pollFirst(), unitNodes ) );
+                            new AbstractTypeDeclarationVisitor( callbacks ).visit( ( AbstractTypeDeclaration )atd );
+                        } )
+                );
     }
 
-    private static void renameClassAndReferences ( TypeDeclaration typeDeclaration, String obfuscatedName, Collection<UnitNode> unitNodes )
+    public static void renameTypeDeclarationAndReferences ( TypeDeclaration typeDeclaration, String obfuscatedName, Collection<UnitNode> unitNodes )
     {
         Map<Class<? extends ASTNode>, List<ASTNode>> globalCollectedNodes = mergeNodeMapsToGlobalMap( unitNodes );
         String classIdentifier = typeDeclaration.getName().getIdentifier();
@@ -234,8 +231,11 @@ public class ObfuscationUtil
                 .filter( md -> !md.isConstructor() )
                 .filter( md -> !md.getName().getIdentifier().equals( "main" ) )
                 .filter( md -> !md.getName().getIdentifier().equals( "compareTo" ) )
+                .filter( md -> !md.getName().getIdentifier().equals( "equals" ) )
                 .filter( md -> !md.getName().getIdentifier().equals( "toString" ) )
                 .filter( md -> !md.getName().getIdentifier().equals( "accept" ) )
+                .filter( md -> !md.getName().getIdentifier().equals( "clone" ) )
+                .filter( md -> !md.getName().getIdentifier().equals( "finalize" ) )
                 .forEach( md -> {
                     //obfuscate refs
                     globalCollectedNodes.getOrDefault( MethodInvocation.class, Collections.emptyList() ).stream()
@@ -267,4 +267,5 @@ public class ObfuscationUtil
                         } ) );
         return globalCollectedNodes;
     }
+
 }

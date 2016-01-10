@@ -2,13 +2,14 @@ package obfuscations.visitors;
 
 import obfuscations.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.List;
 
 
 public class CompilationUnitVisitor extends ASTVisitor
@@ -27,9 +28,9 @@ public class CompilationUnitVisitor extends ASTVisitor
     {
         this.callbacks.stream().forEach( c -> c.notify( compilationUnit ) );
 
-        //TODO : visit all type declarations and not just the first one
-        //FIXME : .types does not always return TypeDeclaration. Fix when you add tests for ENUMs
-        new TypeDeclarationVisitor( this.callbacks ).visit( ( TypeDeclaration )compilationUnit.types().get( 0 ) );
+        List<AbstractTypeDeclaration> abstractTypeDeclarations = compilationUnit.types();
+        abstractTypeDeclarations.stream()
+                .forEach( atd -> new AbstractTypeDeclarationVisitor( this.callbacks ).visit( atd ) );
 
         compilationUnit.imports().stream()
                 .forEach( impdecl -> new ImportDeclarationVisitor( this.callbacks ).visit( ( ImportDeclaration )impdecl ) );
