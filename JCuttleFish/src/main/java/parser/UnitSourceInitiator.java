@@ -1,6 +1,7 @@
 package parser;
 
 import configuration.ConfigurationEnvironment;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -12,6 +13,7 @@ import providers.FileSourceCodeProvider;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -32,6 +34,11 @@ public class UnitSourceInitiator
         ASTParser parser = ASTParser.newParser( AST.JLS8 );
         parser.setKind( ASTParser.K_COMPILATION_UNIT );
         parser.setSource( this.sourceCode.toCharArray() );
+
+        Map options = JavaCore.getOptions();
+        JavaCore.setComplianceOptions( JavaCore.VERSION_1_8, options );
+        parser.setCompilerOptions(options);
+
         parser.setBindingsRecovery( true );
 
         parser.setUnitName( configurationEnvironment.getRelativeSourcePath() );

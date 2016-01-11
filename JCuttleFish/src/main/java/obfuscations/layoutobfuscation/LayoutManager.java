@@ -1,7 +1,7 @@
 package obfuscations.layoutobfuscation;
 
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.UnitNode;
@@ -10,6 +10,7 @@ import util.ObfuscationUtil;
 import util.SourceUtil;
 
 import java.util.Collection;
+import java.util.Collections;
 
 
 public class LayoutManager
@@ -26,9 +27,14 @@ public class LayoutManager
 
         for ( UnitNode unitNode : unitNodeCollection )
         {
-            Collection<MethodDeclaration> methods = ConvenienceWrappers
-                    .getMethodDeclarationsAsList( ( TypeDeclaration )unitNode.getUnitSource()
-                            .getCompilationUnit().types().get( 0 ) );
+            //FIXME: Quickfix. Repair when compilation units with more than 1 Type are added.
+            Collection<MethodDeclaration> methods = Collections.emptyList();
+            if ( !unitNode.getUnitSource().getCompilationUnit().types().isEmpty() )
+            {
+                methods = ConvenienceWrappers
+                        .getMethodDeclarationsAsList( ( AbstractTypeDeclaration )unitNode.getUnitSource()
+                                .getCompilationUnit().types().get( 0 ) );
+            }
 
             methods.stream().forEach( m -> {
                 ObfuscationUtil.obfuscateMethodParameters( unitNode, m );

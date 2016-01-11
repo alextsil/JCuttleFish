@@ -39,7 +39,6 @@ public class TypeDeclarationVisitor extends ASTVisitor
                     .forEach( md -> new MethodDeclarationVisitor( this.callbacks ).visit( md ) );
 
             List superInterfaceTypes = typeDeclaration.superInterfaceTypes();
-
             superInterfaceTypes.stream()
                     .forEach( sit -> new TypeVisitor( this.callbacks ).visit( ( Type )sit ) );
 

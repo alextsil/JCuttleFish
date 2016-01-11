@@ -1,50 +1,80 @@
 package util;
 
-import org.eclipse.jdt.core.dom.FieldDeclaration;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.Modifier;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 
 public class ConvenienceWrappers
 {
 
-    /**
-     * Receives a TypeDeclaration (essentially a Class) and returns a List of its private fields as FieldDeclaration.
-     *
-     * @param typeDeclaration - The target class
-     * @return List of private FieldDeclaration(s). Empty list if none found.
-     */
-    public static List<FieldDeclaration> getPrivateFieldDeclarations ( TypeDeclaration typeDeclaration )
+    public static Collection<FieldDeclaration> getPrivateFieldDeclarations ( AbstractTypeDeclaration abstractTypeDeclaration )
     {
-        List<FieldDeclaration> privateFieldDeclarations = new ArrayList<>();
-        FieldDeclaration[] fieldDeclarations = typeDeclaration.getFields();
-        for ( FieldDeclaration fieldDeclaration : fieldDeclarations )
+        Collection<FieldDeclaration> privateFieldDeclarations = new ArrayList<>();
+
+        if ( abstractTypeDeclaration instanceof TypeDeclaration )
         {
-            //Get list of field modifiers to check if it's a private variable or not.
-            List<Modifier> modifiers = fieldDeclaration.modifiers();
-            if ( modifiers.stream().anyMatch( m -> m.isPrivate() ) )
-            {
-                privateFieldDeclarations.add( fieldDeclaration );
-            }
+            TypeDeclaration typeDeclaration = ( TypeDeclaration )abstractTypeDeclaration;
+            FieldDeclaration[] fieldDeclarations = typeDeclaration.getFields();
+            privateFieldDeclarations = Arrays.asList( fieldDeclarations ).stream()
+                    .filter( fd -> Modifier.isPrivate( fd.getModifiers() ) ).collect( toList() );
+
+        } else if ( abstractTypeDeclaration instanceof EnumDeclaration )
+        {
+            EnumDeclaration enumDeclaration = ( EnumDeclaration )abstractTypeDeclaration;
+            Collection<FieldDeclaration> fieldDeclarations = ( Collection<FieldDeclaration> )enumDeclaration.bodyDeclarations().stream()
+                    .filter( bd -> bd instanceof FieldDeclaration )
+                    .collect( toList() );
+            //Find the private ones
+            privateFieldDeclarations = fieldDeclarations.stream()
+                    .filter( fd -> Modifier.isPrivate( fd.getModifiers() ) ).collect( toList() );
         }
+
         return privateFieldDeclarations;
     }
 
-    public static Collection<FieldDeclaration> getFieldDeclarationsAsList ( TypeDeclaration typeDeclaration )
+    public static Collection<FieldDeclaration> getFieldDeclarationsAsList ( AbstractTypeDeclaration abstractTypeDeclaration )
     {
-        return Arrays.stream( typeDeclaration.getFields() ).collect( Collectors.toList() );
+        if ( abstractTypeDeclaration instanceof TypeDeclaration )
+        {
+            TypeDeclaration typeDeclaration = ( TypeDeclaration )abstractTypeDeclaration;
+            return Arrays.stream( typeDeclaration.getFields() ).collect( toList() );
+        } else if ( abstractTypeDeclaration instanceof EnumDeclaration )
+        {
+            EnumDeclaration enumDeclaration = ( EnumDeclaration )abstractTypeDeclaration;
+            return ( Collection<FieldDeclaration> )enumDeclaration.bodyDeclarations().stream()
+                    .filter( bd -> bd instanceof FieldDeclaration )
+                    .collect( toList() );
+        } else if ( abstractTypeDeclaration instanceof AnnotationTypeDeclaration )
+        {
+            throw new RuntimeException( "not implemented" );
+        }
+
+        throw new RuntimeException( "Unknown AbstractTypeDeclaration : " + abstractTypeDeclaration.getClass() );
     }
 
-    public static Collection<MethodDeclaration> getMethodDeclarationsAsList ( TypeDeclaration typeDeclaration )
+    public static Collection<MethodDeclaration> getMethodDeclarationsAsList ( AbstractTypeDeclaration abstractTypeDeclaration )
     {
-        return Arrays.stream( typeDeclaration.getMethods() ).collect( Collectors.toList() );
+        if ( abstractTypeDeclaration instanceof TypeDeclaration )
+        {
+            TypeDeclaration typeDeclaration = ( TypeDeclaration )abstractTypeDeclaration;
+            return Arrays.stream( typeDeclaration.getMethods() ).collect( toList() );
+        } else if ( abstractTypeDeclaration instanceof EnumDeclaration )
+        {
+            EnumDeclaration enumDeclaration = ( EnumDeclaration )abstractTypeDeclaration;
+            return ( Collection<MethodDeclaration> )enumDeclaration.bodyDeclarations().stream()
+                    .filter( bd -> bd instanceof MethodDeclaration )
+                    .collect( toList() );
+        } else if ( abstractTypeDeclaration instanceof AnnotationTypeDeclaration )
+        {
+            throw new RuntimeException( "not implemented" );
+        }
+
+        throw new RuntimeException( "Unknown AbstractTypeDeclaration : " + abstractTypeDeclaration.getClass() );
     }
 
 }

@@ -1,12 +1,10 @@
 package util;
 
-import obfuscations.callbacks.AstNodeFoundCallback;
-import obfuscations.callbacks.RenameAbstractTypeDeclarationCallback;
-import obfuscations.callbacks.RenameClassReferenceCallback;
-import obfuscations.callbacks.RenameTypesCallback;
+import obfuscations.callbacks.*;
 import obfuscations.visitors.*;
 import org.eclipse.jdt.core.dom.*;
 import pojo.UnitNode;
+import pojo.UnitSource;
 import providers.ObfuscatedNamesProvider;
 import util.enums.ObfuscatedNamesVariations;
 
@@ -93,12 +91,17 @@ public class ObfuscationUtil
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
 
-        List<SimpleName> classLocalFields = ConvenienceWrappers.getPrivateFieldDeclarations( ( TypeDeclaration )unitNode.getUnitSource()
-                .getCompilationUnit().types().get( 0 ) )
-                .stream()
-                .map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
-                .map( VariableDeclaration::getName )
-                .collect( toList() );
+        //FIXME: Quickfix. Repair when compilation units with more than 1 Type are added.
+        List<SimpleName> classLocalFields = Collections.emptyList();
+        if ( !unitNode.getUnitSource().getCompilationUnit().types().isEmpty() )
+        {
+            classLocalFields = ConvenienceWrappers.getPrivateFieldDeclarations( ( AbstractTypeDeclaration )unitNode.getUnitSource()
+                    .getCompilationUnit().types().get( 0 ) )
+                    .stream()
+                    .map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
+                    .map( VariableDeclaration::getName )
+                    .collect( toList() );
+        }
 
         classLocalFields.stream().forEach( clf ->
                 {
@@ -137,7 +140,7 @@ public class ObfuscationUtil
 
         unitNodes.stream()
                 .map( UnitNode::getUnitSource )
-                .map( us -> us.getCompilationUnit() )
+                .map( UnitSource::getCompilationUnit )
                 .forEach( cu -> cu.types().stream()
                         .forEach( atd -> {
                             Collection<AstNodeFoundCallback> callbacks = new ArrayList<>();
@@ -208,25 +211,23 @@ public class ObfuscationUtil
     {
         unitNodes.stream()
                 .map( UnitNode::getUnitSource )
-                .map( us -> us.getCompilationUnit().types().get( 0 ) )
-                .forEach( td -> {
-                    TypeDeclaration typeDeclaration = ( TypeDeclaration )td;
-                    ITypeBinding typeBinding = typeDeclaration.resolveBinding();
-                    if ( typeBinding.isClass() && typeBinding.isFromSource() )
-                    {
-                        renameMethodsAndReferences( typeDeclaration, unitNodes );
-                    }
-                } );
+                .map( UnitSource::getCompilationUnit )
+                .forEach( cu -> cu.types().stream()
+                        .forEach( atd -> {
+                            Collection<AstNodeFoundCallback> callbacks = new ArrayList<>();
+                            callbacks.add( new RenameMethodsAndReferencesCallback( unitNodes ) );
+                            new AbstractTypeDeclarationVisitor( callbacks ).visit( ( AbstractTypeDeclaration )atd );
+                        } ) );
     }
 
-    private static void renameMethodsAndReferences ( TypeDeclaration typeDeclaration, Collection<UnitNode> unitNodes )
+    public static void renameMethodsAndReferences ( AbstractTypeDeclaration abstractTypeDeclaration, Collection<UnitNode> unitNodes )
     {
         Map<Class<? extends ASTNode>, List<ASTNode>> globalCollectedNodes = mergeNodeMapsToGlobalMap( unitNodes );
 
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
 
-        ConvenienceWrappers.getMethodDeclarationsAsList( typeDeclaration ).stream()
+        ConvenienceWrappers.getMethodDeclarationsAsList( abstractTypeDeclaration ).stream()
                 .map( MethodDeclaration.class::cast )
                 .filter( md -> !md.isConstructor() )
                 .filter( md -> !md.getName().getIdentifier().equals( "main" ) )
