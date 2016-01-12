@@ -1,7 +1,10 @@
 package util;
 
 import obfuscations.callbacks.*;
-import obfuscations.visitors.*;
+import obfuscations.visitors.AbstractTypeDeclarationVisitor;
+import obfuscations.visitors.FieldDeclarationVisitor;
+import obfuscations.visitors.MethodDeclarationVisitor;
+import obfuscations.visitors.TypeVisitor;
 import org.eclipse.jdt.core.dom.*;
 import pojo.UnitNode;
 import pojo.UnitSource;
@@ -150,14 +153,14 @@ public class ObfuscationUtil
                 );
     }
 
-    public static void renameTypeDeclarationAndReferences ( TypeDeclaration typeDeclaration, String obfuscatedName, Collection<UnitNode> unitNodes )
+    public static void renameAbstractTypeDeclarationAndReferences ( AbstractTypeDeclaration abstractTypeDeclaration, String obfuscatedName, Collection<UnitNode> unitNodes )
     {
         Map<Class<? extends ASTNode>, List<ASTNode>> globalCollectedNodes = mergeNodeMapsToGlobalMap( unitNodes );
-        String classIdentifier = typeDeclaration.getName().getIdentifier();
+        String classIdentifier = abstractTypeDeclaration.getName().getIdentifier();
 
         Collection<AstNodeFoundCallback> callbacks = new ArrayList<>();
         callbacks.add( new RenameTypesCallback( classIdentifier, obfuscatedName ) );
-        callbacks.add( new RenameClassReferenceCallback( typeDeclaration.getName().resolveBinding(), obfuscatedName ) );
+        callbacks.add( new RenameClassReferenceCallback( abstractTypeDeclaration.getName().resolveBinding(), obfuscatedName ) );
 
         //Rename occurences in field declarations
         globalCollectedNodes.getOrDefault( FieldDeclaration.class, Collections.emptyList() ).stream()
@@ -182,7 +185,7 @@ public class ObfuscationUtil
                 .map( ImportDeclaration.class::cast )
                 .forEach( impDecl -> {
                     IBinding typeBinding = impDecl.resolveBinding();
-                    if ( typeBinding.isEqualTo( typeDeclaration.resolveBinding() ) )
+                    if ( typeBinding.isEqualTo( abstractTypeDeclaration.resolveBinding() ) )
                     {
                         QualifiedName qualifiedName = ( QualifiedName )impDecl.getName();
                         SimpleName simpleName = qualifiedName.getName();
@@ -191,20 +194,20 @@ public class ObfuscationUtil
                 } );
 
         //Rename mixins - TODO : find a better solution
-        new TypeDeclarationVisitor( callbacks ).visit( typeDeclaration );
+        new AbstractTypeDeclarationVisitor( callbacks ).visit( abstractTypeDeclaration );
 
         //Rename constructor(s)
         globalCollectedNodes.getOrDefault( MethodDeclaration.class, Collections.emptyList() ).stream()
                 .map( MethodDeclaration.class::cast )
                 .filter( md -> {
-                    TypeDeclaration parentTypeDeclaration = ( TypeDeclaration )md.getParent();
-                    return ( parentTypeDeclaration.resolveBinding().isEqualTo( typeDeclaration.resolveBinding() ) );
+                    AbstractTypeDeclaration parentAbstractTypeDeclaration = ( AbstractTypeDeclaration )md.getParent();
+                    return ( parentAbstractTypeDeclaration.resolveBinding().isEqualTo( abstractTypeDeclaration.resolveBinding() ) );
                 } )
                 .filter( MethodDeclaration::isConstructor )
                 .forEach( md -> RenameNodeUtil.renameMethodDeclaration( md, obfuscatedName ) );
 
         //Rename actual class
-        typeDeclaration.getName().setIdentifier( obfuscatedName );
+        abstractTypeDeclaration.getName().setIdentifier( obfuscatedName );
     }
 
     public static void obfuscateMethodNames ( Collection<UnitNode> unitNodes )

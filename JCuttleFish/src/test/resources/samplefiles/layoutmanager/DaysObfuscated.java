@@ -1,24 +1,24 @@
 package test;
 
-public enum Days
+public enum a
 {
-    MONDAY( 1 ),
-    TUESDAY( 2 ),
-    WEDNESDAY( 3 ),
-    THURSDAY( 4 ),
-    FRIDAY( 5 ),
-    SATURDAY( 6 ),
-    SUNDAY( 7 );
-    private int value;
+    a( 1 ),
+    b( 2 ),
+    c( 3 ),
+    d( 4 ),
+    e( 5 ),
+    f( 6 ),
+    g( 7 );
+    private int a;
 
-    private Days ( int value )
+    private a ( int aa )
     {
-        this.value = value;
+        this.a = aa;
     }
 
-    public int getValue ()
+    public int a ()
     {
-        return this.value;
+        return this.a;
     }
 
     @Override
@@ -26,20 +26,20 @@ public enum Days
     {
         switch ( this )
         {
-            case MONDAY:
-                return "Monday: " + value;
-            case TUESDAY:
-                return "Tuesday: " + value;
-            case WEDNESDAY:
-                return "Wednesday: " + value;
-            case THURSDAY:
-                return "Thursday: " + value;
-            case FRIDAY:
-                return "Friday: " + value;
-            case SATURDAY:
-                return "Saturday: " + value;
-            case SUNDAY:
-                return "Sunday: " + value;
+            case a:
+                return "Monday: " + a;
+            case b:
+                return "Tuesday: " + a;
+            case c:
+                return "Wednesday: " + a;
+            case d:
+                return "Thursday: " + a;
+            case e:
+                return "Friday: " + a;
+            case f:
+                return "Saturday: " + a;
+            case g:
+                return "Sunday: " + a;
             default:
                 return "Default";
         }

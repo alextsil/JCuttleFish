@@ -1,9 +1,6 @@
 package obfuscations.callbacks;
 
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
-import org.eclipse.jdt.core.dom.EnumDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.*;
 import pojo.UnitNode;
 import util.ObfuscationUtil;
 
@@ -25,15 +22,9 @@ public class RenameAbstractTypeDeclarationCallback extends AstNodeFoundCallback
     @Override
     public <V extends ASTNode> void notify ( V v )
     {
-        if ( v instanceof TypeDeclaration )
+        if ( v instanceof TypeDeclaration || v instanceof EnumDeclaration || v instanceof AnnotationTypeDeclaration )
         {
-            ObfuscationUtil.renameTypeDeclarationAndReferences( ( TypeDeclaration )v, this.obfuscatedName, this.unitNodes );
-        } else if ( v instanceof EnumDeclaration )
-        {
-            //
-        } else if ( v instanceof AnnotationTypeDeclaration )
-        {
-            //
+            ObfuscationUtil.renameAbstractTypeDeclarationAndReferences( ( AbstractTypeDeclaration )v, this.obfuscatedName, this.unitNodes );
         }
     }
 }
