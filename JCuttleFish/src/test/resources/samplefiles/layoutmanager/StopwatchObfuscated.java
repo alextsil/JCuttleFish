@@ -7,7 +7,7 @@ public class a
 
     private long b;
 
-    public static final double NANOS_PER_SEC = 1000000000.0;
+    public static final double c = 1000000000.0;
 
     public void a ()
     {
@@ -21,7 +21,7 @@ public class a
 
     public double c ()
     {
-        return ( b - a ) / NANOS_PER_SEC;
+        return ( b - a ) / c;
     }
 
     public String toString ()

@@ -22,7 +22,7 @@ public class a
         List<c> bbb = new ArrayList<c>();
         aaa.a();
         c.class.getClass();
-        String ccc = c.static1;
+        String ccc = c.a;
         c.b();
         pack2.c.b();
     }

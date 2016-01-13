@@ -3,21 +3,21 @@ package test;
 public class a
 {
 
-    public String alpha;
+    public String a;
 
-    private String a;
+    private String b;
 
-    private static String b = "1";
+    private static String c = "1";
 
-    private final String c = "2";
+    private final String d = "2";
 
-    private final static String d = "3";
+    private final static String e = "3";
 
     public a ( String aa, String bb, String cc )
     {
-        this.alpha = aa;
-        this.a = bb;
-        this.c = cc;
+        this.a = aa;
+        this.b = bb;
+        this.d = cc;
     }
 
 }

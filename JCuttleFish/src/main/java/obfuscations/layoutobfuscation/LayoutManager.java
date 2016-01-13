@@ -24,6 +24,7 @@ public class LayoutManager
 
         ObfuscationUtil.obfuscateAbstractTypeDeclarationNames( unitNodeCollection );
         ObfuscationUtil.obfuscateMethodNames( unitNodeCollection );
+        ObfuscationUtil.obfuscateClassLocalVarsAndReferences( unitNodeCollection );
 
         for ( UnitNode unitNode : unitNodeCollection )
         {
@@ -35,13 +36,10 @@ public class LayoutManager
                         .getMethodDeclarationsAsList( ( AbstractTypeDeclaration )unitNode.getUnitSource()
                                 .getCompilationUnit().types().get( 0 ) );
             }
-
             methods.stream().forEach( m -> {
                 ObfuscationUtil.obfuscateMethodParameters( unitNode, m );
                 ObfuscationUtil.obfuscateMethodDeclaredVariables( unitNode, m );
             } );
-
-            ObfuscationUtil.obfuscateClassLocalVarsAndReferences( unitNode );
         }
 
         unitNodeCollection.stream().forEach( un -> SourceUtil.replace( un.getUnitSource() ) );

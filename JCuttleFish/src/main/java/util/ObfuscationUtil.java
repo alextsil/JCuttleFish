@@ -89,27 +89,35 @@ public class ObfuscationUtil
         } );
     }
 
-    public static void obfuscateClassLocalVarsAndReferences ( UnitNode unitNode )
+    public static void obfuscateClassLocalVarsAndReferences ( Collection<UnitNode> unitNodes )
+    {
+        unitNodes.stream()
+                .map( UnitNode::getUnitSource )
+                .map( UnitSource::getCompilationUnit )
+                .forEach( cu -> cu.types().stream()
+                        .forEach( atd -> {
+                            AbstractTypeDeclaration abstractTypeDeclaration = ( AbstractTypeDeclaration )atd;
+                            List<SimpleName> classLocalSimpleNames = ConvenienceWrappers.getFieldDeclarationsAsList( abstractTypeDeclaration ).stream()
+                                    .map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
+                                    .map( VariableDeclaration::getName ).collect( toList() );
+                            obfuscateSimpleNamesAndReferences( unitNodes, classLocalSimpleNames );
+                            if ( atd instanceof EnumDeclaration )
+                            {
+                                EnumDeclaration enumDeclaration = ( EnumDeclaration )atd;
+                                List<EnumConstantDeclaration> enumConstantDeclarations = enumDeclaration.enumConstants();
+                                //Call enum obfuscation
+                            }
+                        } ) );
+    }
+
+    private static void obfuscateSimpleNamesAndReferences ( Collection<UnitNode> unitNodes, Collection<SimpleName> simpleNames )
     {
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
 
-        //FIXME: Quickfix. Repair when compilation units with more than 1 Type are added.
-        List<SimpleName> classLocalFields = Collections.emptyList();
-        if ( !unitNode.getUnitSource().getCompilationUnit().types().isEmpty() )
-        {
-            classLocalFields = ConvenienceWrappers.getPrivateFieldDeclarations( ( AbstractTypeDeclaration )unitNode.getUnitSource()
-                    .getCompilationUnit().types().get( 0 ) )
-                    .stream()
-                    .map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
-                    .map( VariableDeclaration::getName )
-                    .collect( toList() );
-        }
-
-        classLocalFields.stream().forEach( clf ->
-                {
-                    unitNode.getCollectedNodesGroupedByIdentifier().get( clf.getIdentifier() )
-                            .stream().forEach( item -> {
+        simpleNames.stream().forEach( sn -> {
+            unitNodes.stream().forEach( unitNode -> unitNode.getCollectedNodesGroupedByIdentifier().getOrDefault( sn.getIdentifier(), Collections.emptyList() )
+                    .stream().forEach( item -> {
                         if ( item instanceof SimpleName )
                         {
                             SimpleName simpleName = ( SimpleName )item;
@@ -130,10 +138,10 @@ public class ObfuscationUtil
                             FieldDeclaration fieldDeclaration = ( FieldDeclaration )item;
                             RenameNodeUtil.renameFieldDeclaration( fieldDeclaration, obfuscatedVariableNames.peekFirst() );
                         }
-                    } );
-                    obfuscatedVariableNames.poll();
-                }
-        );
+                    } )
+            );
+            obfuscatedVariableNames.pollFirst();
+        } );
     }
 
     public static void obfuscateAbstractTypeDeclarationNames ( Collection<UnitNode> unitNodes )
