@@ -69,6 +69,9 @@ public class StatementVisitor
         } else if ( statementNodeType == ASTNode.SWITCH_STATEMENT )
         {
             CastToAndVisit.switchStatement( statement, this.callbacks );
+        } else if ( statementNodeType == ASTNode.SWITCH_CASE )
+        {
+            CastToAndVisit.switchCase( statement, this.callbacks );
         } else if ( statementNodeType == ASTNode.TRY_STATEMENT )
         {
             CastToAndVisit.tryStatement( statement, this.callbacks );

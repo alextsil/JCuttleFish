@@ -2,6 +2,7 @@ package obfuscations.visitors;
 
 import obfuscations.callbacks.AstNodeFoundCallback;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.Type;
 import org.slf4j.Logger;
@@ -37,6 +38,9 @@ public class EnumDeclarationVisitor extends ASTVisitor
 
         superInterfaceTypes.stream()
                 .forEach( sit -> new TypeVisitor( this.callbacks ).visit( ( Type )sit ) );
+
+        List<EnumConstantDeclaration> enumConstants = enumDeclaration.enumConstants();
+        enumConstants.stream().forEach( c -> new EnumConstantDeclarationVisitor( this.callbacks ).visit( c ) );
 
         return false;
     }

@@ -106,6 +106,16 @@ public class CastToAndVisit
         new SwitchStatementVisitor( callbacks ).visit( switchStatement );
     }
 
+    public static <V extends ASTNode> void switchCase ( V node, Collection<AstNodeFoundCallback> callbacks )
+    {
+        SwitchCase switchCase = ( SwitchCase )node;
+        Expression expression = switchCase.getExpression();
+        if ( expression != null )
+        {
+            new ExpressionVisitor( callbacks ).visit( expression );
+        }
+    }
+
     public static <V extends ASTNode> void classInstanceCreation ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         ClassInstanceCreation classInstanceCreation = ( ClassInstanceCreation )node;

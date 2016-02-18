@@ -37,7 +37,7 @@ public class NodeFinder
         this.callbacks.add( new VariableDeclarationStatementCallback() );
         this.callbacks.add( new ClassInstanceCreationCallback() );
         this.callbacks.add( new TypeDeclarationCallback() );
-        this.callbacks.add( new EnumDeclarationCallback() );
+        this.callbacks.add( new EnumCallback() );
         this.callbacks.add( new FieldDeclarationCallback() );
         this.callbacks.add( new MethodDeclarationCallback() );
         this.callbacks.add( new ImportDeclarationCallback() );

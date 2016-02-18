@@ -32,8 +32,15 @@ public class NodeIdentification
             return getNodeIdentifierString( ( MethodInvocation )node );
         if ( node instanceof EnumDeclaration )
             return getNodeIdentifierString( ( EnumDeclaration )node );
+        if ( node instanceof EnumConstantDeclaration )
+            return getNodeIdentifierString( ( EnumConstantDeclaration )node );
 
         throw new IllegalArgumentException( node.getClass() + " type not supported" );
+    }
+
+    private static String getNodeIdentifierString ( EnumConstantDeclaration enumConstantDeclaration )
+    {
+        return enumConstantDeclaration.getName().getIdentifier();
     }
 
     private static String getNodeIdentifierString ( EnumDeclaration enumDeclaration )

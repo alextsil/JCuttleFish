@@ -12,6 +12,7 @@ import providers.ObfuscatedNamesProvider;
 import util.enums.ObfuscatedNamesVariations;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -101,11 +102,15 @@ public class ObfuscationUtil
                                     .map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
                                     .map( VariableDeclaration::getName ).collect( toList() );
                             obfuscateSimpleNamesAndReferences( unitNodes, classLocalSimpleNames );
+
                             if ( atd instanceof EnumDeclaration )
                             {
                                 EnumDeclaration enumDeclaration = ( EnumDeclaration )atd;
                                 List<EnumConstantDeclaration> enumConstantDeclarations = enumDeclaration.enumConstants();
-                                //Call enum obfuscation
+                                List<SimpleName> enumConstantsNames = enumConstantDeclarations.stream()
+                                        .map( ecd -> ecd.getName() )
+                                        .collect( Collectors.toList() );
+                                obfuscateSimpleNamesAndReferences( unitNodes, enumConstantsNames );
                             }
                         } ) );
     }
@@ -137,6 +142,10 @@ public class ObfuscationUtil
                         {
                             FieldDeclaration fieldDeclaration = ( FieldDeclaration )item;
                             RenameNodeUtil.renameFieldDeclaration( fieldDeclaration, obfuscatedVariableNames.peekFirst() );
+                        } else if ( item instanceof EnumConstantDeclaration )
+                        {
+                            EnumConstantDeclaration enumConstantDeclaration = ( EnumConstantDeclaration )item;
+                            RenameNodeUtil.renameSimpleName( enumConstantDeclaration.getName(), obfuscatedVariableNames.peekFirst() );
                         }
                     } )
             );
