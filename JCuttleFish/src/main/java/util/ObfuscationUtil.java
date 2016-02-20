@@ -12,6 +12,7 @@ import providers.ObfuscatedNamesProvider;
 import util.enums.ObfuscatedNamesVariations;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -67,6 +68,11 @@ public class ObfuscationUtil
 
     public static void obfuscateMethodParameters ( UnitNode unitNode, MethodDeclaration methodDeclaration )
     {
+        final BiFunction<SimpleName, IVariableBinding, Boolean> isSimpleNameEqualToMethodParam = ( sn, ivb ) ->
+                OptionalUtils.getIVariableBinding( sn ).isPresent() &&
+                        OptionalUtils.getIVariableBinding( sn ).get().isParameter() &&
+                        OptionalUtils.getIVariableBinding( sn ).get().isEqualTo( ivb );
+
         List<SingleVariableDeclaration> parameters = methodDeclaration.parameters();
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.METHOD_PARAMETERS );
@@ -79,9 +85,7 @@ public class ObfuscationUtil
                     .stream()
                     .filter( occurence -> occurence instanceof SimpleName )
                     .map( SimpleName.class::cast )
-                    .filter( sn -> OptionalUtils.getIVariableBinding( sn ).isPresent() )
-                    .filter( sn -> OptionalUtils.getIVariableBinding( sn ).get().isParameter() )
-                    .filter( sn -> OptionalUtils.getIVariableBinding( sn ).get().isEqualTo( paramIvb ) )
+                    .filter( simpleName -> isSimpleNameEqualToMethodParam.apply( simpleName, paramIvb ) )
                     .forEach( sn -> sn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
 
             //rename param on method declaration
@@ -108,7 +112,7 @@ public class ObfuscationUtil
                                 EnumDeclaration enumDeclaration = ( EnumDeclaration )atd;
                                 List<EnumConstantDeclaration> enumConstantDeclarations = enumDeclaration.enumConstants();
                                 List<SimpleName> enumConstantsNames = enumConstantDeclarations.stream()
-                                        .map( ecd -> ecd.getName() )
+                                        .map( EnumConstantDeclaration::getName )
                                         .collect( Collectors.toList() );
                                 obfuscateSimpleNamesAndReferences( unitNodes, enumConstantsNames );
                             }
@@ -249,14 +253,7 @@ public class ObfuscationUtil
 
         ConvenienceWrappers.getMethodDeclarationsAsList( abstractTypeDeclaration ).stream()
                 .map( MethodDeclaration.class::cast )
-                .filter( md -> !md.isConstructor() )
-                .filter( md -> !md.getName().getIdentifier().equals( "main" ) )
-                .filter( md -> !md.getName().getIdentifier().equals( "compareTo" ) )
-                .filter( md -> !md.getName().getIdentifier().equals( "equals" ) )
-                .filter( md -> !md.getName().getIdentifier().equals( "toString" ) )
-                .filter( md -> !md.getName().getIdentifier().equals( "accept" ) )
-                .filter( md -> !md.getName().getIdentifier().equals( "clone" ) )
-                .filter( md -> !md.getName().getIdentifier().equals( "finalize" ) )
+                .filter( ConvenienceWrappers.excludedMethods )
                 .forEach( md -> {
                     //obfuscate refs
                     globalCollectedNodes.getOrDefault( MethodInvocation.class, Collections.emptyList() ).stream()

@@ -5,12 +5,22 @@ import org.eclipse.jdt.core.dom.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 
 
 public class ConvenienceWrappers
 {
+
+    public static Predicate<MethodDeclaration> excludedMethods = md -> !md.isConstructor() &&
+            !md.getName().getIdentifier().equals( "main" ) &&
+            !md.getName().getIdentifier().equals( "compareTo" ) &&
+            !md.getName().getIdentifier().equals( "equals" ) &&
+            !md.getName().getIdentifier().equals( "toString" ) &&
+            !md.getName().getIdentifier().equals( "accept" ) &&
+            !md.getName().getIdentifier().equals( "clone" ) &&
+            !md.getName().getIdentifier().equals( "finalize" );
 
     public static Collection<FieldDeclaration> getPrivateFieldDeclarations ( AbstractTypeDeclaration abstractTypeDeclaration )
     {
