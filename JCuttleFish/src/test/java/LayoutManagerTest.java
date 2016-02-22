@@ -277,17 +277,6 @@ public class LayoutManagerTest
                 this.invokeObfuscateAndGetResultAsString( originalFile ) );
     }
 
-    @Test
-    @Category ( SingleFileTest.class )
-    public void testObfuscate_Days ()
-    {
-        File originalFile = new File( "src/test/resources/samplefiles/layoutmanager/DaysOriginal.java" );
-        File obfuscatedFile = new File( "src/test/resources/samplefiles/layoutmanager/DaysObfuscated.java" );
-
-        assertEquals( this.sourceCodeProvider.get( obfuscatedFile ),
-                this.invokeObfuscateAndGetResultAsString( originalFile ) );
-    }
-
     //A "scratchpad" test
     @Test
     @Category ( MultipleFileTest.class )

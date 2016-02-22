@@ -40,7 +40,7 @@ public class ObfuscationInfo
 
     public Collection<AstNodeFoundCallback> getCallbacks ()
     {
-        return callbacks;
+        return this.callbacks;
     }
 
     public void registerCallback ( AstNodeFoundCallback callback )

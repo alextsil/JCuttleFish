@@ -25,7 +25,7 @@ public class AbstractTypeDeclarationVisitor extends ASTVisitor
             new TypeDeclarationVisitor( this.callbacks ).visit( ( TypeDeclaration )abstractTypeDeclaration );
         } else if ( abstractTypeDeclaration instanceof EnumDeclaration )
         {
-            new EnumDeclarationVisitor( this.callbacks ).visit( ( EnumDeclaration )abstractTypeDeclaration );
+            //Do nothing
         } else if ( abstractTypeDeclaration instanceof AnnotationTypeDeclaration )
         {
             throw new RuntimeException( "not implemented" );
