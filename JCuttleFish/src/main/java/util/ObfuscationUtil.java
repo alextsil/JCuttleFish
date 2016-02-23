@@ -1,6 +1,7 @@
 package util;
 
 import obfuscations.callbacks.*;
+import obfuscations.layoutobfuscation.ExclusionFilters;
 import obfuscations.visitors.AbstractTypeDeclarationVisitor;
 import obfuscations.visitors.FieldDeclarationVisitor;
 import obfuscations.visitors.MethodDeclarationVisitor;
@@ -12,8 +13,6 @@ import providers.ObfuscatedNamesProvider;
 import util.enums.ObfuscatedNamesVariations;
 
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -66,31 +65,31 @@ public class ObfuscationUtil
                 } );
     }
 
-    public static void obfuscateMethodParameters ( UnitNode unitNode, MethodDeclaration methodDeclaration )
+    public static void obfuscateMethodParameters ( Collection<UnitNode> unitNodes )
     {
-        final BiFunction<SimpleName, IVariableBinding, Boolean> isSimpleNameEqualToMethodParam = ( sn, ivb ) ->
-                OptionalUtils.getIVariableBinding( sn ).isPresent() &&
-                        OptionalUtils.getIVariableBinding( sn ).get().isParameter() &&
-                        OptionalUtils.getIVariableBinding( sn ).get().isEqualTo( ivb );
+        unitNodes.stream().forEach( un -> {
+            Collection<MethodDeclaration> methods = ConvenienceWrappers.getMethodDeclarationsAsList(
+                    ( AbstractTypeDeclaration )un.getUnitSource().getCompilationUnit().types().get( 0 ) );
+            methods.stream().forEach( md -> {
+                List<SingleVariableDeclaration> parameters = md.parameters();
+                ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
+                Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.METHOD_PARAMETERS );
 
-        List<SingleVariableDeclaration> parameters = methodDeclaration.parameters();
-        ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
-        Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.METHOD_PARAMETERS );
+                parameters.stream().forEach( p -> {
+                    //find occurences and replace
+                    IVariableBinding paramIvb = OptionalUtils.getIVariableBinding( p ).get();
 
-        parameters.stream().forEach( p -> {
-            //find occurences and replace
-            IVariableBinding paramIvb = OptionalUtils.getIVariableBinding( p ).get();
+                    un.getCollectedNodesGroupedByIdentifier().getOrDefault( p.getName().getIdentifier(), Collections.emptyList() )
+                            .stream()
+                            .filter( occurence -> occurence instanceof SimpleName )
+                            .map( SimpleName.class::cast )
+                            .filter( simpleName -> ExclusionFilters.isSimpleNameEqualToMethodParam.apply( simpleName, paramIvb ) )
+                            .forEach( sn -> sn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
 
-            unitNode.getCollectedNodesGroupedByIdentifier().getOrDefault( p.getName().getIdentifier(), Collections.emptyList() )
-                    .stream()
-                    .filter( occurence -> occurence instanceof SimpleName )
-                    .map( SimpleName.class::cast )
-                    .filter( simpleName -> isSimpleNameEqualToMethodParam.apply( simpleName, paramIvb ) )
-                    .forEach( sn -> sn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
-
-            //rename param on method declaration
-            p.setName( unitNode.getUnitSource().getCompilationUnit().getAST()
-                    .newSimpleName( obfuscatedVariableNames.poll() ) );
+                    //rename param on method declaration
+                    p.setName( un.getUnitSource().getCompilationUnit().getAST().newSimpleName( obfuscatedVariableNames.poll() ) );
+                } );
+            } );
         } );
     }
 
@@ -100,22 +99,13 @@ public class ObfuscationUtil
                 .map( UnitNode::getUnitSource )
                 .map( UnitSource::getCompilationUnit )
                 .forEach( cu -> cu.types().stream()
+                        .filter( ExclusionFilters.excludedAbstractTypeDeclarations )
                         .forEach( atd -> {
                             AbstractTypeDeclaration abstractTypeDeclaration = ( AbstractTypeDeclaration )atd;
                             List<SimpleName> classLocalSimpleNames = ConvenienceWrappers.getFieldDeclarationsAsList( abstractTypeDeclaration ).stream()
                                     .map( f -> ( VariableDeclarationFragment )f.fragments().get( 0 ) )
                                     .map( VariableDeclaration::getName ).collect( toList() );
                             obfuscateSimpleNamesAndReferences( unitNodes, classLocalSimpleNames );
-
-                            if ( atd instanceof EnumDeclaration )
-                            {
-                                EnumDeclaration enumDeclaration = ( EnumDeclaration )atd;
-                                List<EnumConstantDeclaration> enumConstantDeclarations = enumDeclaration.enumConstants();
-                                List<SimpleName> enumConstantsNames = enumConstantDeclarations.stream()
-                                        .map( EnumConstantDeclaration::getName )
-                                        .collect( Collectors.toList() );
-                                obfuscateSimpleNamesAndReferences( unitNodes, enumConstantsNames );
-                            }
                         } ) );
     }
 
@@ -166,6 +156,7 @@ public class ObfuscationUtil
                 .map( UnitNode::getUnitSource )
                 .map( UnitSource::getCompilationUnit )
                 .forEach( cu -> cu.types().stream()
+                        .filter( ExclusionFilters.excludedAbstractTypeDeclarations )
                         .forEach( atd -> {
                             Collection<AstNodeFoundCallback> callbacks = new ArrayList<>();
                             callbacks.add( new RenameAbstractTypeDeclarationCallback( obfuscatedVariableNames.pollFirst(), unitNodes ) );
@@ -237,6 +228,7 @@ public class ObfuscationUtil
                 .map( UnitNode::getUnitSource )
                 .map( UnitSource::getCompilationUnit )
                 .forEach( cu -> cu.types().stream()
+                        .filter( ExclusionFilters.excludedAbstractTypeDeclarations )
                         .forEach( atd -> {
                             Collection<AstNodeFoundCallback> callbacks = new ArrayList<>();
                             callbacks.add( new RenameMethodsAndReferencesCallback( unitNodes ) );
@@ -253,7 +245,7 @@ public class ObfuscationUtil
 
         ConvenienceWrappers.getMethodDeclarationsAsList( abstractTypeDeclaration ).stream()
                 .map( MethodDeclaration.class::cast )
-                .filter( ConvenienceWrappers.excludedMethods )
+                .filter( ExclusionFilters.excludedMethods )
                 .forEach( md -> {
                     //obfuscate refs
                     globalCollectedNodes.getOrDefault( MethodInvocation.class, Collections.emptyList() ).stream()

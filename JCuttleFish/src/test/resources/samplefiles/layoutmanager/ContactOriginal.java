@@ -6,11 +6,13 @@ package test;
 
 import API.IContact;
 
+import java.io.Serializable;
+
 
 /**
  * @author Alexei
  */
-public class Contact implements IContact
+public class Contact implements IContact, Serializable
 {
 
     private String id;
