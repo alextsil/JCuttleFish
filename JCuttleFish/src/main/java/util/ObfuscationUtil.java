@@ -20,49 +20,56 @@ import static java.util.stream.Collectors.toList;
 public class ObfuscationUtil
 {
 
-    public static void obfuscateMethodDeclaredVariables ( UnitNode unitNode, MethodDeclaration methodDeclaration )
+    public static void obfuscateMethodDeclaredVariables ( Collection<UnitNode> unitNodes )
     {
-        ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
-        Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.METHOD_LOCAL_VARS );
+        unitNodes.stream().forEach( un -> {
+            Collection<MethodDeclaration> methods = ConvenienceWrappers.getMethodDeclarationsAsList(
+                    ( AbstractTypeDeclaration )un.getUnitSource().getCompilationUnit().types().get( 0 ) );
+            methods.stream().forEach( md -> {
 
-        Collection<List<ASTNode>> ASTNodeListCollection = unitNode.getCollectedNodesGroupedByIdentifier().values();
+                ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
+                Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.METHOD_LOCAL_VARS );
 
-        List<VariableDeclarationStatement> methodDeclaredVarDeclStatements = ASTNodeListCollection.stream()
-                .flatMap( List::stream )
-                .filter( node -> node instanceof VariableDeclarationStatement )
-                .map( VariableDeclarationStatement.class::cast )
-                .filter( node -> {
-                    VariableDeclarationFragment vdf = ( VariableDeclarationFragment )node.fragments().get( 0 );
-                    Optional<IVariableBinding> oivb = OptionalUtils.getIVariableBinding( vdf );
-                    if ( oivb.isPresent() )
-                    {
-                        if ( oivb.get().getDeclaringMethod().isEqualTo( methodDeclaration.resolveBinding() ) )
+                Collection<List<ASTNode>> ASTNodeListCollection = un.getCollectedNodesGroupedByIdentifier().values();
+
+                List<VariableDeclarationStatement> methodDeclaredVarDeclStatements = ASTNodeListCollection.stream()
+                        .flatMap( List::stream )
+                        .filter( node -> node instanceof VariableDeclarationStatement )
+                        .map( VariableDeclarationStatement.class::cast )
+                        .filter( node -> {
+                            VariableDeclarationFragment vdf = ( VariableDeclarationFragment )node.fragments().get( 0 );
+                            Optional<IVariableBinding> oivb = OptionalUtils.getIVariableBinding( vdf );
+                            if ( oivb.isPresent() )
+                            {
+                                if ( oivb.get().getDeclaringMethod().isEqualTo( md.resolveBinding() ) )
+                                {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        } )
+                        .sorted( ( vds1, vds2 ) -> vds1.getStartPosition() - vds2.getStartPosition() )
+                        .collect( toList() );
+
+                methodDeclaredVarDeclStatements.stream()
+                        .map( VariableDeclarationStatement.class::cast )
+                        .forEach( vds ->
                         {
-                            return true;
-                        }
-                    }
-                    return false;
-                } )
-                .sorted( ( vds1, vds2 ) -> vds1.getStartPosition() - vds2.getStartPosition() )
-                .collect( toList() );
+                            VariableDeclarationFragment f = ( VariableDeclarationFragment )vds.fragments().get( 0 );
+                            SimpleName sn = f.getName();
+                            IVariableBinding fragIvb = OptionalUtils.getIVariableBinding( sn ).get();
 
-        methodDeclaredVarDeclStatements.stream()
-                .map( VariableDeclarationStatement.class::cast )
-                .forEach( vds ->
-                {
-                    VariableDeclarationFragment f = ( VariableDeclarationFragment )vds.fragments().get( 0 );
-                    SimpleName sn = f.getName();
-                    IVariableBinding fragIvb = OptionalUtils.getIVariableBinding( sn ).get();
-
-                    unitNode.getCollectedNodesGroupedByIdentifier().getOrDefault( sn.getIdentifier(), Collections.emptyList() )
-                            .stream()
-                            .filter( occurence -> occurence instanceof SimpleName )
-                            .map( SimpleName.class::cast )
-                            .filter( foundsn -> OptionalUtils.getIVariableBinding( foundsn ).isPresent() )
-                            .filter( foundsn -> OptionalUtils.getIVariableBinding( foundsn ).get().isEqualTo( fragIvb ) )
-                            .forEachOrdered( foundsn -> foundsn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
-                    sn.setIdentifier( obfuscatedVariableNames.poll() );
-                } );
+                            un.getCollectedNodesGroupedByIdentifier().getOrDefault( sn.getIdentifier(), Collections.emptyList() )
+                                    .stream()
+                                    .filter( occurence -> occurence instanceof SimpleName )
+                                    .map( SimpleName.class::cast )
+                                    .filter( foundsn -> OptionalUtils.getIVariableBinding( foundsn ).isPresent() )
+                                    .filter( foundsn -> OptionalUtils.getIVariableBinding( foundsn ).get().isEqualTo( fragIvb ) )
+                                    .forEachOrdered( foundsn -> foundsn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
+                            sn.setIdentifier( obfuscatedVariableNames.poll() );
+                        } );
+            } );
+        } );
     }
 
     public static void obfuscateMethodParameters ( Collection<UnitNode> unitNodes )
