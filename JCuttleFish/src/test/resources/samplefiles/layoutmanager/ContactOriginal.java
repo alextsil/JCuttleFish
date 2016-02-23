@@ -28,7 +28,6 @@ public class Contact implements IContact, Serializable
      * Contact type objects constructor
      * that needs at least two parameters to allow
      * initialisation of it's objects
-     *
      */
     public Contact ( String firstname, String telephone )
     {
@@ -60,6 +59,7 @@ public class Contact implements IContact, Serializable
     @Override
     public void setId ( String id )
     {
+        String thisShouldGetObfuscated = "";
         this.id = id;
     }
 

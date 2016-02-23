@@ -12,144 +12,144 @@ import java.io.Serializable;
 /**
  * @author Alexei
  */
-public class a implements IContact, Serializable
+public class Contact implements IContact, Serializable
 {
 
-    private String a;
-    private String b;
-    private String c;
-    private String d;
-    private String e;
-    private String f;
-    private String g;
-    private String h;
+    private String id;
+    private String firstname;
+    private String lastname;
+    private String email;
+    private String telephone;
+    private String mtelephone;
+    private String address;
+    private String city;
 
     /**
      * Contact type objects constructor
      * that needs at least two parameters to allow
      * initialisation of it's objects
-     *
      */
-    public a ( String aa, String bb )
+    public Contact ( String firstname, String telephone )
     {
-        this.b = aa;
-        this.e = bb;
-        this.a = "";
-        this.c = "";
-        this.d = "";
-        this.f = "";
-        this.g = "";
-        this.h = "";
+        this.firstname = firstname;
+        this.telephone = telephone;
+        this.id = "";
+        this.lastname = "";
+        this.email = "";
+        this.mtelephone = "";
+        this.address = "";
+        this.city = "";
     }
 
     /**
      * simple constructor
      */
-    public a ()
+    public Contact ()
     {
-        this.a = "";
-        this.b = "";
-        this.c = "";
-        this.d = "";
-        this.e = "";
-        this.f = "";
-        this.g = "";
-        this.h = "";
+        this.id = "";
+        this.firstname = "";
+        this.lastname = "";
+        this.email = "";
+        this.telephone = "";
+        this.mtelephone = "";
+        this.address = "";
+        this.city = "";
     }
 
     @Override
-    public void a ( String aa )
+    public void setId ( String id )
     {
-        this.a = aa;
+        String aaa = "";
+        this.id = id;
     }
 
     @Override
-    public String b ()
+    public String getId ()
     {
-        return a;
+        return id;
     }
 
     @Override
-    public String c ()
+    public String getFirstname ()
     {
-        return b;
+        return firstname;
     }
 
     @Override
-    public void d ( String aa )
+    public void setFirstname ( String firstname )
     {
-        this.b = aa;
+        this.firstname = firstname;
     }
 
     @Override
-    public String e ()
+    public String getLastname ()
     {
-        return c;
+        return lastname;
     }
 
     @Override
-    public void f ( String aa )
+    public void setLastname ( String lastname )
     {
-        this.c = aa;
+        this.lastname = lastname;
     }
 
     @Override
-    public String g ()
+    public String getEmail ()
     {
-        return d;
+        return email;
     }
 
     @Override
-    public void h ( String aa )
+    public void setEmail ( String email )
     {
-        this.d = aa;
+        this.email = email;
     }
 
     @Override
-    public String i ()
+    public String getTelephone ()
     {
-        return e;
+        return telephone;
     }
 
     @Override
-    public void j ( String aa )
+    public void setTelephone ( String telephone )
     {
-        this.e = aa;
+        this.telephone = telephone;
     }
 
     @Override
-    public String k ()
+    public String getMtelephone ()
     {
-        return f;
+        return mtelephone;
     }
 
     @Override
-    public void l ( String aa )
+    public void setMtelephone ( String mtelephone )
     {
-        this.f = aa;
+        this.mtelephone = mtelephone;
     }
 
     @Override
-    public String m ()
+    public String getAddress ()
     {
-        return g;
+        return address;
     }
 
     @Override
-    public void n ( String aa )
+    public void setAddress ( String address )
     {
-        this.g = aa;
+        this.address = address;
     }
 
     @Override
-    public String o ()
+    public String getCity ()
     {
-        return h;
+        return city;
     }
 
     @Override
-    public void p ( String aa )
+    public void setCity ( String city )
     {
-        this.h = aa;
+        this.city = city;
     }
 }

@@ -74,30 +74,32 @@ public class ObfuscationUtil
 
     public static void obfuscateMethodParameters ( Collection<UnitNode> unitNodes )
     {
-        unitNodes.stream().forEach( un -> {
-            Collection<MethodDeclaration> methods = ConvenienceWrappers.getMethodDeclarationsAsList(
-                    ( AbstractTypeDeclaration )un.getUnitSource().getCompilationUnit().types().get( 0 ) );
-            methods.stream().forEach( md -> {
-                List<SingleVariableDeclaration> parameters = md.parameters();
-                ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
-                Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.METHOD_PARAMETERS );
+        unitNodes.stream()
+                .filter( un -> ExclusionFilters.excludedAbstractTypeDeclarations.test( ( AbstractTypeDeclaration )un.getUnitSource().getCompilationUnit().types().get( 0 ) ) )
+                .forEach( un -> {
+                    Collection<MethodDeclaration> methods = ConvenienceWrappers.getMethodDeclarationsAsList(
+                            ( AbstractTypeDeclaration )un.getUnitSource().getCompilationUnit().types().get( 0 ) );
+                    methods.stream().forEach( md -> {
+                        List<SingleVariableDeclaration> parameters = md.parameters();
+                        ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
+                        Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.METHOD_PARAMETERS );
 
-                parameters.stream().forEach( p -> {
-                    //find occurences and replace
-                    IVariableBinding paramIvb = OptionalUtils.getIVariableBinding( p ).get();
+                        parameters.stream().forEach( p -> {
+                            //find occurences and replace
+                            IVariableBinding paramIvb = OptionalUtils.getIVariableBinding( p ).get();
 
-                    un.getCollectedNodesGroupedByIdentifier().getOrDefault( p.getName().getIdentifier(), Collections.emptyList() )
-                            .stream()
-                            .filter( occurence -> occurence instanceof SimpleName )
-                            .map( SimpleName.class::cast )
-                            .filter( simpleName -> ExclusionFilters.isSimpleNameEqualToMethodParam.apply( simpleName, paramIvb ) )
-                            .forEach( sn -> sn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
+                            un.getCollectedNodesGroupedByIdentifier().getOrDefault( p.getName().getIdentifier(), Collections.emptyList() )
+                                    .stream()
+                                    .filter( occurence -> occurence instanceof SimpleName )
+                                    .map( SimpleName.class::cast )
+                                    .filter( simpleName -> ExclusionFilters.isSimpleNameEqualToMethodParam.apply( simpleName, paramIvb ) )
+                                    .forEach( sn -> sn.setIdentifier( obfuscatedVariableNames.peekFirst() ) );
 
-                    //rename param on method declaration
-                    p.setName( un.getUnitSource().getCompilationUnit().getAST().newSimpleName( obfuscatedVariableNames.poll() ) );
+                            //rename param on method declaration
+                            p.setName( un.getUnitSource().getCompilationUnit().getAST().newSimpleName( obfuscatedVariableNames.poll() ) );
+                        } );
+                    } );
                 } );
-            } );
-        } );
     }
 
     public static void obfuscateClassLocalVarsAndReferences ( Collection<UnitNode> unitNodes )
