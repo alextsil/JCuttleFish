@@ -4,11 +4,39 @@ import org.eclipse.jdt.core.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Deque;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+
 
 public class RenameNodeUtil
 {
 
     private static final Logger logger = LoggerFactory.getLogger( RenameNodeUtil.class );
+    public static BiConsumer<ASTNode, Deque<String>> renameASTNode = ( node, obfuscatedNames ) ->
+    {
+        if ( node instanceof SimpleName )
+        {
+            SimpleName simpleName = ( SimpleName )node;
+            Optional<IVariableBinding> ivb = OptionalUtils.getIVariableBinding( simpleName );
+            if ( ivb.isPresent() )
+            {
+                if ( ivb.get().isField() )
+                {
+                    RenameNodeUtil.renameSimpleName( simpleName, obfuscatedNames.peekFirst() );
+                }
+            }
+        } else if ( node instanceof FieldAccess )
+        {
+            FieldAccess fieldAccess = ( FieldAccess )node;
+            RenameNodeUtil.renameFieldAccessName( fieldAccess, obfuscatedNames.peekFirst() );
+        } else if ( node instanceof FieldDeclaration )
+        {
+            FieldDeclaration fieldDeclaration = ( FieldDeclaration )node;
+            RenameNodeUtil.renameFieldDeclaration( fieldDeclaration, obfuscatedNames.peekFirst() );
+        }
+    };
+
 
     public static void renameFieldAccessName ( FieldAccess fieldAccess, String obfuscatedVarName )
     {

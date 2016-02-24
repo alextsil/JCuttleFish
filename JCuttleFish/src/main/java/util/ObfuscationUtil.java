@@ -1,7 +1,6 @@
 package util;
 
 import obfuscations.callbacks.*;
-import obfuscations.layoutobfuscation.ExclusionFilters;
 import obfuscations.visitors.AbstractTypeDeclarationVisitor;
 import obfuscations.visitors.FieldDeclarationVisitor;
 import obfuscations.visitors.MethodDeclarationVisitor;
@@ -36,19 +35,8 @@ public class ObfuscationUtil
                         .flatMap( List::stream )
                         .filter( node -> node instanceof VariableDeclarationStatement )
                         .map( VariableDeclarationStatement.class::cast )
-                        .filter( node -> {
-                            VariableDeclarationFragment vdf = ( VariableDeclarationFragment )node.fragments().get( 0 );
-                            Optional<IVariableBinding> oivb = OptionalUtils.getIVariableBinding( vdf );
-                            if ( oivb.isPresent() )
-                            {
-                                if ( oivb.get().getDeclaringMethod().isEqualTo( md.resolveBinding() ) )
-                                {
-                                    return true;
-                                }
-                            }
-                            return false;
-                        } )
-                        .sorted( ( vds1, vds2 ) -> vds1.getStartPosition() - vds2.getStartPosition() )
+                        .filter( vds -> ExclusionFilters.doesVariableBelongToMethod.apply( vds, md ) )
+                        .sorted( Comparators.byOccurenceOnOriginalFile )
                         .collect( toList() );
 
                 methodDeclaredVarDeclStatements.stream()
@@ -125,32 +113,7 @@ public class ObfuscationUtil
 
         simpleNames.stream().forEach( sn -> {
             unitNodes.stream().forEach( unitNode -> unitNode.getCollectedNodesGroupedByIdentifier().getOrDefault( sn.getIdentifier(), Collections.emptyList() )
-                    .stream().forEach( item -> {
-                        if ( item instanceof SimpleName )
-                        {
-                            SimpleName simpleName = ( SimpleName )item;
-                            Optional<IVariableBinding> ivb = OptionalUtils.getIVariableBinding( simpleName );
-                            if ( ivb.isPresent() )
-                            {
-                                if ( ivb.get().isField() )
-                                {
-                                    RenameNodeUtil.renameSimpleName( simpleName, obfuscatedVariableNames.peekFirst() );
-                                }
-                            }
-                        } else if ( item instanceof FieldAccess )
-                        {
-                            FieldAccess fieldAccess = ( FieldAccess )item;
-                            RenameNodeUtil.renameFieldAccessName( fieldAccess, obfuscatedVariableNames.peekFirst() );
-                        } else if ( item instanceof FieldDeclaration )
-                        {
-                            FieldDeclaration fieldDeclaration = ( FieldDeclaration )item;
-                            RenameNodeUtil.renameFieldDeclaration( fieldDeclaration, obfuscatedVariableNames.peekFirst() );
-                        } else if ( item instanceof EnumConstantDeclaration )
-                        {
-                            EnumConstantDeclaration enumConstantDeclaration = ( EnumConstantDeclaration )item;
-                            RenameNodeUtil.renameSimpleName( enumConstantDeclaration.getName(), obfuscatedVariableNames.peekFirst() );
-                        }
-                    } )
+                    .stream().forEach( node -> RenameNodeUtil.renameASTNode.accept( node, obfuscatedVariableNames ) )
             );
             obfuscatedVariableNames.pollFirst();
         } );
@@ -220,10 +183,7 @@ public class ObfuscationUtil
         //Rename constructor(s)
         globalCollectedNodes.getOrDefault( MethodDeclaration.class, Collections.emptyList() ).stream()
                 .map( MethodDeclaration.class::cast )
-                .filter( md -> {
-                    AbstractTypeDeclaration parentAbstractTypeDeclaration = ( AbstractTypeDeclaration )md.getParent();
-                    return ( parentAbstractTypeDeclaration.resolveBinding().isEqualTo( abstractTypeDeclaration.resolveBinding() ) );
-                } )
+                .filter( md -> ExclusionFilters.doesMethodBelongToAbstractTypeDeclaration.apply( md, abstractTypeDeclaration ) )
                 .filter( MethodDeclaration::isConstructor )
                 .forEach( md -> RenameNodeUtil.renameMethodDeclaration( md, obfuscatedName ) );
 
@@ -259,7 +219,7 @@ public class ObfuscationUtil
                     //obfuscate refs
                     globalCollectedNodes.getOrDefault( MethodInvocation.class, Collections.emptyList() ).stream()
                             .map( MethodInvocation.class::cast )
-                            .filter( mi -> md.getName().resolveBinding().isEqualTo( mi.getName().resolveBinding() ) )
+                            .filter( mi -> ExclusionFilters.isMethodInvocationOfThisMethodDeclaration.apply( md, mi ) )
                             .forEach( mi -> mi.getName().setIdentifier( obfuscatedVariableNames.peekFirst() ) );
                     //obfuscate method name
                     md.getName().setIdentifier( obfuscatedVariableNames.pollFirst() );
