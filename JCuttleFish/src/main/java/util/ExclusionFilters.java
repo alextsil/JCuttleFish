@@ -13,18 +13,16 @@ public class ExclusionFilters
 
     public static Predicate<MethodDeclaration> excludedMethods = md -> !md.isConstructor() &&
             !md.getName().getIdentifier().equals( "main" ) &&
-            !md.getName().getIdentifier().equals( "compareTo" ) &&
-            !md.getName().getIdentifier().equals( "equals" ) &&
-            !md.getName().getIdentifier().equals( "toString" ) &&
-            !md.getName().getIdentifier().equals( "accept" ) &&
-            !md.getName().getIdentifier().equals( "clone" ) &&
-            !md.getName().getIdentifier().equals( "finalize" );
-    //
+            ConvenienceWrappers.getMethodAnnotationsAsList( md ).stream()
+                    .map( IAnnotationBinding::getName )
+                    .noneMatch( a -> a.equals( "Override" ) );
+
+    //Excludes Classes that implement Serializable, Enums and Interfaces
     public static Predicate<AbstractTypeDeclaration> excludedAbstractTypeDeclarations = atd -> {
         if ( atd instanceof TypeDeclaration )
         {
+            //Excludes AbstractTypeDeclarations that implement Serializable
             List<Type> implementedInterfaces = ( ( TypeDeclaration )atd ).superInterfaceTypes();
-            //Exclude Serializable
             return implementedInterfaces.stream()
                     .filter( t -> t.isSimpleType() )
                     .map( SimpleType.class::cast )
@@ -35,10 +33,12 @@ public class ExclusionFilters
         }
         return true;
     };
+
     public static BiFunction<SimpleName, IVariableBinding, Boolean> isSimpleNameEqualToMethodParam = ( sn, ivb ) ->
             OptionalUtils.getIVariableBinding( sn ).isPresent() &&
                     OptionalUtils.getIVariableBinding( sn ).get().isParameter() &&
                     OptionalUtils.getIVariableBinding( sn ).get().isEqualTo( ivb );
+
     //
     public static BiFunction<VariableDeclarationStatement, MethodDeclaration, Boolean> doesVariableBelongToMethod = ( vds, md ) ->
     {
@@ -53,8 +53,10 @@ public class ExclusionFilters
         }
         return false;
     };
+
     public static BiFunction<MethodDeclaration, MethodInvocation, Boolean> isMethodInvocationOfThisMethodDeclaration = ( md, mi ) ->
             md.getName().resolveBinding().isEqualTo( mi.getName().resolveBinding() );
+
     public static BiFunction<MethodDeclaration, AbstractTypeDeclaration, Boolean> doesMethodBelongToAbstractTypeDeclaration = ( md, atd ) -> {
         AbstractTypeDeclaration parentAbstractTypeDeclaration = ( AbstractTypeDeclaration )md.getParent();
         return ( parentAbstractTypeDeclaration.resolveBinding().isEqualTo( atd.resolveBinding() ) );

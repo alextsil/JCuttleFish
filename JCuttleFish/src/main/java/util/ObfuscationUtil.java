@@ -113,13 +113,13 @@ public class ObfuscationUtil
 
         simpleNames.stream().forEach( sn -> {
             unitNodes.stream().forEach( unitNode -> unitNode.getCollectedNodesGroupedByIdentifier().getOrDefault( sn.getIdentifier(), Collections.emptyList() )
-                    .stream().forEach( node -> RenameNodeUtil.renameASTNode.accept( node, obfuscatedVariableNames ) )
+                    .stream().forEach( node -> RenameNodeUtil.renameFieldASTNode.accept( node, obfuscatedVariableNames ) )
             );
             obfuscatedVariableNames.pollFirst();
         } );
     }
 
-    public static void obfuscateAbstractTypeDeclarationNames ( Collection<UnitNode> unitNodes )
+    public static void obfuscateAbstractTypeDeclarationsAndReferences ( Collection<UnitNode> unitNodes )
     {
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
@@ -137,7 +137,7 @@ public class ObfuscationUtil
                 );
     }
 
-    public static void renameAbstractTypeDeclarationAndReferences ( AbstractTypeDeclaration abstractTypeDeclaration, String obfuscatedName, Collection<UnitNode> unitNodes )
+    public static void renameAbstractTypeDeclarationAndReferences ( TypeDeclaration abstractTypeDeclaration, String obfuscatedName, Collection<UnitNode> unitNodes )
     {
         Map<Class<? extends ASTNode>, List<ASTNode>> globalCollectedNodes = mergeNodeMapsToGlobalMap( unitNodes );
         String classIdentifier = abstractTypeDeclaration.getName().getIdentifier();
@@ -177,8 +177,18 @@ public class ObfuscationUtil
                     }
                 } );
 
-        //Rename mixins - TODO : find a better solution
-        new AbstractTypeDeclarationVisitor( callbacks ).visit( abstractTypeDeclaration );
+        //Rename mixins
+        abstractTypeDeclaration.superInterfaceTypes().stream()
+                .filter( type -> type instanceof ParameterizedType )
+                .forEach( type -> {
+                    ParameterizedType parameterizedType = ( ParameterizedType )type;
+                    parameterizedType.typeArguments().stream()
+                            .filter( typeParameter -> typeParameter instanceof SimpleType )
+                            .forEach( typeParameter -> {
+                                SimpleType simpleTypeParameter = ( SimpleType )typeParameter;
+                                simpleTypeParameter.setName( abstractTypeDeclaration.getAST().newName( obfuscatedName ) );
+                            } );
+                } );
 
         //Rename constructor(s)
         globalCollectedNodes.getOrDefault( MethodDeclaration.class, Collections.emptyList() ).stream()

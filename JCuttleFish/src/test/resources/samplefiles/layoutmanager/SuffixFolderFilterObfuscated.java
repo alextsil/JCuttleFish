@@ -18,6 +18,7 @@ public class a implements FileFilter {
 
     // using commonsio filter implementations
     //The directory filter ensures that the filter will only replace on files. - do not remove.
+    @Override
     public boolean accept ( File aa ) {
         return new SuffixFileFilter( this.a ).accept( aa )
                 || DirectoryFileFilter.INSTANCE.accept( aa );

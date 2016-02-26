@@ -57,6 +57,11 @@ public class ConvenienceWrappers
         throw new RuntimeException( "Unknown AbstractTypeDeclaration : " + abstractTypeDeclaration.getClass() );
     }
 
+    public static Collection<IAnnotationBinding> getMethodAnnotationsAsList ( MethodDeclaration methodDeclaration )
+    {
+        return Arrays.stream( methodDeclaration.resolveBinding().getAnnotations() ).collect( toList() );
+    }
+
     public static Collection<MethodDeclaration> getMethodDeclarationsAsList ( AbstractTypeDeclaration abstractTypeDeclaration )
     {
         if ( abstractTypeDeclaration instanceof TypeDeclaration )

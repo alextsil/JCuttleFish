@@ -24,6 +24,7 @@ public class Stopwatch
         return ( stopTime - startTime ) / NANOS_PER_SEC;
     }
 
+    @Override
     public String toString ()
     {
         return "elapsed time: " + time() + " seconds.";

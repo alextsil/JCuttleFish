@@ -13,7 +13,7 @@ public class RenameNodeUtil
 {
 
     private static final Logger logger = LoggerFactory.getLogger( RenameNodeUtil.class );
-    public static BiConsumer<ASTNode, Deque<String>> renameASTNode = ( node, obfuscatedNames ) ->
+    public static BiConsumer<ASTNode, Deque<String>> renameFieldASTNode = ( node, obfuscatedNames ) ->
     {
         if ( node instanceof SimpleName )
         {

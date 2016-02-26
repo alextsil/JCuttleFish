@@ -16,15 +16,25 @@ public class LayoutManager
 
     public Collection<UnitNode> obfuscate ( Collection<UnitNode> unitNodeCollection )
     {
-        unitNodeCollection.stream().forEach( UnitNode::recordMofications );
+        this.beginRecordingModifications( unitNodeCollection );
 
-        ObfuscationUtil.obfuscateAbstractTypeDeclarationNames( unitNodeCollection );
+        ObfuscationUtil.obfuscateAbstractTypeDeclarationsAndReferences( unitNodeCollection );
         ObfuscationUtil.obfuscateMethodNames( unitNodeCollection );
         ObfuscationUtil.obfuscateClassLocalVarsAndReferences( unitNodeCollection );
         ObfuscationUtil.obfuscateMethodParameters( unitNodeCollection );
         ObfuscationUtil.obfuscateMethodDeclaredVariables( unitNodeCollection );
 
-        unitNodeCollection.stream().forEach( un -> SourceUtil.replace( un.getUnitSource() ) );
+        this.applyModifications( unitNodeCollection );
         return unitNodeCollection;
+    }
+
+    private void beginRecordingModifications ( Collection<UnitNode> unitNodeCollection )
+    {
+        unitNodeCollection.stream().forEach( UnitNode::recordMofications );
+    }
+
+    private void applyModifications ( Collection<UnitNode> unitNodeCollection )
+    {
+        unitNodeCollection.stream().forEach( un -> SourceUtil.replace( un.getUnitSource() ) );
     }
 }

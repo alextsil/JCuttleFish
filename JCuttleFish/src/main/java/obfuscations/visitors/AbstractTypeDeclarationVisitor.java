@@ -1,7 +1,9 @@
 package obfuscations.visitors;
 
 import obfuscations.callbacks.AstNodeFoundCallback;
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import java.util.Collection;
 
@@ -23,12 +25,6 @@ public class AbstractTypeDeclarationVisitor extends ASTVisitor
         if ( abstractTypeDeclaration instanceof TypeDeclaration )
         {
             new TypeDeclarationVisitor( this.callbacks ).visit( ( TypeDeclaration )abstractTypeDeclaration );
-        } else if ( abstractTypeDeclaration instanceof EnumDeclaration )
-        {
-            //Do nothing
-        } else if ( abstractTypeDeclaration instanceof AnnotationTypeDeclaration )
-        {
-            throw new RuntimeException( "not implemented" );
         }
 
         return false;

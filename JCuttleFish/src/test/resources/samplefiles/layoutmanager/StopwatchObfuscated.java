@@ -24,6 +24,7 @@ public class a
         return ( b - a ) / c;
     }
 
+    @Override
     public String toString ()
     {
         return "elapsed time: " + c() + " seconds.";

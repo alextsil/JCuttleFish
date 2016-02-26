@@ -1,6 +1,10 @@
 package obfuscations.callbacks;
 
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pojo.UnitNode;
 import util.ObfuscationUtil;
 
@@ -12,6 +16,8 @@ public class RenameMethodsAndReferencesCallback extends AstNodeFoundCallback
 
     private Collection<UnitNode> unitNodes;
 
+    private final Logger logger = LoggerFactory.getLogger( RenameMethodsAndReferencesCallback.class );
+
     public RenameMethodsAndReferencesCallback ( Collection<UnitNode> unitNodes )
     {
         this.unitNodes = unitNodes;
@@ -22,13 +28,14 @@ public class RenameMethodsAndReferencesCallback extends AstNodeFoundCallback
     {
         if ( v instanceof TypeDeclaration )
         {
-            ObfuscationUtil.renameMethodsAndReferences( ( AbstractTypeDeclaration )v, this.unitNodes );
-        } else if ( v instanceof EnumDeclaration )
-        {
-            ObfuscationUtil.renameMethodsAndReferences( ( AbstractTypeDeclaration )v, this.unitNodes );
-        } else if ( v instanceof AnnotationTypeDeclaration )
-        {
-            throw new RuntimeException( "not implemented" );
+            if ( ( ( TypeDeclaration )v ).isInterface() )
+            {
+                //todo : call interface methods obfuscation logic
+                logger.info( "TypeDeclaration isInterface is true : " + v.toString() );
+            } else
+            {
+                ObfuscationUtil.renameMethodsAndReferences( ( AbstractTypeDeclaration )v, this.unitNodes );
+            }
         }
     }
 }

@@ -280,7 +280,7 @@ public class LayoutManagerTest
     //A "scratchpad" test
     @Test
     @Category ( MultipleFileTest.class )
-    public void onthefly ()
+    public void testObfuscate_ClassRefs ()
     {
         ConfigurationEnvironment.createConfigurationInstance( "src/test/resources/sampleapplications/classrefs/original" );
 
@@ -298,5 +298,26 @@ public class LayoutManagerTest
                 unitSources.get( 1 ).getDocument().get() );
         assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/classrefs/obfuscated/pack2/One.java" ) ),
                 unitSources.get( 2 ).getDocument().get() );
+    }
+
+    //A "scratchpad" test
+    @Test
+    @Category ( MultipleFileTest.class )
+    public void onthefly ()
+    {
+        ConfigurationEnvironment.createConfigurationInstance( "src/test/resources/sampleapplications/interfaces/original" );
+
+        PathsExtractor pathsExtractor = new PathsExtractor( "src/test/resources/sampleapplications/interfaces/original" );
+        Collection<File> originalFiles = pathsExtractor.getFilesInstances( new SuffixFolderFilter( SuffixFilters.JAVA ) );
+
+        Collection<UnitNode> unitNodes = this.nodeFinder
+                .getUnitNodesCollectionFromUnitSources( this.initiator.fetchUnitSourceCollection( originalFiles ) );
+        unitNodes = this.layoutManager.obfuscate( unitNodes );
+
+        List<UnitSource> unitSources = unitNodes.stream().map( UnitNode::getUnitSource ).collect( Collectors.toList() );
+        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/interfaces/obfuscated/BallisticBicycle.java" ) ),
+                unitSources.get( 0 ).getDocument().get() );
+        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/interfaces/obfuscated/Bicycle.java" ) ),
+                unitSources.get( 1 ).getDocument().get() );
     }
 }
