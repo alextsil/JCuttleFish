@@ -17,6 +17,7 @@ public class TypeDeclarationVisitor extends ASTVisitor
 {
 
     private Collection<AstNodeFoundCallback> callbacks;
+
     private final Logger logger = LoggerFactory.getLogger( TypeDeclarationVisitor.class );
 
     public TypeDeclarationVisitor ( Collection<AstNodeFoundCallback> callbacks )
@@ -44,7 +45,7 @@ public class TypeDeclarationVisitor extends ASTVisitor
 
         } else
         {
-            this.logger.info( "Type binding is not a class" );
+            this.logger.info( "Type binding is not a concrete class : " );
         }
 
         return false;

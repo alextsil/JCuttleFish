@@ -1,5 +1,5 @@
 
-public interface Bicycle
+public interface b
 {
 
     public void printNumberOfGears ();

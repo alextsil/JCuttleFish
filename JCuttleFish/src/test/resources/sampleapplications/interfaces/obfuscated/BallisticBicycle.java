@@ -1,5 +1,5 @@
 
-public class a implements Bicycle
+public class a implements b
 {
 
     private int a = 18;

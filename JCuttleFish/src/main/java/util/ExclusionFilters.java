@@ -17,11 +17,10 @@ public class ExclusionFilters
                     .map( IAnnotationBinding::getName )
                     .noneMatch( a -> a.equals( "Override" ) );
 
-    //Excludes Classes that implement Serializable, Enums and Interfaces
+    //Excludes Enums and classes that implement Serializable
     public static Predicate<AbstractTypeDeclaration> excludedAbstractTypeDeclarations = atd -> {
         if ( atd instanceof TypeDeclaration )
         {
-            //Excludes AbstractTypeDeclarations that implement Serializable
             List<Type> implementedInterfaces = ( ( TypeDeclaration )atd ).superInterfaceTypes();
             return implementedInterfaces.stream()
                     .filter( t -> t.isSimpleType() )

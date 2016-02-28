@@ -140,10 +140,10 @@ public class ObfuscationUtil
     public static void renameAbstractTypeDeclarationAndReferences ( TypeDeclaration abstractTypeDeclaration, String obfuscatedName, Collection<UnitNode> unitNodes )
     {
         Map<Class<? extends ASTNode>, List<ASTNode>> globalCollectedNodes = mergeNodeMapsToGlobalMap( unitNodes );
-        String classIdentifier = abstractTypeDeclaration.getName().getIdentifier();
+        String identifier = abstractTypeDeclaration.getName().getIdentifier();
 
         Collection<AstNodeFoundCallback> callbacks = new ArrayList<>();
-        callbacks.add( new RenameTypesCallback( classIdentifier, obfuscatedName ) );
+        callbacks.add( new RenameTypesCallback( identifier, obfuscatedName ) );
         callbacks.add( new RenameClassReferenceCallback( abstractTypeDeclaration.getName().resolveBinding(), obfuscatedName ) );
 
         //Rename occurences in field declarations
@@ -189,6 +189,13 @@ public class ObfuscationUtil
                                 simpleTypeParameter.setName( abstractTypeDeclaration.getAST().newName( obfuscatedName ) );
                             } );
                 } );
+
+        //Rename occurences on other classes that implement this one
+        globalCollectedNodes.getOrDefault( TypeDeclaration.class, Collections.emptyList() ).stream()
+                .map( TypeDeclaration.class::cast )
+                .flatMap( td -> td.superInterfaceTypes().stream() )
+                .filter( type -> type instanceof SimpleType )
+                .forEach( type -> new TypeVisitor( callbacks ).visit( ( Type )type ) );
 
         //Rename constructor(s)
         globalCollectedNodes.getOrDefault( MethodDeclaration.class, Collections.emptyList() ).stream()

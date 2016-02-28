@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/JCuttleFish.iml" filepath="$PROJECT_DIR$/JCuttleFish.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/JCuttleFish.iml" filepath="$PROJECT_DIR$/.idea/modules/JCuttleFish.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/JCuttleFish_main.iml" filepath="$PROJECT_DIR$/.idea/modules/JCuttleFish_main.iml" group="JCuttleFish" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/JCuttleFish_test.iml" filepath="$PROJECT_DIR$/.idea/modules/JCuttleFish_test.iml" group="JCuttleFish" />
     </modules>
   </component>
 </project>

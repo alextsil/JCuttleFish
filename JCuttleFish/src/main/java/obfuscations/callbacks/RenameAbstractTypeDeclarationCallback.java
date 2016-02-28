@@ -30,14 +30,7 @@ public class RenameAbstractTypeDeclarationCallback extends AstNodeFoundCallback
     {
         if ( v instanceof TypeDeclaration )
         {
-            if ( ( ( TypeDeclaration )v ).isInterface() )
-            {
-                //todo : call interface obfuscation logic
-                logger.info( "TypeDeclaration isInterface is true : " + v.toString() );
-            } else
-            {
-                ObfuscationUtil.renameAbstractTypeDeclarationAndReferences( ( TypeDeclaration )v, this.obfuscatedName, this.unitNodes );
-            }
+            ObfuscationUtil.renameAbstractTypeDeclarationAndReferences( ( TypeDeclaration )v, this.obfuscatedName, this.unitNodes );
         }
     }
 }
