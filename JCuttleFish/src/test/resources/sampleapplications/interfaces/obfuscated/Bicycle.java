@@ -2,5 +2,5 @@
 public interface b
 {
 
-    public void printNumberOfGears ();
+    public void ai ();
 }

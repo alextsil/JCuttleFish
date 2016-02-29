@@ -8,6 +8,11 @@ public class BallisticBicycle implements Bicycle
     {
     }
 
+    public void randomMethodToCheckForNameCollision ()
+    {
+
+    }
+
     @Override
     public void printNumberOfGears ()
     {

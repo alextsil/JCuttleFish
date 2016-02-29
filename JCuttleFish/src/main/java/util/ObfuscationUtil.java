@@ -12,6 +12,7 @@ import providers.ObfuscatedNamesProvider;
 import util.enums.ObfuscatedNamesVariations;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toList;
 
@@ -222,25 +223,61 @@ public class ObfuscationUtil
                         } ) );
     }
 
-    public static void renameMethodsAndReferences ( AbstractTypeDeclaration abstractTypeDeclaration, Collection<UnitNode> unitNodes )
+    public static void renameClassMethodsAndReferences ( TypeDeclaration typeDeclaration, Collection<UnitNode> unitNodes )
     {
         Map<Class<? extends ASTNode>, List<ASTNode>> globalCollectedNodes = mergeNodeMapsToGlobalMap( unitNodes );
 
         ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
         Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
-
-        ConvenienceWrappers.getMethodDeclarationsAsList( abstractTypeDeclaration ).stream()
+        //TODO : move this to a separate class after refactoring the names provider
+        Consumer<MethodDeclaration> renameMethodDeclarationAndInvocations = ( md ) -> {
+            //obfuscate refs
+            globalCollectedNodes.getOrDefault( MethodInvocation.class, Collections.emptyList() ).stream()
+                    .map( MethodInvocation.class::cast )
+                    .filter( mi -> ExclusionFilters.isMethodInvocationOfThisMethodDeclaration.apply( md, mi ) )
+                    .forEach( mi -> mi.getName().setIdentifier( obfuscatedVariableNames.peekFirst() ) );
+            //obfuscate method name
+            md.getName().setIdentifier( obfuscatedVariableNames.pollFirst() );
+        };
+        //
+        ConvenienceWrappers.getMethodDeclarationsAsList( typeDeclaration ).stream()
                 .map( MethodDeclaration.class::cast )
                 .filter( ExclusionFilters.excludedMethods )
-                .forEach( md -> {
-                    //obfuscate refs
-                    globalCollectedNodes.getOrDefault( MethodInvocation.class, Collections.emptyList() ).stream()
-                            .map( MethodInvocation.class::cast )
-                            .filter( mi -> ExclusionFilters.isMethodInvocationOfThisMethodDeclaration.apply( md, mi ) )
-                            .forEach( mi -> mi.getName().setIdentifier( obfuscatedVariableNames.peekFirst() ) );
-                    //obfuscate method name
-                    md.getName().setIdentifier( obfuscatedVariableNames.pollFirst() );
-                } );
+                .forEach( renameMethodDeclarationAndInvocations );
+    }
+
+    public static void renameInterfaceMethodsAndReferences ( TypeDeclaration interfaceDeclaration, Collection<UnitNode> unitNodes )
+    {
+        Map<Class<? extends ASTNode>, List<ASTNode>> globalCollectedNodes = mergeNodeMapsToGlobalMap( unitNodes );
+
+        ObfuscatedNamesProvider obfNamesProvider = new ObfuscatedNamesProvider();
+        Deque<String> obfuscatedVariableNames = obfNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.INTERFACE_METHODS );
+
+        Collection<MethodDeclaration> interfaceMethods = ConvenienceWrappers.getMethodDeclarationsAsList( interfaceDeclaration );
+
+        //All classes that implement this interface
+        List<TypeDeclaration> implementers = globalCollectedNodes.getOrDefault( TypeDeclaration.class, Collections.emptyList() ).stream()
+                .map( TypeDeclaration.class::cast )
+                .filter( td -> ExclusionFilters.doesClassImplementThisInterface.test( td, interfaceDeclaration ) ).collect( toList() );
+
+        //Loop over interfaceMethods, find each one of these methods on every implementer and obfuscate accordingly
+        interfaceMethods.stream().forEach( imd -> {
+            implementers.stream().forEach( td -> {
+                ConvenienceWrappers.getMethodDeclarationsAsList( td ).stream()
+                        .filter( md -> md.resolveBinding().isSubsignature( imd.resolveBinding() ) )
+                        .forEach( md -> {
+                            //obfuscate overriding method
+                            md.getName().setIdentifier( obfuscatedVariableNames.peekFirst() );
+                            //obfuscate refs
+                            globalCollectedNodes.getOrDefault( MethodInvocation.class, Collections.emptyList() ).stream()
+                                    .map( MethodInvocation.class::cast )
+                                    .filter( mi -> ExclusionFilters.isMethodInvocationOfThisMethodDeclaration.apply( md, mi ) )
+                                    .forEach( mi -> mi.getName().setIdentifier( obfuscatedVariableNames.peekFirst() ) );
+                        } );
+            } );
+            //obfuscate original method name
+            imd.getName().setIdentifier( obfuscatedVariableNames.pollFirst() );
+        } );
     }
 
     private static Map<Class<? extends ASTNode>, List<ASTNode>> mergeNodeMapsToGlobalMap ( Collection<UnitNode> unitNodes )

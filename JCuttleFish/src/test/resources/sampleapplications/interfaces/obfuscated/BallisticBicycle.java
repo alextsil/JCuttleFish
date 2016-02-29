@@ -8,8 +8,13 @@ public class a implements b
     {
     }
 
+    public void a ()
+    {
+
+    }
+
     @Override
-    public void printNumberOfGears ()
+    public void ai ()
     {
         System.out.println( this.a + "" );
     }

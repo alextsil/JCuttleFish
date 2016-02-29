@@ -1,7 +1,6 @@
 package obfuscations.callbacks;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +29,10 @@ public class RenameMethodsAndReferencesCallback extends AstNodeFoundCallback
         {
             if ( ( ( TypeDeclaration )v ).isInterface() )
             {
-                //todo : call interface methods obfuscation logic
-                logger.info( "TypeDeclaration isInterface is true : " + v.toString() );
+                ObfuscationUtil.renameInterfaceMethodsAndReferences( ( TypeDeclaration )v, this.unitNodes );
             } else
             {
-                ObfuscationUtil.renameMethodsAndReferences( ( AbstractTypeDeclaration )v, this.unitNodes );
+                ObfuscationUtil.renameClassMethodsAndReferences( ( TypeDeclaration )v, this.unitNodes );
             }
         }
     }

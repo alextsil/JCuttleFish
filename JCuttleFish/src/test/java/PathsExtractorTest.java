@@ -49,7 +49,7 @@ public class PathsExtractorTest
     {
         resultsList = instance.getFilesInstances();
 
-        assertEquals( 35, resultsList.size() );
+        assertEquals( 34, resultsList.size() );
     }
 
     @Test

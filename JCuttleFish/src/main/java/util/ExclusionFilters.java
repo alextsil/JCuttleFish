@@ -2,9 +2,11 @@ package util;
 
 import org.eclipse.jdt.core.dom.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 
@@ -60,5 +62,9 @@ public class ExclusionFilters
         AbstractTypeDeclaration parentAbstractTypeDeclaration = ( AbstractTypeDeclaration )md.getParent();
         return ( parentAbstractTypeDeclaration.resolveBinding().isEqualTo( atd.resolveBinding() ) );
     };
+
+    public static BiPredicate<TypeDeclaration, TypeDeclaration> doesClassImplementThisInterface = ( c, i ) ->
+            !c.isInterface() && i.isInterface() &&
+                    Arrays.asList( c.resolveBinding().getInterfaces() ).stream().anyMatch( implInt -> implInt.isEqualTo( i.resolveBinding() ) );
 
 }
