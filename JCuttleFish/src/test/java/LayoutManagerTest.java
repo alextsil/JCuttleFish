@@ -28,8 +28,11 @@ public class LayoutManagerTest
 {
 
     private LayoutManager layoutManager = new LayoutManager();
+
     private UnitSourceInitiator initiator = new UnitSourceInitiator();
+
     private NodeFinder nodeFinder = new NodeFinder();
+
     private FileSourceCodeProvider sourceCodeProvider = new FileSourceCodeProvider();
 
     @Before
@@ -300,10 +303,9 @@ public class LayoutManagerTest
                 unitSources.get( 2 ).getDocument().get() );
     }
 
-    //A "scratchpad" test
     @Test
     @Category ( MultipleFileTest.class )
-    public void onthefly ()
+    public void testObfuscate_Interfaces ()
     {
         ConfigurationEnvironment.createConfigurationInstance( "src/test/resources/sampleapplications/interfaces/original" );
 
@@ -319,5 +321,7 @@ public class LayoutManagerTest
                 unitSources.get( 0 ).getDocument().get() );
         assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/interfaces/obfuscated/Bicycle.java" ) ),
                 unitSources.get( 1 ).getDocument().get() );
+        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/interfaces/obfuscated/Main.java" ) ),
+                unitSources.get( 2 ).getDocument().get() );
     }
 }
