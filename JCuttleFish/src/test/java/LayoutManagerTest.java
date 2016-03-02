@@ -321,7 +321,9 @@ public class LayoutManagerTest
                 unitSources.get( 0 ).getDocument().get() );
         assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/interfaces/obfuscated/Bicycle.java" ) ),
                 unitSources.get( 1 ).getDocument().get() );
-        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/interfaces/obfuscated/Main.java" ) ),
+        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/interfaces/obfuscated/IdealBicycle.java" ) ),
                 unitSources.get( 2 ).getDocument().get() );
+        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/interfaces/obfuscated/Main.java" ) ),
+                unitSources.get( 3 ).getDocument().get() );
     }
 }

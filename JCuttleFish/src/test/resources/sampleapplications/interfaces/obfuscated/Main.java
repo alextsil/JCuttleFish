@@ -1,5 +1,5 @@
 
-public class c
+public class d
 {
 
     public static void main ( String[] aa )
@@ -8,6 +8,11 @@ public class c
         aaa.ai();
         aaa.a();
         aaa.toString();
+        c bbb = new c();
+        bbb.ai();
+        bbb.a();
+        bbb.b();
+        bbb.toString();
     }
 
 }

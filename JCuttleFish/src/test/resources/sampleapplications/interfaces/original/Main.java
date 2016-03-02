@@ -1,5 +1,5 @@
 
-public class c
+public class Main
 {
 
     public static void main ( String[] args )
@@ -8,6 +8,11 @@ public class c
         ballisticBicycle.printNumberOfGears();
         ballisticBicycle.randomMethodToCheckForNameCollision();
         ballisticBicycle.toString();
+        IdealBicycle idealBicycle = new IdealBicycle();
+        idealBicycle.printNumberOfGears();
+        idealBicycle.randomMethodToCheckForNameCollision();
+        idealBicycle.randomMethodToCheckForNameCollision2();
+        idealBicycle.toString();
     }
 
 }
