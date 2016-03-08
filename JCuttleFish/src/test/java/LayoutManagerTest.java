@@ -28,11 +28,8 @@ public class LayoutManagerTest
 {
 
     private LayoutManager layoutManager = new LayoutManager();
-
     private UnitSourceInitiator initiator = new UnitSourceInitiator();
-
     private NodeFinder nodeFinder = new NodeFinder();
-
     private FileSourceCodeProvider sourceCodeProvider = new FileSourceCodeProvider();
 
     @Before

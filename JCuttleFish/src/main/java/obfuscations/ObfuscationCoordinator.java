@@ -13,7 +13,6 @@ import util.BackupFilesHelper;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 
 
 //manages the different types of obfuscations and the order they will be applied.
@@ -32,11 +31,11 @@ public class ObfuscationCoordinator
 
         Collection<UnitSource> unitSources = initiator.fetchUnitSourceCollection( originalFiles );
         Collection<UnitNode> unitNodes = new NodeFinder().getUnitNodesCollectionFromUnitSources( unitSources );
-        obfuscations.layoutobfuscation.LayoutManager layoutManager = new LayoutManager();
+
+        LayoutManager layoutManager = new LayoutManager();
         layoutManager.obfuscate( unitNodes );
 
         this.saveUnitSourcesToFiles( unitSources );
-
     }
 
     private void saveUnitSourcesToFiles ( Collection<UnitSource> unitSources )
@@ -56,7 +55,6 @@ public class ObfuscationCoordinator
     private Collection<File> getAbsolutePaths ( String rootAbsolutePath )
     {
         PathsExtractor pathsExtractor = new PathsExtractor( rootAbsolutePath );
-        List<File> originalFiles = pathsExtractor.getFilesInstances( new SuffixFolderFilter( SuffixFilters.JAVA ) );
-        return originalFiles;
+        return pathsExtractor.getFilesInstances( new SuffixFolderFilter( SuffixFilters.JAVA ) );
     }
 }
