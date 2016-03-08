@@ -10,7 +10,7 @@ public class UnitSource
 {
 
     private final CompilationUnit compilationUnit;
-    private final File file;
+    private File file;
     //Hosts the source code as text
     private final Document document;
 
@@ -29,6 +29,11 @@ public class UnitSource
     public File getFile ()
     {
         return this.file;
+    }
+
+    public void setFile ( File file )
+    {
+        this.file = file;
     }
 
     public Document getDocument ()
