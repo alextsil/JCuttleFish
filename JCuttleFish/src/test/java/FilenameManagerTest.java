@@ -15,6 +15,7 @@ import util.enums.ObfuscatedNamesVariations;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
 
@@ -43,6 +44,10 @@ public class FilenameManagerTest
     public void classRefsTest () throws IOException
     {
         File pack1 = this.temporaryFolder.newFolder( "root/pack1" );
+
+        File pack11 = this.temporaryFolder.newFolder( "root/pack1/pack11" );
+        File we = this.temporaryFolder.newFile( "root/pack1/pack11/we.java" );
+
         File two = this.temporaryFolder.newFile( "root/pack1/Two.java" );
         File pack2 = this.temporaryFolder.newFolder( "root/pack2" );
         File main = this.temporaryFolder.newFile( "root/pack2/Main.java" );
@@ -59,13 +64,19 @@ public class FilenameManagerTest
         List<UnitNode> unitNodes = ( List<UnitNode> )this.nodeFinder
                 .getUnitNodesCollectionFromUnitSources( this.initiator.fetchUnitSourceCollection( originalFiles ) );
 
-        FilenameManager filenameManager = new FilenameManager();
+        FilenameManager filenameManager = new FilenameManager( this.root );
         filenameManager.obfuscate( unitNodes );
 
-        Deque<String> obfuscatedNames = this.obfuscatedNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
-
-        assertEquals( obfuscatedNames.pollFirst() + ".java", unitNodes.get( 0 ).getUnitSource().getFile().getName() );
+        Deque<String> obfuscatedFileNames = this.obfuscatedNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
+        Deque<String> obfuscatedFolderNames = this.obfuscatedNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
+        //Assert file names
+        assertEquals( obfuscatedFileNames.pollFirst() + ".java", unitNodes.get( 0 ).getUnitSource().getFile().getName() );
         assertEquals( "Main.java", unitNodes.get( 1 ).getUnitSource().getFile().getName() );
-        assertEquals( obfuscatedNames.pollFirst() + ".java", unitNodes.get( 2 ).getUnitSource().getFile().getName() );
+        assertEquals( obfuscatedFileNames.pollFirst() + ".java", unitNodes.get( 2 ).getUnitSource().getFile().getName() );
+        //Assert folder names
+        List<String> rootFolderContents = Arrays.asList( this.root.list() );
+        assertEquals( obfuscatedFolderNames.pollFirst(), rootFolderContents.get( 0 ) );
+        assertEquals( "pack2", rootFolderContents.get( 1 ) );
+
     }
 }

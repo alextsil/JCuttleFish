@@ -3,6 +3,7 @@ package obfuscations;
 import extractor.PathsExtractor;
 import extractor.filefilters.SuffixFolderFilter;
 import extractor.filefilters.enums.SuffixFilters;
+import obfuscations.filenameobfuscation.FilenameManager;
 import obfuscations.layoutobfuscation.LayoutManager;
 import org.apache.commons.io.FileUtils;
 import parser.UnitSourceInitiator;
@@ -34,6 +35,9 @@ public class ObfuscationCoordinator
 
         LayoutManager layoutManager = new LayoutManager();
         layoutManager.obfuscate( unitNodes );
+
+        FilenameManager filenameManager = new FilenameManager( originalLocation );
+        filenameManager.obfuscate( unitNodes );
 
         this.saveUnitSourcesToFiles( unitSources );
     }
