@@ -3,6 +3,7 @@ package obfuscations.filenameobfuscation;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import pojo.UnitNode;
 import providers.ObfuscatedNamesProvider;
+import util.Comparators;
 import util.ConvenienceWrappers;
 import util.enums.ObfuscatedNamesVariations;
 
@@ -10,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
@@ -69,7 +71,22 @@ public class FilenameManager
             FolderVisitor folderVisitor = new FolderVisitor( this.rootPath, this.createExcludedFolderNamesList() );
             Files.walkFileTree( this.rootPath.toPath(), folderVisitor );
             List<File> targetFolders = folderVisitor.getTargetFolders();
-            //// TODO: 9/3/2016 Sort by depth and rename
+            targetFolders.sort( Comparators.byDepth );
+
+            ObfuscatedNamesProvider obfuscatedNamesProvider = new ObfuscatedNamesProvider();
+            Deque<String> obfuscatedNames = obfuscatedNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
+
+            targetFolders.stream().forEach( f -> {
+                try
+                {
+                    Files.move( f.toPath(), f.toPath().resolveSibling( obfuscatedNames.pollFirst() ), StandardCopyOption.REPLACE_EXISTING );
+                } catch ( IOException e )
+                {
+                    e.printStackTrace();
+                }
+            } );
+
+            int debug = 1;
         } catch ( IOException e )
         {
             e.printStackTrace();
@@ -104,5 +121,4 @@ public class FilenameManager
         assert renamedFile != null;
         return renamedFile.toFile();
     }
-
 }

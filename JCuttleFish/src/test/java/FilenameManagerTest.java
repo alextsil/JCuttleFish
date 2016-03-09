@@ -68,14 +68,16 @@ public class FilenameManagerTest
         filenameManager.obfuscate( unitNodes );
 
         Deque<String> obfuscatedFileNames = this.obfuscatedNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
-        Deque<String> obfuscatedFolderNames = this.obfuscatedNamesProvider.getObfuscatedNames( ObfuscatedNamesVariations.ALPHABET );
+
         //Assert file names
         assertEquals( obfuscatedFileNames.pollFirst() + ".java", unitNodes.get( 0 ).getUnitSource().getFile().getName() );
         assertEquals( "Main.java", unitNodes.get( 1 ).getUnitSource().getFile().getName() );
         assertEquals( obfuscatedFileNames.pollFirst() + ".java", unitNodes.get( 2 ).getUnitSource().getFile().getName() );
+
         //Assert folder names
         List<String> rootFolderContents = Arrays.asList( this.root.list() );
-        assertEquals( obfuscatedFolderNames.pollFirst(), rootFolderContents.get( 0 ) );
+        assertEquals( 2, this.root.list().length );
+        assertEquals( "b", rootFolderContents.get( 0 ) );
         assertEquals( "pack2", rootFolderContents.get( 1 ) );
 
     }
