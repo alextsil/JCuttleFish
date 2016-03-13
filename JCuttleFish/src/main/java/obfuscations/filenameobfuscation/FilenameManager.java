@@ -1,5 +1,6 @@
 package obfuscations.filenameobfuscation;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import pojo.UnitNode;
 import providers.ObfuscatedNamesProvider;
@@ -11,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
@@ -79,7 +79,13 @@ public class FilenameManager
             targetFolders.stream().forEach( f -> {
                 try
                 {
-                    Files.move( f.toPath(), f.toPath().resolveSibling( obfuscatedNames.pollFirst() ), StandardCopyOption.REPLACE_EXISTING );
+//                    Files.move( f.toPath(), f.toPath().resolve( obfuscatedNames.pollFirst() ) );
+                    FileUtils.copyDirectory( f, new File( f.getParent() + "/" + obfuscatedNames.pollFirst() ) );
+                    boolean deleted = FileUtils.deleteQuietly( f );
+                    if ( !deleted )
+                    {
+                        throw new IOException( "failed to delete" );
+                    }
                 } catch ( IOException e )
                 {
                     e.printStackTrace();

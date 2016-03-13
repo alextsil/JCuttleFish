@@ -323,4 +323,28 @@ public class LayoutManagerTest
         assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/interfaces/obfuscated/Main.java" ) ),
                 unitSources.get( 3 ).getDocument().get() );
     }
+
+    @Test
+    @Category ( MultipleFileTest.class )
+    public void testObfuscate_Inheritance ()
+    {
+        ConfigurationEnvironment.createConfigurationInstance( "src/test/resources/sampleapplications/inheritance/original" );
+
+        PathsExtractor pathsExtractor = new PathsExtractor( "src/test/resources/sampleapplications/inheritance/original" );
+        Collection<File> originalFiles = pathsExtractor.getFilesInstances( new SuffixFolderFilter( SuffixFilters.JAVA ) );
+
+        Collection<UnitNode> unitNodes = this.nodeFinder
+                .getUnitNodesCollectionFromUnitSources( this.initiator.fetchUnitSourceCollection( originalFiles ) );
+        int debug = 1;
+        unitNodes = this.layoutManager.obfuscate( unitNodes );
+
+        List<UnitSource> unitSources = unitNodes.stream().map( UnitNode::getUnitSource ).collect( Collectors.toList() );
+        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/inheritance/obfuscated/BicycleBase.java" ) ),
+                unitSources.get( 0 ).getDocument().get() );
+        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/inheritance/obfuscated/ClassMain.java" ) ),
+                unitSources.get( 1 ).getDocument().get() );
+        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/inheritance/obfuscated/MountainBike.java" ) ),
+                unitSources.get( 2 ).getDocument().get() );
+
+    }
 }

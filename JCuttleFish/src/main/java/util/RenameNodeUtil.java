@@ -37,7 +37,6 @@ public class RenameNodeUtil
         }
     };
 
-
     public static void renameFieldAccessName ( FieldAccess fieldAccess, String obfuscatedVarName )
     {
         if ( fieldAccess.getExpression().getNodeType() == ASTNode.METHOD_INVOCATION )
