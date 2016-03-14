@@ -140,6 +140,12 @@ public class CastToAndVisit
         new ConstructorInvocationVisitor( callbacks ).visit( constructorInvocation );
     }
 
+    public static <V extends ASTNode> void superConstructorInvocation ( V node, Collection<AstNodeFoundCallback> callbacks )
+    {
+        SuperConstructorInvocation superConstructorInvocation = ( SuperConstructorInvocation )node;
+        new SuperConstructorInvocationVisitor( callbacks ).visit( superConstructorInvocation );
+    }
+
     public static <V extends ASTNode> void simpleName ( V node, Collection<AstNodeFoundCallback> callbacks )
     {
         SimpleName simpleName = ( SimpleName )node;

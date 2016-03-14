@@ -78,6 +78,9 @@ public class StatementVisitor
         } else if ( statementNodeType == ASTNode.CONSTRUCTOR_INVOCATION )
         {
             CastToAndVisit.constructorInvocation( statement, this.callbacks );
+        } else if ( statementNodeType == ASTNode.SUPER_CONSTRUCTOR_INVOCATION )
+        {
+            CastToAndVisit.superConstructorInvocation( statement, this.callbacks );
         } else
         {
             this.logger.warn( "Not mapped yet. type : " + statement.getClass() );

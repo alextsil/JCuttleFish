@@ -191,6 +191,25 @@ public class ObfuscationUtil
                             } );
                 } );
 
+        //Rename extends
+        globalCollectedNodes.getOrDefault( TypeDeclaration.class, Collections.emptyList() ).stream()
+                .map( TypeDeclaration.class::cast )
+                .filter( td -> td.getSuperclassType() != null )
+                .forEach( td -> {
+                    if ( td.getSuperclassType().resolveBinding().isEqualTo( abstractTypeDeclaration.resolveBinding() ) )
+                    {
+                        if ( td.getSuperclassType() instanceof SimpleType )
+                        {
+                            SimpleType simpleType = ( SimpleType )td.getSuperclassType();
+                            SimpleName simpleName = ( SimpleName )simpleType.getName();
+                            RenameNodeUtil.renameSimpleName( simpleName, obfuscatedName );
+                        } else
+                        {
+                            throw new RuntimeException( "Only SimpleTypes supported" );
+                        }
+                    }
+                } );
+
         //Rename occurences on other classes that implement this one
         globalCollectedNodes.getOrDefault( TypeDeclaration.class, Collections.emptyList() ).stream()
                 .map( TypeDeclaration.class::cast )
