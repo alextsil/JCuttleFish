@@ -12,13 +12,14 @@ public class c extends a
     }
 
     // the MountainBike subclass adds one method
-    public void setHeight ( int aa )
+    public void as ( int aa )
     {
         a = aa;
     }
 
-    public void stop ()
+    @Override
+    public void c ( int aa )
     {
-        c = 0;
+        //
     }
 }

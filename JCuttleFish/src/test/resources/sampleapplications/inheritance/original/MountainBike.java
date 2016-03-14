@@ -17,8 +17,9 @@ public class MountainBike extends BicycleBase
         seatHeight = newValue;
     }
 
-    public void stop ()
+    @Override
+    public void applyBrake ( int decrement )
     {
-        speed = 0;
+        //
     }
 }

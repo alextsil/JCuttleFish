@@ -14,7 +14,6 @@ public class RenameMethodsAndReferencesCallback extends AstNodeFoundCallback
 {
 
     private Collection<UnitNode> unitNodes;
-
     private final Logger logger = LoggerFactory.getLogger( RenameMethodsAndReferencesCallback.class );
 
     public RenameMethodsAndReferencesCallback ( Collection<UnitNode> unitNodes )
@@ -30,9 +29,12 @@ public class RenameMethodsAndReferencesCallback extends AstNodeFoundCallback
             if ( ( ( TypeDeclaration )v ).isInterface() )
             {
                 ObfuscationUtil.renameInterfaceMethodsAndReferences( ( TypeDeclaration )v, this.unitNodes );
+            } else if ( ( ( TypeDeclaration )v ).getSuperclassType() != null ) //Means it's not a base class
+            {
+                ObfuscationUtil.renameSubClassMethodsAndReferences( ( TypeDeclaration )v, this.unitNodes );
             } else
             {
-                ObfuscationUtil.renameClassMethodsAndReferences( ( TypeDeclaration )v, this.unitNodes );
+                ObfuscationUtil.renameBaseClassMethodsAndReferences( ( TypeDeclaration )v, this.unitNodes );
             }
         }
     }

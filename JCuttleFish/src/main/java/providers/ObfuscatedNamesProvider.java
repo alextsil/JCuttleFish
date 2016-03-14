@@ -39,6 +39,11 @@ public class ObfuscatedNamesProvider
             variableNamesStream = Stream.of( "aaa", "bbb", "ccc", "ddd", "eee", "fff", "ggg", "hhh", "iii", "jjj", "kkk",
                     "lll", "mmm", "nnn", "ooo", "ppp", "qqq", "rrr",
                     "sss", "ttt", "uuu", "vvv", "www", "xxx", "yyy", "zzz" );
+        } else if ( variation == ObfuscatedNamesVariations.SUBCLASS_METHODS )
+        {
+            variableNamesStream = Stream.of( "as", "bs", "cs", "ds", "es", "fs", "gs", "hs", "is", "js", "ks",
+                    "ls", "ms", "ns", "os", "ps", "qs", "rs",
+                    "ss", "ts", "us", "vs", "ws", "xs", "ys", "zs", "a1s", "b2s", "c3s", "d4s", "e5s", "f6s" );
         } else if ( variation == ObfuscatedNamesVariations.INTERFACE_METHODS )
         {
             variableNamesStream = Stream.of( "ai", "bi", "ci", "di", "ei", "fi", "gi", "hi", "ii", "ji", "ki",
