@@ -35,7 +35,7 @@ public class FilenameManager
         Collection<UnitNode> obfuscatedUnitNodeCollection;
         obfuscatedUnitNodeCollection = this.obfuscateFilenames( unitNodeCollection );
 
-        this.obfuscateFoldernames();
+//        this.obfuscateFoldernames();
 
         return obfuscatedUnitNodeCollection;
     }
@@ -79,7 +79,7 @@ public class FilenameManager
             targetFolders.stream().forEach( f -> {
                 try
                 {
-//                    Files.move( f.toPath(), f.toPath().resolve( obfuscatedNames.pollFirst() ) );
+                    // TODO: 14/3/2016 rename packages on files
                     FileUtils.copyDirectory( f, new File( f.getParent() + "/" + obfuscatedNames.pollFirst() ) );
                     boolean deleted = FileUtils.deleteQuietly( f );
                     if ( !deleted )

@@ -15,7 +15,6 @@ import util.enums.ObfuscatedNamesVariations;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
 
@@ -73,12 +72,5 @@ public class FilenameManagerTest
         assertEquals( obfuscatedFileNames.pollFirst() + ".java", unitNodes.get( 0 ).getUnitSource().getFile().getName() );
         assertEquals( "Main.java", unitNodes.get( 1 ).getUnitSource().getFile().getName() );
         assertEquals( obfuscatedFileNames.pollFirst() + ".java", unitNodes.get( 2 ).getUnitSource().getFile().getName() );
-
-        //Assert folder names
-        List<String> rootFolderContents = Arrays.asList( this.root.list() );
-        assertEquals( 2, this.root.list().length );
-        assertEquals( "b", rootFolderContents.get( 0 ) );
-        assertEquals( "pack2", rootFolderContents.get( 1 ) );
-
     }
 }
