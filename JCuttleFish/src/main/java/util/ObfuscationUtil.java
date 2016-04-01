@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toList;
 
-
+@SuppressWarnings( "all" )
 public class ObfuscationUtil
 {
 

@@ -335,7 +335,7 @@ public class LayoutManagerTest
 
         Collection<UnitNode> unitNodes = this.nodeFinder
                 .getUnitNodesCollectionFromUnitSources( this.initiator.fetchUnitSourceCollection( originalFiles ) );
-        int debug = 1;
+
         unitNodes = this.layoutManager.obfuscate( unitNodes );
 
         List<UnitSource> unitSources = unitNodes.stream().map( UnitNode::getUnitSource ).collect( Collectors.toList() );
@@ -346,5 +346,26 @@ public class LayoutManagerTest
         assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/inheritance/obfuscated/MountainBike.java" ) ),
                 unitSources.get( 2 ).getDocument().get() );
 
+    }
+
+    @Test
+    @Category ( MultipleFileTest.class )
+    public void testObfuscate_Students ()
+    {
+        ConfigurationEnvironment.createConfigurationInstance( "src/test/resources/sampleapplications/students/original" );
+
+        PathsExtractor pathsExtractor = new PathsExtractor( "src/test/resources/sampleapplications/students/original" );
+        Collection<File> originalFiles = pathsExtractor.getFilesInstances( new SuffixFolderFilter( SuffixFilters.JAVA ) );
+
+        Collection<UnitNode> unitNodes = this.nodeFinder
+                .getUnitNodesCollectionFromUnitSources( this.initiator.fetchUnitSourceCollection( originalFiles ) );
+
+        unitNodes = this.layoutManager.obfuscate( unitNodes );
+
+        List<UnitSource> unitSources = unitNodes.stream().map( UnitNode::getUnitSource ).collect( Collectors.toList() );
+        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/students/obfuscated/Main.java" ) ),
+                unitSources.get( 0 ).getDocument().get() );
+        assertEquals( this.sourceCodeProvider.get( new File( "src/test/resources/sampleapplications/students/obfuscated/Student.java" ) ),
+                unitSources.get( 1 ).getDocument().get() );
     }
 }

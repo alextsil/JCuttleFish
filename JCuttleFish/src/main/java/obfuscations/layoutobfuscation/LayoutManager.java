@@ -18,8 +18,8 @@ public class LayoutManager
     {
         this.beginRecordingModifications( unitNodeCollection );
 
-        ObfuscationUtil.obfuscateAbstractTypeDeclarationsAndReferences( unitNodeCollection );
         ObfuscationUtil.obfuscateMethodNames( unitNodeCollection );
+        ObfuscationUtil.obfuscateAbstractTypeDeclarationsAndReferences( unitNodeCollection );
         ObfuscationUtil.obfuscateClassLocalVarsAndReferences( unitNodeCollection );
         ObfuscationUtil.obfuscateMethodParameters( unitNodeCollection );
         ObfuscationUtil.obfuscateMethodDeclaredVariables( unitNodeCollection );
