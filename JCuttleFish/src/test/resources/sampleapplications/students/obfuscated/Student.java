@@ -1,61 +1,61 @@
-public class Student
+public class b
 {
-//
-    private String rollNumber;
-    private String name;
-    private String standard;
-    private int totalMarks;
 
-    public Student ()
+    private String a;
+    private String b;
+    private String c;
+    private int d;
+
+    public b ()
     {
     }
 
-    public Student ( String rollNumber, String name, String standard, int totalMarks )
+    public b ( String aa, String bb, String cc, int dd )
     {
-        this.rollNumber = rollNumber;
-        this.name = name;
-        this.standard = standard;
-        this.totalMarks = totalMarks;
+        this.a = aa;
+        this.b = bb;
+        this.c = cc;
+        this.d = dd;
     }
 
-    public String getRollNumber ()
+    public String a ()
     {
-        return rollNumber;
+        return a;
     }
 
-    public void setRollNumber ( String rollNumber )
+    public void b ( String aa )
     {
-        this.rollNumber = rollNumber;
+        this.a = aa;
     }
 
-    public String getName ()
+    public String c ()
     {
-        return name;
+        return b;
     }
 
-    public void setName ( String name )
+    public void d ( String aa )
     {
-        this.name = name;
+        this.b = aa;
     }
 
-    public String getStandard ()
+    public String e ()
     {
-        return standard;
+        return c;
     }
 
-    public void setStandard ( String standard )
+    public void f ( String aa )
     {
-        this.standard = standard;
+        this.c = aa;
     }
 
-    public int getTotalMarks ()
+    public int g ()
     {
-        return totalMarks;
+        return d;
     }
 
-    public void setTotalMarks ( int totalMarks )
+    public void h ( int aa )
     {
-        this.totalMarks = totalMarks;
+        this.d = aa;
     }
 
 }
