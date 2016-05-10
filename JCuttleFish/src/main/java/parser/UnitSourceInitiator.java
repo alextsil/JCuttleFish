@@ -21,7 +21,6 @@ public class UnitSourceInitiator
 {
 
     private final Logger logger = LoggerFactory.getLogger( UnitSourceInitiator.class );
-    private String sourceCode = null;
 
     public UnitSourceInitiator ()
     {
@@ -29,15 +28,11 @@ public class UnitSourceInitiator
 
     public UnitSource fetchUnitSource ( File file )
     {
-        this.sourceCode = this.getSourceCodeFromFile( file );
+        String sourceCode = this.getSourceCodeFromFile( file );
         ConfigurationEnvironment configurationEnvironment = ConfigurationEnvironment.getInstance();
         ASTParser parser = ASTParser.newParser( AST.JLS8 );
         parser.setKind( ASTParser.K_COMPILATION_UNIT );
-        parser.setSource( this.sourceCode.toCharArray() );
-
-        Map options = JavaCore.getOptions();
-        JavaCore.setComplianceOptions( JavaCore.VERSION_1_8, options );
-        parser.setCompilerOptions(options);
+        parser.setSource( sourceCode.toCharArray() );
 
         parser.setBindingsRecovery( true );
 
@@ -48,8 +43,13 @@ public class UnitSourceInitiator
 
         parser.setResolveBindings( true );
 
+
+        Map options = JavaCore.getOptions();
+        JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+        parser.setCompilerOptions(options);
+
         CompilationUnit cu = ( CompilationUnit )parser.createAST( null );
-        return new UnitSource( cu, file, this.sourceCode );
+        return new UnitSource( cu, file, sourceCode );
     }
 
     public Collection<UnitSource> fetchUnitSourceCollection ( Collection<File> files )

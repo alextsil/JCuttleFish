@@ -14,7 +14,7 @@ public final class ConfigurationEnvironment
 //      relative source path not useful for now.
         this.relativeSourcePath = "";//"JCuttleFish" + System.lineSeparator() + "src";
         this.absoluteSourcePath[ 0 ] = absoluteSourcePath;
-        this.classpath[ 0 ] = System.getenv( "JAVA_HOME" ) + System.lineSeparator() + "bin";
+        this.classpath[ 0 ] = System.getenv( "JAVA_HOME" ) + "\\jre\\lib\\rt.jar";
     }
 
     public static ConfigurationEnvironment getInstance ()
