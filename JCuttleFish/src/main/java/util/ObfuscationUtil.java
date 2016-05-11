@@ -16,7 +16,8 @@ import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toList;
 
-@SuppressWarnings( "all" )
+
+@SuppressWarnings ( "all" )
 public class ObfuscationUtil
 {
 
@@ -222,10 +223,14 @@ public class ObfuscationUtil
                 .map( MethodDeclaration.class::cast )
                 .filter( md -> ExclusionFilters.doesMethodBelongToAbstractTypeDeclaration.apply( md, abstractTypeDeclaration ) )
                 .filter( MethodDeclaration::isConstructor )
-                .forEach( md -> RenameNodeUtil.renameMethodDeclaration( md, obfuscatedName ) );
+                .forEach( md -> {
+                    RenameNodeUtil.renameMethodDeclaration( md, obfuscatedName );
+                    md.setJavadoc( null );
+                } );
 
         //Rename actual class
         abstractTypeDeclaration.getName().setIdentifier( obfuscatedName );
+        abstractTypeDeclaration.setJavadoc( null );
     }
 
     public static void obfuscateMethodNames ( Collection<UnitNode> unitNodes )
@@ -257,6 +262,7 @@ public class ObfuscationUtil
                     .forEach( mi -> mi.getName().setIdentifier( obfuscatedVariableNames.peekFirst() ) );
             //obfuscate method name
             md.getName().setIdentifier( obfuscatedVariableNames.pollFirst() );
+            md.setJavadoc( null );
         };
         //
         ConvenienceWrappers.getMethodDeclarationsAsList( typeDeclaration ).stream()
@@ -280,6 +286,7 @@ public class ObfuscationUtil
                     .forEach( mi -> mi.getName().setIdentifier( obfuscatedVariableNames.peekFirst() ) );
             //obfuscate method name
             md.getName().setIdentifier( obfuscatedVariableNames.pollFirst() );
+            md.setJavadoc( null );
         };
         //
         List<MethodDeclaration> methodDeclarations = ConvenienceWrappers.getMethodDeclarationsAsList( typeDeclaration ).stream()
@@ -338,6 +345,7 @@ public class ObfuscationUtil
             } );
             //obfuscate original method name
             imd.getName().setIdentifier( obfuscatedVariableNames.pollFirst() );
+            imd.setJavadoc( null );
         } );
     }
 
