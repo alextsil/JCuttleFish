@@ -10,9 +10,6 @@ import su.levenetc.android.textsurface.utils.Utils;
 import java.util.ArrayList;
 
 
-/**
- * Created by Eugene Levenetc.
- */
 public class a implements Comparable<a>
 {
 

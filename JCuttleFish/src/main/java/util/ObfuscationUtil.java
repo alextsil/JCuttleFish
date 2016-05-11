@@ -164,6 +164,8 @@ public class ObfuscationUtil
                                 SingleVariableDeclaration svd = ( SingleVariableDeclaration )p;
                                 new TypeVisitor( callbacks ).visit( svd.getType() );
                             } );
+                    //Rename occurences in method return type
+                    new TypeVisitor( callbacks ).visit( md.getReturnType2() );
                 } );
 
         //Rename occurences in import declarations

@@ -27,7 +27,7 @@ public class a
         pack2.c.b();
     }
 
-    public void a ( c aa, a bb )
+    public a a ( c aa, a bb )
     {
         //
     }

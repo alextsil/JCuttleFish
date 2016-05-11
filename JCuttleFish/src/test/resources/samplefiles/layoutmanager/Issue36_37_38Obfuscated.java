@@ -4,9 +4,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
-/**
- * Created by Eugene Levenetc.
- */
 public class a {
 
     private Paint a;

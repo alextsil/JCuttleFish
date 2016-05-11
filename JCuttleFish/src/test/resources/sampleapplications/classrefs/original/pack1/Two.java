@@ -27,7 +27,7 @@ public class Two
         pack2.One.staticFunct();
     }
 
-    public void both ( One one, Two two )
+    public Two both ( One one, Two two )
     {
         //
     }
